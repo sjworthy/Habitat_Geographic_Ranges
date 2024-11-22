@@ -1,0 +1,84 @@
+---
+title: "GBIF"
+output: html_document
+date: "2024-11-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Install packages
+
+```{r}
+#install.packages("rgbif")
+library(rgbif)
+```
+
+Read in the species list
+
+```{r}
+species = read.csv("../Raw.Data/species.csv")
+```
+
+Getting taxon key/usage key for each species
+
+```{r}
+taxon.key=name_backbone_checklist(species$Species)
+head(taxon.key)
+```
+
+Issues found: 
+
+* Taxodium ascendens and Taxodium distichum are synonyms, may be issue if have distinct microenvironments
+* Fraxinus texensis is a synonym for Fraxinus albicans, Fraxinus albicans is not in the data set
+
+Download the data
+
+```{r}
+occ_download(pred("hasGeospatialIssue", FALSE), # removes coordinates that are (0,0)
+             pred("hasCoordinate", TRUE), # keeps only records with coordinates
+             pred("occurrenceStatus","PRESENT"), # removes absent record
+             pred("country", "US"), # country 
+             pred_in("taxonKey",taxon.key$usageKey), # supplying usagekey
+             
+             pred_or(pred_lt("coordinateUncertaintyInMeters",10000),
+                     pred_isnull("coordinateUncertaintyInMeters")), # coordinate Uncertainty is less than 10000 m or left blank
+                  format = "SIMPLE_CSV") # return tsv file of occurrences
+```
+
+Citation Info:  
+  Please always cite the download DOI when using this data.
+  https://www.gbif.org/citation-guidelines
+  DOI: 10.15468/dl.t7z4jz
+  Citation:
+  GBIF Occurrence Download https://doi.org/10.15468/dl.t7z4jz Accessed from R via rgbif (https://github.com/ropensci/rgbif) on 2024-11-22
+
+Check status
+
+```{r}
+occ_download_wait('0028832-241107131044228')
+```
+
+Download data
+
+```{r}
+#d = occ_download_get('0028832-241107131044228', path = "/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Raw.Data") %>%
+  occ_download_import()
+```
+
+```{r}
+head(d)
+```
+
+Way more species than in dataset (143). Many varieties included.
+
+```{r}
+sort(unique(d$scientificName))
+```
+
+```{r}
+abies = d %>%
+  filter(genus == "Abies")
+```
+
