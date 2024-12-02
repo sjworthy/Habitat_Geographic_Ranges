@@ -1,144 +1,144 @@
-﻿Family,Genus,Species,FIA.Code,Common.Name
-Pinaceae,Abies,Abies balsamea,ABBA,balsam fir
-Pinaceae,Abies,Abies fraseri,ABFR,Fraser fir
-Cupressaceae,Chamaecyparis,Chamaecyparis thyoides,CHTH2,Atlantic white-cedar
-Cupressaceae,Juniperus,Juniperus virginiana,JUVI,eastern redcedar
-Pinaceae,Larix,Larix laricina,LALA,tamarack
-Pinaceae,Picea,Picea glauca,PIGL,white spruce
-Pinaceae,Picea,Picea mariana,PIMA,black spruce
-Pinaceae,Picea,Picea rubens,PIRU,red spruce
-Pinaceae,Pinus,Pinus banksiana,PIBA2,jack pine
-Pinaceae,Pinus,Pinus clausa,PICL,sand pine
-Pinaceae,Pinus,Pinus echinaa,PIEC2,shortleaf pine
-Pinaceae,Pinus,Pinus elliottii,PIEL,slash pine
-Pinaceae,Pinus,Pinus glabra,PIGL2,spruce pine
-Pinaceae,Pinus,Pinus palustris,PIPA2,longleaf pine
-Pinaceae,Pinus,Pinus pungens,PIPUS,Table Mountain pine
-Pinaceae,Pinus,Pinus resinosa,PIRE,red pine
-Pinaceae,Pinus,Pinus rigida,PIRI,pitch pine
-Pinaceae,Pinus,Pinus serotina,PISE,pond pine
-Pinaceae,Pinus,Pinus strobus,PIST,eastern white pine
-Pinaceae,Pinus,Pinus taeda,PITA,loblolly pine
-Pinaceae,Pinus,Pinus virginiana,PIVI2,Virginia pine
-Cupressaceae,Taxodium,Taxodium ascendens,TAAS,pondcypress
-Cupressaceae,Taxodium,Taxodium distichum,TADI2,baldcyress
-Cupressaceae,Thuja,Thuja occidentalis,THOC2,northern white-cedar
-Pinaceae,Tsuga,Tsuga canadensis,TSCA,eastern hemlock
-Pinaceae,Tsuga,Tsuga caroliniana,TSCA2,Carolina hemlock
-Aceraceae,Acer,Acer barbatum,ACBA3,Florida maple
-Aceraceae,Acer,Acer leucoderme,ACLE,chalk maple
-Aceraceae,Acer,Acer negundo,ACNE3,boxelder
-Aceraceae,Acer,Acer nigrum,ACNI5,black maple
-Aceraceae,Acer,Acer pensylvanicum,ACPE,striped maple
-Aceraceae,Acer,Acer rubrum,ACRU,red maple
-Aceraceae,Acer,Acer saccharinum,ACSA2,silver maple
-Aceraceae,Acer,Acer saccharum,ACSA3,sugar maple
-Aceraceae,Acer,Acer spicatum,ACSP2,mountain maple
-Hippocastanaceae,Aesculus,Aesculus flava,AEFL,yellow buckeye
-Hippocastanaceae,Aesculus,Aesculus glabra,AEGL,Ohio buckeye
-Simaroubaceae,Ailanthus,Ailanthus altissima,AIAL,tree-of-heaven
-Annonaceae,Annona,Annona glabra,ANGL4,pond-apple
-Annonaceae,Asimina,Asimina triloba,ASTR,pawpaw
-Betulaceae,Betula,Betula alleghaniensis,BEAL2,yellow birch
-Betulaceae,Betula,Betula lenta,BELE,sweet birch
-Betulaceae,Betula,Betula nigra,BENI,river birch
-Betulaceae,Betula,Betula papyrifera,BEPA,paper birch
-Betulaceae,Betula,Betula populifolia,BEPO,gray birch
-Betulaceae,Carpinus,Carpinus caroliniana,CACA18,American hornbeam
-Juglandaceae,Carya,Carya alba,CAAL27,mockernut hickory
-Juglandaceae,Carya,Carya aquatica,CAAQ2,water hickory
-Juglandaceae,Carya,Carya cordiformis,CACO15,bitternut hickory
-Juglandaceae,Carya,Carya glabra,CAGL8,pignut hickory
-Juglandaceae,Carya,Carya illinoinensis,CAIL2,pecan
-Juglandaceae,Carya,Carya ovata,CAOV2,shagbarck hickory
-Juglandaceae,Carya,Carya texana,CATE9,black hickory
-Fagaceae,Castanea,Castanea dentata,CADE12,American chestnut
-Ulmaceae,Celtis,Celtis laevigata,CELA,sugarberry
-Ulmaceae,Celtis,Celtis occidentalis,CEOC,hackberry
-Fabaceae,Cercis,Cercis canadensis,CECA4,eastern redbud
-Cornaceae,Cornus,Cornus florida,COFL2,flowering dogwood
-Ebenaceae,Diospyros,Diospyros virginiana,DIVI5,common persimmon
-Fagaceae,Fagus,Fagus grandifolia,FAGR,American beech
-Oleaceae,Fraxinus,Fraxinus americana,FRAM2,white ash
-Oleaceae,Fraxinus,Fraxinus caroliniana,FRCA3,Carolia ash
-Oleaceae,Fraxinus,Fraxinus nigra,FRNI,black ash
-Oleaceae,Fraxinus,Fraxinus pennsylvanica,FRPE,green ash
-Oleaceae,Fraxinus,Fraxinus profunda,FRPR,pumpkin ash
-Oleaceae,Fraxinus,Fraxinus quadrangulata,FRQU,blue ash
-Oleaceae,Fraxinus,Fraxinus texensis,FRTE,Texas ash
-Fabaceae,Gleditsia,Gleditsia aquatica,GLAQ,waterlocust
-Fabaceae,Gleditsia,Gleditsia triacanthos,GLTR,honeylocust
-Theaceae,Gordonia,Gordonia lasianthus,GOLA,loblolly-bay
-Fabaceae,Gymnocladus,Gymnocladus dioicus,GYDI,Kentucky coffeetree
-Aquifoliaceae,Ilex,Ilex opaca,ILOP,American holly
-Juglandaceae,Juglans,Juglans cinerea,JUCI,butternut
-Juglandaceae,Juglans,Juglans nigra,JUNI,black walnut
-Hamamelidaceae,Liquidambar,Liquidambar styraciflua,LIST2,sweetgum
-Magnoliaceae,Liriodendron,Liriodendron tulipifera,LITU,yellow-poplar
-Moraceae,Maclura,Maclura pomifera,MAPO,Osage-orange
-Magnoliaceae,Magnolia,Magnolia acuminata,MAAC,cucumbertree
-Magnoliaceae,Magnolia,Magnolia fraseri,MAFR,mountain magnolia
-Magnoliaceae,Magnolia,Magnolia grandiflora,MAGR4,southern magnolia
-Magnoliaceae,Magnolia,Magnolia macrophylla,MAMA2,bigleaf magnolia
-Magnoliaceae,Magnolia,Magnolia virginiana,MAVI2,sweetbay
-Moraceae,Morus,Morus rubra,MORU2,red mulberry
-Cornaceae,Nyssa,Nyssa aquatica,NYAQ2,water tupelo
-Cornaceae,Nyssa,Nyssa biflora,NYBI,swamp tupelo
-Cornaceae,Nyssa,Nyssa ogeche,NYOG,Ogeechee tupelo
-Cornaceae,Nyssa,Nyssa sylvatica,NYSY,blackgum
-Betulaceae,Ostrya,Ostrya virginiana,OSVI,eastern hophornbeam
-Ericaceae,Oxydendrum,Oxydendrum arboreum,OXAR,sourwood
-Scrophulariaceae,Paulownia,Paulownia tomentosa,PATO2,empress-tree
-Lauraceae,Persea,Persea borbonia,PEBO,redbay
-Ulmaceae,Planera,Planera aquatica,PLAQ,water-elm
-Platanaceae,Platanus,Platanus occidentalis,PLOC,American sycamore
-Salicaceae,Populus,Populus balsamifera,POBA2,balsam poplar
-Salicaceae,Populus,Populus deltoides,PODE3,eastern cottonwood
-Salicaceae,Populus,Populus grandidentata,POGR4,bigtooth aspen
-Salicaceae,Populus,Populus heterophylla,POHE4,swamp cottonwood
-Salicaceae,Populus,Populus tremuloides,POTR5,quaking aspen
-Rosaceae,Prunus,Prunus americana,PRAM,Amercian plum
-Rosaceae,Prunus,Prunus pensylvanica,PRPE2,pin cherry
-Rosaceae,Prunus,Prunus serotina,PRSE2,black cherry
-Rosaceae,Prunus,Prunus virginiana,PRVI,chokecherry
-Fagaceae,Quercus,Quercus alba,QUAL,white oak
-Fagaceae,Quercus,Quercus bicolor,QUBI,swamp white oak
-Fagaceae,Quercus,Quercus coccinea,QUCO2,scarlet oak
-Fagaceae,Quercus,Quercus ellipsoidalis,QUEL,northern pin oak
-Fagaceae,Quercus,Quercus falcata,QUFA,southern red oak
-Fagaceae,Quercus,Quercus ilicifolia,QUIL,bear oak
-Fagaceae,Quercus,Quercus imbricaria,QUIM,shingle oak
-Fagaceae,Quercus,Quercus incana,QUIN,bluejack oak
-Fagaceae,Quercus,Quercus laevis,QULA2,turkey oak
-Fagaceae,Quercus,Quercus laurifolia,QULA3,laurel oak
-Fagaceae,Quercus,Quercus lyrata,QULY,overcup oak
-Fagaceae,Quercus,Quercus macrocarpa,QUMA2,bur oak
-Fagaceae,Quercus,Quercus margarettiae,QUMA6,dwarf post oak
-Fagaceae,Quercus,Quercus marilandica,QUMA3,blackjack oak
-Fagaceae,Quercus,Quercus michauxii,QUMI,swamp checknut oak
-Fagaceae,Quercus,Quercus minima,QUMI2,dwarf live oak
-Fagaceae,Quercus,Quercus muehlenbergii,QUMU,chinkapin oak
-Fagaceae,Quercus,Quercus nigra,QUNI,water oak
-Fagaceae,Quercus,Quercus pagoda,QUPA5,cherrybark oak
-Fagaceae,Quercus,Quercus palustris,QUPA2,pin oak
-Fagaceae,Quercus,Quercus phellos,QUPH,willow oak
-Fagaceae,Quercus,Quercus prinus,QUPR2,chestnut oak
-Fagaceae,Quercus,Quercus rubra,QURU,northern red oak
-Fagaceae,Quercus,Quercus shumardii,QUSH,Shumard oak
-Fagaceae,Quercus,Quercus sinnata var sinnata,QUSIS,Durand oak
-Fagaceae,Quercus,Quercus stellata,QUST,post oak
-Fagaceae,Quercus,Quercus texana,QUTE,Texas red oak
-Fagaceae,Quercus,Quercus velutina,QUVE,black oak
-Fagaceae,Quercus,Quercus virginiana,QUVI,live oak
-Fabaceae,Robinia,Robinia pseudoacacia,ROPS,black locust
-Salicaceae,Salix,Salix caroliniana,CACA5,coastal plain willow
-Salicaceae,Salix,Salix nigra,SANI,black willow
-Lauraceae,Sassafras,Sassafras albidum,SAAL5,sassafras
-Rosaceae,Sorbus,Sorbus americana,SOAM3,American mountain-ash
-Tiliaceae,Tilia,Tilia americana,TIAM,American basswood
-Euphorbiaceae,Triadica,Triadica sebifera,TRSE6,Chinese tallowtree
-Ulmaceae,Ulmus,Ulmus alata,ULAL,winged elm
-Ulmaceae,Ulmus,Ulmus americana,ULAM,American elm
-Ulmaceae,Ulmus,Ulmus crassifolia,ULCR,cedar elm
-Ulmaceae,Ulmus,Ulmus rubra,ULRU,slippery elm
-Ulmaceae,Ulmus,Ulmus thomasii,ULTH,rock elm
+﻿Family,Genus,Species,FIA.Code,Common.Name,Scientific.Name,
+Pinaceae,Abies,Abies balsamea,ABBA,balsam fir,Abies balsamea (L.) Mill.,
+Pinaceae,Abies,Abies fraseri,ABFR,Fraser fir,Abies fraseri (Pursh) Poir.,
+Cupressaceae,Chamaecyparis,Chamaecyparis thyoides,CHTH2,Atlantic white-cedar,"Chamaecyparis thyoides (L.) Britton, Sterns & Poggenb.",
+Cupressaceae,Juniperus,Juniperus virginiana,JUVI,eastern redcedar,Juniperus virginiana L.,
+Pinaceae,Larix,Larix laricina,LALA,tamarack,Larix laricina (Du Roi) K. Koch,
+Pinaceae,Picea,Picea glauca,PIGL,white spruce,Picea glauca (Moench) Voss,
+Pinaceae,Picea,Picea mariana,PIMA,black spruce,"Picea mariana (Mill.) Britton, Sterns & Poggenb.",
+Pinaceae,Picea,Picea rubens,PIRU,red spruce,Picea rubens Sarg.,
+Pinaceae,Pinus,Pinus banksiana,PIBA2,jack pine,Pinus banksiana Lamb.,
+Pinaceae,Pinus,Pinus clausa,PICL,sand pine,Pinus clausa (Chapman ex Engelm.) Vasey ex Sarg.,
+Pinaceae,Pinus,Pinus echinata,PIEC2,shortleaf pine,Pinus echinata Mill.,
+Pinaceae,Pinus,Pinus elliottii,PIEL,slash pine,Pinus elliottii Engelm.,
+Pinaceae,Pinus,Pinus glabra,PIGL2,spruce pine,Pinus glabra Walter,
+Pinaceae,Pinus,Pinus palustris,PIPA2,longleaf pine,Pinus palustris Mill.,
+Pinaceae,Pinus,Pinus pungens,PIPUS,Table Mountain pine,Pinus pungens Lamb.,
+Pinaceae,Pinus,Pinus resinosa,PIRE,red pine,Pinus resinosa Aiton,
+Pinaceae,Pinus,Pinus rigida,PIRI,pitch pine,Pinus rigida Mill.,
+Pinaceae,Pinus,Pinus serotina,PISE,pond pine,Pinus serotina Michx.,
+Pinaceae,Pinus,Pinus strobus,PIST,eastern white pine,Pinus strobus L.,
+Pinaceae,Pinus,Pinus taeda,PITA,loblolly pine,Pinus taeda L.,
+Pinaceae,Pinus,Pinus virginiana,PIVI2,Virginia pine,Pinus virginiana Mill.,
+Cupressaceae,Taxodium,Taxodium ascendens,TAAS,pondcypress,Taxodium ascendens Brongn.,
+Cupressaceae,Taxodium,Taxodium distichum,TADI2,baldcyress,Taxodium distichum (L.) Rich.,
+Cupressaceae,Thuja,Thuja occidentalis,THOC2,northern white-cedar,Thuja occidentalis L.,
+Pinaceae,Tsuga,Tsuga canadensis,TSCA,eastern hemlock,Tsuga canadensis (L.) Carrière,
+Pinaceae,Tsuga,Tsuga caroliniana,TSCA2,Carolina hemlock,Tsuga caroliniana Engelm.,
+Aceraceae,Acer,Acer barbatum,ACBA3,Florida maple,Acer barbatum Michx.,
+Aceraceae,Acer,Acer leucoderme,ACLE,chalk maple,Acer leucoderme Small,
+Aceraceae,Acer,Acer negundo,ACNE3,boxelder,Acer negundo L.,
+Aceraceae,Acer,Acer nigrum,ACNI5,black maple,Acer nigrum Michx. f.,
+Aceraceae,Acer,Acer pensylvanicum,ACPE,striped maple,Acer pensylvanicum L.,
+Aceraceae,Acer,Acer rubrum,ACRU,red maple,Acer rubrum L.,
+Aceraceae,Acer,Acer saccharinum,ACSA2,silver maple,Acer saccharinum L.,
+Aceraceae,Acer,Acer saccharum,ACSA3,sugar maple,Acer saccharum Marsh.,
+Aceraceae,Acer,Acer spicatum,ACSP2,mountain maple,Acer spicatum Lam.,
+Hippocastanaceae,Aesculus,Aesculus flava,AEFL,yellow buckeye,Aesculus flava Aiton,
+Hippocastanaceae,Aesculus,Aesculus glabra,AEGL,Ohio buckeye,Aesculus glabra Willd.,
+Simaroubaceae,Ailanthus,Ailanthus altissima,AIAL,tree-of-heaven,Ailanthus altissima (Mill.) Swingle,
+Annonaceae,Annona,Annona glabra,ANGL4,pond-apple,Annona glabra L.,
+Annonaceae,Asimina,Asimina triloba,ASTR,pawpaw,Asimina triloba (L.) Dunal,
+Betulaceae,Betula,Betula alleghaniensis,BEAL2,yellow birch,Betula alleghaniensis Britton,
+Betulaceae,Betula,Betula lenta,BELE,sweet birch,Betula lenta L.,
+Betulaceae,Betula,Betula nigra,BENI,river birch,Betula nigra L.,
+Betulaceae,Betula,Betula papyrifera,BEPA,paper birch,Betula papyrifera Marsh.,
+Betulaceae,Betula,Betula populifolia,BEPO,gray birch,Betula populifolia Marsh.,
+Betulaceae,Carpinus,Carpinus caroliniana,CACA18,American hornbeam,Carpinus caroliniana Walter,
+Juglandaceae,Carya,Carya alba,CAAL27,mockernut hickory,Carya alba (L.) Nutt.,
+Juglandaceae,Carya,Carya aquatica,CAAQ2,water hickory,Carya aquatica (Michx. f.) Nutt.,
+Juglandaceae,Carya,Carya cordiformis,CACO15,bitternut hickory,Carya cordiformis (Wangenh.) K. Koch,
+Juglandaceae,Carya,Carya glabra,CAGL8,pignut hickory,Carya glabra (Mill.) Sweet,
+Juglandaceae,Carya,Carya illinoinensis,CAIL2,pecan,Carya illinoinensis (wangenh.) K. Koch,
+Juglandaceae,Carya,Carya ovata,CAOV2,shagbarck hickory,Carya ovata (Mill.) K. Koch,
+Juglandaceae,Carya,Carya texana,CATE9,black hickory,Carya texana Buckley,
+Fagaceae,Castanea,Castanea dentata,CADE12,American chestnut,Castanea dentata (Marsh.) Borkh.,
+Ulmaceae,Celtis,Celtis laevigata,CELA,sugarberry,Celtis laevigata Willd.,
+Ulmaceae,Celtis,Celtis occidentalis,CEOC,hackberry,Celtis occidentalis L.,
+Fabaceae,Cercis,Cercis canadensis,CECA4,eastern redbud,Cercis canadensis L.,
+Cornaceae,Cornus,Cornus florida,COFL2,flowering dogwood,Cornus florida L.,
+Ebenaceae,Diospyros,Diospyros virginiana,DIVI5,common persimmon,Diospyros virginiana L.,
+Fagaceae,Fagus,Fagus grandifolia,FAGR,American beech,Fagus grandifolia Ehrh.,
+Oleaceae,Fraxinus,Fraxinus americana,FRAM2,white ash,Fraxinus americana L.,
+Oleaceae,Fraxinus,Fraxinus caroliniana,FRCA3,Carolia ash,Fraxinus caroliniana Mill.,
+Oleaceae,Fraxinus,Fraxinus nigra,FRNI,black ash,Fraxinus nigra Marsh.,
+Oleaceae,Fraxinus,Fraxinus pennsylvanica,FRPE,green ash,Fraxinus pennsylvanica Marsh.,
+Oleaceae,Fraxinus,Fraxinus profunda,FRPR,pumpkin ash,Fraxinus profunda (Bush) Bush,
+Oleaceae,Fraxinus,Fraxinus quadrangulata,FRQU,blue ash,Fraxinus quadrangulata Michx.,
+Oleaceae,Fraxinus,Fraxinus texensis,FRTE,Texas ash,Fraxinus texensis (A. Gray) Sarg.,
+Fabaceae,Gleditsia,Gleditsia aquatica,GLAQ,waterlocust,Gleditsia aquatica Marsh.,
+Fabaceae,Gleditsia,Gleditsia triacanthos,GLTR,honeylocust,Gleditsia triacanthos L.,
+Theaceae,Gordonia,Gordonia lasianthus,GOLA,loblolly-bay,Gordonia lasianthus (L.) Ellis,
+Fabaceae,Gymnocladus,Gymnocladus dioicus,GYDI,Kentucky coffeetree,Gymnocladus dioicus (L.) K. Koch,
+Aquifoliaceae,Ilex,Ilex opaca,ILOP,American holly,Ilex opaca Aiton,
+Juglandaceae,Juglans,Juglans cinerea,JUCI,butternut,Juglans cinerea L.,
+Juglandaceae,Juglans,Juglans nigra,JUNI,black walnut,Juglans nigra L.,
+Hamamelidaceae,Liquidambar,Liquidambar styraciflua,LIST2,sweetgum,Liquidambar styraciflua L.,
+Magnoliaceae,Liriodendron,Liriodendron tulipifera,LITU,yellow-poplar,Liriodendron tulipifera L.,
+Moraceae,Maclura,Maclura pomifera,MAPO,Osage-orange,Maclura pomifera (Raf.) C.K. Schneid.,
+Magnoliaceae,Magnolia,Magnolia acuminata,MAAC,cucumbertree,Magnolia acuminata (L.) L.,
+Magnoliaceae,Magnolia,Magnolia fraseri,MAFR,mountain magnolia,Magnolia fraseri Walter,
+Magnoliaceae,Magnolia,Magnolia grandiflora,MAGR4,southern magnolia,Magnolia grandiflora L.,
+Magnoliaceae,Magnolia,Magnolia macrophylla,MAMA2,bigleaf magnolia,Magnolia macrophylla Michx.,
+Magnoliaceae,Magnolia,Magnolia virginiana,MAVI2,sweetbay,Magnolia virginiana L.,
+Moraceae,Morus,Morus rubra,MORU2,red mulberry,Morus rubra L.,
+Cornaceae,Nyssa,Nyssa aquatica,NYAQ2,water tupelo,Nyssa aquatica L.,
+Cornaceae,Nyssa,Nyssa biflora,NYBI,swamp tupelo,Nyssa biflora Walter,
+Cornaceae,Nyssa,Nyssa ogeche,NYOG,Ogeechee tupelo,Nyssa ogeche Bartram ex Marsh.,
+Cornaceae,Nyssa,Nyssa sylvatica,NYSY,blackgum,Nyssa sylvatica Marsh.,
+Betulaceae,Ostrya,Ostrya virginiana,OSVI,eastern hophornbeam,Ostrya virginiana (Mill.) K. Koch,
+Ericaceae,Oxydendrum,Oxydendrum arboreum,OXAR,sourwood,Oxydendrum arboreum (L.) DC.,
+Scrophulariaceae,Paulownia,Paulownia tomentosa,PATO2,empress-tree,Paulownia tomentosa (Thunb.) Siebold & Zucc. Ex Steud.,
+Lauraceae,Persea,Persea borbonia,PEBO,redbay,Persea borbonia (L.) Spreng.,
+Ulmaceae,Planera,Planera aquatica,PLAQ,water-elm,Planera aquatica J.F. Gmel.,
+Platanaceae,Platanus,Platanus occidentalis,PLOC,American sycamore,Platanus occidentalis L.,
+Salicaceae,Populus,Populus balsamifera,POBA2,balsam poplar,Populus balsamifera L.,
+Salicaceae,Populus,Populus deltoides,PODE3,eastern cottonwood,Populus deltoides Bartram ex Marsh.,
+Salicaceae,Populus,Populus grandidentata,POGR4,bigtooth aspen,Populus grandidentata Michx.,
+Salicaceae,Populus,Populus heterophylla,POHE4,swamp cottonwood,Populus heterophylla L.,
+Salicaceae,Populus,Populus tremuloides,POTR5,quaking aspen,Populus tremuloides Michx.,
+Rosaceae,Prunus,Prunus americana,PRAM,Amercian plum,Prunus americana Marsh.,
+Rosaceae,Prunus,Prunus pensylvanica,PRPE2,pin cherry,Prunus pensylvanica L. f.,
+Rosaceae,Prunus,Prunus serotina,PRSE2,black cherry,Prunus serotina Ehrh.,
+Rosaceae,Prunus,Prunus virginiana,PRVI,chokecherry,Prunus virginiana L.,
+Fagaceae,Quercus,Quercus alba,QUAL,white oak,Quercus alba L.,
+Fagaceae,Quercus,Quercus bicolor,QUBI,swamp white oak,Quercus bicolor Willd.,
+Fagaceae,Quercus,Quercus coccinea,QUCO2,scarlet oak,Quercus coccinea Münchh.,
+Fagaceae,Quercus,Quercus ellipsoidalis,QUEL,northern pin oak,Quercus ellipsoidalis E.J. Hill,
+Fagaceae,Quercus,Quercus falcata,QUFA,southern red oak,Quercus falcata Michx.,
+Fagaceae,Quercus,Quercus ilicifolia,QUIL,bear oak,Quercus ilicifolia Wangenh.,
+Fagaceae,Quercus,Quercus imbricaria,QUIM,shingle oak,Quercus imbricaria Michx.,
+Fagaceae,Quercus,Quercus incana,QUIN,bluejack oak,Quercus incana Bartram,
+Fagaceae,Quercus,Quercus laevis,QULA2,turkey oak,Quercus laevis Walter,
+Fagaceae,Quercus,Quercus laurifolia,QULA3,laurel oak,Quercus laurifolia Michx.,
+Fagaceae,Quercus,Quercus lyrata,QULY,overcup oak,Quercus lyrata Walter,
+Fagaceae,Quercus,Quercus macrocarpa,QUMA2,bur oak,Quercus macrocarpa Michx.,
+Fagaceae,Quercus,Quercus margaretta,QUMA6,dwarf post oak,Quercus margaretta (Ashe) Small,Quercus margarettiae in atlas
+Fagaceae,Quercus,Quercus marilandica,QUMA3,blackjack oak,Quercus marilandica Münchh.,
+Fagaceae,Quercus,Quercus michauxii,QUMI,swamp checknut oak,Quercus michauxii Nutt.,
+Fagaceae,Quercus,Quercus minima,QUMI2,dwarf live oak,Quercus minima (Sarg.) Small,
+Fagaceae,Quercus,Quercus muehlenbergii,QUMU,chinkapin oak,Quercus muehlenbergii Engelm.,
+Fagaceae,Quercus,Quercus nigra,QUNI,water oak,Quercus nigra L.,
+Fagaceae,Quercus,Quercus pagoda,QUPA5,cherrybark oak,Quercus pagoda Raf.,
+Fagaceae,Quercus,Quercus palustris,QUPA2,pin oak,Quercus palustris Münchh.,
+Fagaceae,Quercus,Quercus phellos,QUPH,willow oak,Quercus phellos L. ,
+Fagaceae,Quercus,Quercus prinus,QUPR2,chestnut oak,Quercus prinus L.,
+Fagaceae,Quercus,Quercus rubra,QURU,northern red oak,Quercus rubra L.,
+Fagaceae,Quercus,Quercus shumardii,QUSH,Shumard oak,Quercus shumardii Buckley,
+Fagaceae,Quercus,Quercus sinuata var. sinuata,QUSIS,Durand oak,Quercus sinuata Walter var. sinuata,
+Fagaceae,Quercus,Quercus stellata,QUST,post oak,Quercus stellata Wangenh.,
+Fagaceae,Quercus,Quercus texana,QUTE,Texas red oak,Quercus texana Buckley,
+Fagaceae,Quercus,Quercus velutina,QUVE,black oak,Quercus velutina Lam.,
+Fagaceae,Quercus,Quercus virginiana,QUVI,live oak,Quercus virginiana Mill.,
+Fabaceae,Robinia,Robinia pseudoacacia,ROPS,black locust,Robinia pseudoacacia L.,
+Salicaceae,Salix,Salix caroliniana,CACA5,coastal plain willow,Salix caroliniana Michx.,
+Salicaceae,Salix,Salix nigra,SANI,black willow,Salix nigra Marsh.,
+Lauraceae,Sassafras,Sassafras albidum,SAAL5,sassafras,Sassafras albidum (Nutt.) Nees,
+Rosaceae,Sorbus,Sorbus americana,SOAM3,American mountain-ash,Sorbus americana Marsh.,
+Tiliaceae,Tilia,Tilia americana,TIAM,American basswood,Tilia americana L.,
+Euphorbiaceae,Triadica,Triadica sebifera,TRSE6,Chinese tallowtree,Triadica sebifera (L.) Small,
+Ulmaceae,Ulmus,Ulmus alata,ULAL,winged elm,Ulmus alata Michx.,
+Ulmaceae,Ulmus,Ulmus americana,ULAM,American elm,Ulmus americana L.,
+Ulmaceae,Ulmus,Ulmus crassifolia,ULCR,cedar elm,Ulmus crassifolia Nutt.,
+Ulmaceae,Ulmus,Ulmus rubra,ULRU,slippery elm,Ulmus rubra Muhl.,
+Ulmaceae,Ulmus,Ulmus thomasii,ULTH,rock elm,Ulmus thomasii Sarg.,
