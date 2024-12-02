@@ -204,3 +204,6 @@ d.7 = d.6 %>%
 ```{r}
 plot(d.7$decimalLongitude, d.7$decimalLatitude, asp=1, cex=0.3)
 ```
+
+
+
