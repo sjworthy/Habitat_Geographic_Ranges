@@ -16,7 +16,7 @@ library(rgbif)
 library(tidyverse)
 ```
 
-Read in the species list
+### Read in the species list
 
 ```{r}
 species = read.csv("../Raw.Data/species.csv")
@@ -43,7 +43,7 @@ filter(!matchType == "NONE") %>% # get matched names
 pull(usageKey) 
 ```
 
-Download the data
+### Download the data
 
 ```{r}
 occ_download(pred_in("taxonKey", gbif_taxon_keys),
@@ -94,6 +94,8 @@ sort(unique(d$species))
 table(d$taxonRank)
 ```
 
+### Filtering
+
 Get rid of all taxonRanks excepts SPECIES and Quercus sinuata var. sinuata
 
 ```{r}
@@ -109,7 +111,6 @@ sort(unique(d.2$species))
 table(d.2$taxonRank)
 ```
 
-
 Following this for cleaning the data: https://ptarroso.github.io/ENMTutorial/chapter-1---the-presence-data-housekeeping.html. Some of this may be repetitive with settings for GBIF download but want to make sure the data is cleaned.
 
 ```{r}
@@ -124,6 +125,69 @@ Remove rows with missing coordinates. All rows have coordinates
 table(is.na(d.2$decimalLatitude + d.2$decimalLongitude))
 ```
 
+Remove all basis of record categories except human observations and preserved specimens. Checked to make sure that removing all other categories doesn't decrease sample size for any particular species.
+
+```{r}
+table(d.2$basisOfRecord)
+```
+
+Distribution of records per species. Minimum is Aesculus flava with 17. Maximum is Quercus palustris with 133802.
+
+```{r}
+sort(table(d.2$species))
+```
+
+```{r}
+mean(table(d.2$species))
+median(table(d.2$species))
+```
+
+
+Looking at records in each of the other categories
+
+```{r}
+fossil = d.2 %>%
+  filter(basisOfRecord == "FOSSIL_SPECIMEN")
+living = d.2 %>%
+  filter(basisOfRecord == "LIVING_SPECIMEN")
+machine = d.2 %>%
+  filter(basisOfRecord == "MACHINE_OBSERVATION")
+citation = d.2 %>%
+  filter(basisOfRecord == "MATERIAL_CITATION")
+sample = d.2 %>%
+  filter(basisOfRecord == "MATERIAL_SAMPLE")
+occurrence = d.2 %>%
+  filter(basisOfRecord == "OCCURRENCE")
+```
+
+4987 records removed
+
+```{r}
+d.3 = d.2 %>%
+  filter(basisOfRecord %in% c("HUMAN_OBSERVATION","PRESERVED_SPECIMEN"))
+```
+
+```{r}
+mean(table(d.3$species))
+median(table(d.3$species))
+```
+
+
+```{r}
+sort(table(d.3$species)) # no low abundance species had significant decline after filtering
+```
+
+Remove records with longitude < -113.5. Chosen because it is the western boundary of the level I ecoregion: Great Plains. Used this map of Montana to determine longitude: https://gaftp.epa.gov/epadatacommons/ORD/Ecoregions/mt/mt_front_1.pdf
+
+```{r}
+d.4 = d.3 %>%
+  filter(decimalLongitude > -113.5)
+```
+
+```{r}
+plot(d.4$decimalLongitude, d.4$decimalLatitude, asp=1, cex=0.3)
+```
+
 Remove vows that fail cleaning tests.
 
 * "centroids" if the coordinate is exactly at the centroid of a country than it also indicates lack of precision
@@ -131,9 +195,10 @@ Remove vows that fail cleaning tests.
 * "gbif" tests if the coordinate refers to the GBIF headquarters
 * "institutions" some coordinates might be attributes to the institution providing rather than to the observation location
 * "zeros" if the coordinates are set to zero (intersection of equation with prime meridian)
+* "seas" tests if coordinates fall into the ocean
 
 ```{r}
-tests <- c("centroids", "equal", "gbif", "institutions", "zeros")
+tests <- c("centroids", "equal", "gbif", "institutions", "zeros", "seas")
 
 flags_d.2 <- clean_coordinates(x = d.2, lon = "decimalLongitude", lat = "decimalLatitude",
                                 species = "species", countries = "countryCode",
@@ -159,17 +224,7 @@ Already removed coordinates with uncertainty >=10000m
 range(d.3$coordinateUncertaintyInMeters, na.rm = TRUE)
 ```
 
-Remove Fossil records
-
-```{r}
-table(d.3$basisOfRecord)
-```
-```{r}
-d.4 = d.3 %>%
-  filter(basisOfRecord != "FOSSIL_SPECIMEN")
-```
-
-Removing duplicated coordinates
+Removing duplicated coordinates. 2287 removed
 
 ```{r}
 d.5 = d.4 %>%
@@ -183,16 +238,50 @@ Check Map
 plot(d.5$decimalLongitude, d.5$decimalLatitude, asp=1, cex=0.3)
 ```
 
-Remove records with longitude < -105 to keep eastern North America coordinates. Chose -105 since -104 is the western edge of Nebraska
+### Level 1 ecoregion map
 
 ```{r}
-d.6 = d.5 %>%
-  filter(decimalLongitude > -105)
+#install.packages(c("sp", "raster"))
+library(sp)
+library(raster)
+```
+
+Had to compile gdal in terminal: https://github.com/r-spatial/sf
+
+```{r}
+#install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
 ```
 
 ```{r}
-plot(d.6$decimalLongitude, d.6$decimalLatitude, asp=1, cex=0.3)
+library(sf)
 ```
+
+```{r}
+#install.packages("tmap")
+library(tmap)
+```
+
+https://www.epa.gov/eco-research/ecoregions-north-america
+
+```{r}
+ecoregions <- st_read("../Raw.Data/na_cec_eco_l1/")
+```
+
+```{r}
+head(ecoregions)
+```
+
+
+```{r}
+tm_shape(ecoregions) +
+  tm_borders() +  
+  tm_fill(col = "NA_L1NAME", palette = "Set3", title = "Level 1 Ecoregions") +
+  tm_layout(main.title = "Level 1 Ecoregions Map", frame = FALSE)
+```
+
+
+
+
 
 Trying to see which samples are those in the ocean
 
@@ -200,6 +289,15 @@ Trying to see which samples are those in the ocean
 d.7 = d.6 %>%
   cc_sea()
 ```
+
+```{r}
+tm_shape(ecoregions) +
+  tm_borders() +  # Add borders
+  tm_fill(col = "ecomap_field_name", palette = "Set3", title = "Level 1 Ecoregions") +  # Replace with the relevant column name
+  tm_layout(main.title = "Level 1 Ecoregions Map", frame = FALSE)
+
+```
+
 
 ```{r}
 plot(d.7$decimalLongitude, d.7$decimalLatitude, asp=1, cex=0.3)
