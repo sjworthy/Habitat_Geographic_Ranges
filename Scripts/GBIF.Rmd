@@ -197,10 +197,12 @@ Remove vows that fail cleaning tests.
 * "zeros" if the coordinates are set to zero (intersection of equation with prime meridian)
 * "seas" tests if coordinates fall into the ocean
 
+111251 records removed
+
 ```{r}
 tests <- c("centroids", "equal", "gbif", "institutions", "zeros", "seas")
 
-flags_d.2 <- clean_coordinates(x = d.2, lon = "decimalLongitude", lat = "decimalLatitude",
+flags_d.4 <- clean_coordinates(x = d.4, lon = "decimalLongitude", lat = "decimalLatitude",
                                 species = "species", countries = "countryCode",
                                 country_refcol = "iso_a2", tests = tests)
 ```
@@ -208,26 +210,26 @@ flags_d.2 <- clean_coordinates(x = d.2, lon = "decimalLongitude", lat = "decimal
 Looking into which data points failed
 
 ```{r}
-failed = flags_d.2 %>%
+failed = flags_d.4 %>%
   filter(.summary == "FALSE")
 ```
 
 Only keep the records that passed all the tests
 
 ```{r}
-d.3 = d.2[flags_d.2$.summary,]
+d.5 = d.4[flags_d.4$.summary,]
 ```
 
 Already removed coordinates with uncertainty >=10000m
 
 ```{r}
-range(d.3$coordinateUncertaintyInMeters, na.rm = TRUE)
+range(d.5$coordinateUncertaintyInMeters, na.rm = TRUE)
 ```
 
 Removing duplicated coordinates. 2287 removed
 
 ```{r}
-d.5 = d.4 %>%
+d.6 = d.5 %>%
   group_by(species) %>%
   distinct(decimalLatitude,decimalLongitude)
 ```
@@ -235,8 +237,70 @@ d.5 = d.4 %>%
 Check Map
 
 ```{r}
-plot(d.5$decimalLongitude, d.5$decimalLatitude, asp=1, cex=0.3)
+plot(d.6$decimalLongitude, d.6$decimalLatitude, asp=1, cex=0.3)
 ```
+
+```{r}
+library(maps)
+```
+
+```{r}
+us_states <- map_data("state")
+
+map = ggplot() +
+  geom_polygon(data = us_states, aes(x = long, y = lat, group = group), fill = "white") +
+  geom_point(data = d.6,
+             aes(x = decimalLongitude, y = decimalLatitude), alpha = 0.5)
+map
+```
+
+Investigating samples that seem to be in the great lakes
+
+```{r}
+lake.sub = d.6 %>%
+  filter(decimalLatitude > 39 & decimalLatitude < 45 & decimalLongitude < -79 & decimalLongitude > -86)
+```
+
+```{r}
+write.csv(d.6, file="../Formatted.Data/gbif.filtered.csv")
+```
+
+### Plotting
+
+Plotting the distribution of records per species
+
+```{r}
+freq.df = as.data.frame(table(d.6$species))
+head(freq.df)
+```
+
+```{r}
+range(freq.df$Freq)
+mean(freq.df$Freq)
+median(freq.df$Freq)
+quantile(freq.df$Freq)
+```
+
+Values after removing Aesculus flava
+
+```{r}
+freq.df.2 = freq.df %>%
+  filter(Var1 != "Aesculus flava")
+```
+
+```{r}
+range(freq.df.2$Freq)
+mean(freq.df.2$Freq)
+median(freq.df.2$Freq)
+quantile(freq.df.2$Freq)
+```
+
+```{r}
+ggplot(freq.df, aes(Freq))+
+  geom_freqpoly()+
+  theme_classic(base_size = 20)
+```
+
 
 ### Level 1 ecoregion map
 
@@ -271,7 +335,6 @@ ecoregions <- st_read("../Raw.Data/na_cec_eco_l1/")
 head(ecoregions)
 ```
 
-
 ```{r}
 tm_shape(ecoregions) +
   tm_borders() +  
@@ -279,29 +342,21 @@ tm_shape(ecoregions) +
   tm_layout(main.title = "Level 1 Ecoregions Map", frame = FALSE)
 ```
 
-
-
-
-
-Trying to see which samples are those in the ocean
-
 ```{r}
-d.7 = d.6 %>%
-  cc_sea()
+ecoregions.2 = st_simplify(ecoregions, dTolerance = 75)
 ```
 
+Use this to speed up plotting, sg_hb <- st_simplify(sg_hb, dTolerance = 75)
+
 ```{r}
-tm_shape(ecoregions) +
-  tm_borders() +  # Add borders
-  tm_fill(col = "ecomap_field_name", palette = "Set3", title = "Level 1 Ecoregions") +  # Replace with the relevant column name
+tm_shape(ecoregions.2) +
+  tm_borders() +  
+  tm_fill(col = "NA_L1NAME", palette = "Set3", title = "Level 1 Ecoregions") +
   tm_layout(main.title = "Level 1 Ecoregions Map", frame = FALSE)
-
 ```
 
 
-```{r}
-plot(d.7$decimalLongitude, d.7$decimalLatitude, asp=1, cex=0.3)
-```
+https://cran.r-project.org/web/packages/rmapshaper/vignettes/rmapshaper.html
 
 
 

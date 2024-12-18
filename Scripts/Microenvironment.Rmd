@@ -1,0 +1,15 @@
+---
+title: "microenvironment"
+output: html_document
+date: "2024-12-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Working from Kling, Baer, Ackerly. 2024. A Tree's view of the terrain: downscaling bioclimate variables to high resolution using a novel multi-level species distribution model. Ecography
+
+* We call this biologically inferred fine-scale climate variation "bioclimate", and we call the modeling method "bioclimate inference from species' high-resoultion occurrence patterns' (BISHOP)
+* A BISHOP model assumes that macroclimate and micro-physiography shape an unmeasured bioclimate variables that then drives occurrence probability.
+* The climate downscaling submodel predicts a higher-resolution version of a macroclimate variable, creating its corresponding bioclimate variable by adding an offset (or delta value) that is a function of fine-scale physiography (e.g. terrain, soils, vegetation). 
