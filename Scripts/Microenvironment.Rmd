@@ -10,19 +10,73 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Working from Kling, Baer, Ackerly. 2024. A Tree's view of the terrain: downscaling bioclimate variables to high resolution using a novel multi-level species distribution model. Ecography
 
-* We call this biologically inferred fine-scale climate variation "bioclimate", and we call the modeling method "bioclimate inference from species' high-resoultion occurrence patterns' (BISHOP)
-* A BISHOP model assumes that macroclimate and micro-physiography shape an unmeasured bioclimate variables that then drives occurrence probability.
-* The climate downscaling submodel predicts a higher-resolution version of a macroclimate variable, creating its corresponding bioclimate variable by adding an offset (or delta value) that is a function of fine-scale physiography (e.g. terrain, soils, vegetation). 
-* Variables in model: northness, eastness, exposure, elevational position, total annual precipitation, max temperature of the warmest month and minimum temperature of the coldest month, mean annual temperature, total annual precipitation
-* Model includes a climate downscaling component that models a latent bioclimate variable as a function of macroclimate and topography, and a niche component that models species occurrences as a function of bioclimate. 
-* Basic assumptions of the model, (1) the difference between a site's marcoclimate and its bioclimate is a function of topography, (2) each macroclimate variables has a corresponding bioclimate variables, and these are equal in a flate site, (3) at a given site, each topographic variable has a linear modifying effect on each macroclimate variable, (4) these effects vary among locations as a spline function of the modifier variables.
-
+-   We call this biologically inferred fine-scale climate variation "bioclimate", and we call the modeling method "bioclimate inference from species' high-resolution occurrence patterns' (BISHOP)
+-   A BISHOP model assumes that macroclimate and micro-physiography shape an unmeasured bioclimate variables that then drives occurrence probability.
+-   The climate downscaling submodel predicts a higher-resolution version of a macroclimate variable, creating its corresponding bioclimate variable by adding an offset (or delta value) that is a function of fine-scale physiography (e.g. terrain, soils, vegetation).
+-   Variables in model: northness, eastness, exposure, elevational position, total annual precipitation, max temperature of the warmest month and minimum temperature of the coldest month, mean annual temperature, total annual precipitation
+-   Model includes a climate downscaling component that models a latent bioclimate variable as a function of macroclimate and topography, and a niche component that models species occurrences as a function of bioclimate.
+-   Basic assumptions of the model, (1) the difference between a site's marcoclimate and its bioclimate is a function of topography, (2) each macroclimate variables has a corresponding bioclimate variables, and these are equal in a flate site, (3) at a given site, each topographic variable has a linear modifying effect on each macroclimate variable, (4) these effects vary among locations as a spline function of the modifier variables.
 
 To generate example map of Idaho in manuscript:
 
-* fitted multi-species model to generate downscaled tree-sepcies bioclimate data for an example landscape in southern Idaho. 
-* The inputs were the same macrocliamte and wind data used to fit the model, and a 10 m elevation raster.
-* Used bilinear interpolation to create smoothed macroclimate variables at 10 m resolution, and used elevation to calculate the four topographic variables at 10 m resolution. 
-* Using the fitted model parameters, we then calculated bioclimate hgih temperature, low temperature, and moisture ont he 10 m grid. 
+-   fitted multi-species model to generate downscaled tree-sepcies bioclimate data for an example landscape in southern Idaho.
+-   The inputs were the same macrocliamte and wind data used to fit the model, and a 10 m elevation raster.
+-   Used bilinear interpolation to create smoothed macroclimate variables at 10 m resolution, and used elevation to calculate the four topographic variables at 10 m resolution.
+-   Using the fitted model parameters, we then calculated bioclimate high temperature, low temperature, and moisture on the 10 m grid.
 
-This process can be easily replicated using an R package (Data availability section) that lets users input elevation data for any landscape in our study area to generate bioclimate estimates for North American trees based on coefficients from the multi-species model. To yield consistent results, elevation data should ahve a resolution similar to our input data (10-100 m), and cover an area of multiple square kilometers. 
+This process can be easily replicated using an R package (Data availability section) that lets users input elevation data for any landscape in our study area to generate bioclimate estimates for North American trees based on coefficients from the multi-species model. To yield consistent results, elevation data should have a resolution similar to our input data (10-100 m), and cover an area of multiple square kilometers.
+
+Link to github for R package <https://github.com/matthewkling/topoclimate.pred>
+
+Load R package
+
+```{r}
+devtools::install_github("matthewkling/topoclimate.pred")
+```
+
+```{r}
+library(topoclimate.pred)
+```
+
+Read in elevation raster for Niobrara
+
+Source: https://apps.nationalmap.gov/downloader/#/
+
+Metadata: https://www.sciencebase.gov/catalog/item/647ac9a9d34eac007b5234fb
+
+```{r}
+elev <- raster("../Raw.Data/USGS_13_n43w101_20220726.tif")
+names(elev) <- "elevation"
+```
+
+Crop to make smaller 
+
+```{r}
+ext <- extent(-100.1, -100, 42.7, 42.8)
+et <- crop(elev, ext)
+```
+
+Make a quick terrain map of the landscape
+
+```{r}
+hillshade <- hillShade(terrain(elev, "slope"), terrain(elev, "aspect"))
+plot(hillshade, col = colorRampPalette(c("black", "white"))(50), legend = F)
+```
+
+Terrian map of cropped area
+
+```{r}
+hillshade.crop <- hillShade(terrain(et, "slope"), terrain(et, "aspect"))
+plot(hillshade.crop, col = colorRampPalette(c("black", "white"))(50), legend = F)
+```
+Get microclimate. Set include_inputs = TRUE to get macroclimate variables to output
+
+```{r}
+clim <- bioclimate(et, include_inputs = TRUE)
+```
+Plotting
+
+```{r}
+plot(clim, col = viridis::viridis_pal()(50), nrow = 1)
+```
+
