@@ -1,0 +1,4517 @@
+---
+title: "Range.Maps"
+output: html_document
+date: "2025-01-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Location of files originally: https://github.com/wpetry/USTreeAtlas
+
+```{r}
+library(sp)
+library(raster)
+library(sf)
+library(maps)
+library(tidyverse)
+library(tigris)
+options(tigris_use_cache = TRUE)
+```
+
+Read in the GBIF data points
+
+```{r}
+gbif = read.csv("../Formatted.Data/gbif.filtered.csv")
+```
+
+Subset for Abies balsamea
+
+```{r}
+ABBA.occ = gbif %>%
+  filter(species == "Abies balsamea") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ABBA.range = st_read("../../USTreeAtlas/shp/abiebals/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ABBA.range)  <- 4267 
+```
+
+```{r}
+maps::map(database = "state")
+plot(ABBA.range$geometry, col="red", add=T)
+```
+
+```{r}
+us_states <- states(cb = TRUE)
+```
+
+```{r}
+continental_states <- us_states %>%
+  filter(!NAME %in% (c("Alaska","American Samoa","Guam","Commonwealth of the Northern Mariana Islands","Hawaii","United States Virgin Islands",
+                       "Puerto Rico")))
+```
+
+```{r}
+states.map = continental_states %>%
+  st_as_sf %>%
+  st_transform(st_crs(ABBA.range))
+  
+```
+
+```{r}
+ggplot(states.map) +
+  geom_sf()
+```
+
+```{r}
+ggplot(ABBA.range) +
+  geom_sf()
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map)+
+  geom_sf(data = ABBA.range, col = "red")
+```
+
+```{r}
+ABBA_clipped = st_intersection(ABBA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ABBA_clipped, col = "red")+
+  theme_classic()
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ABBA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ABBA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ABBA.range.pdf", width = 12, height = 8)
+```
+
+### Repeat basics of steps above for all other species ####
+
+Subset for Abies fraseri
+
+```{r}
+ABFR.occ = gbif %>%
+  filter(species == "Abies fraseri") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ABFR.range = st_read("../../USTreeAtlas/shp/abiefras/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ABFR.range)  <- 4267 
+```
+
+```{r}
+ABFR_clipped = st_intersection(ABFR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ABFR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ABFR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ABFR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer barbatum
+
+```{r}
+ACBA3.occ = gbif %>%
+  filter(species == "Acer barbatum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACBA3.range = st_read("../../USTreeAtlas/shp/acerbarb/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACBA3.range)  <- 4267 
+```
+
+```{r}
+ACBA3_clipped = st_intersection(ACBA3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACBA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACBA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACBA3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer leucoderme
+
+```{r}
+ACLE.occ = gbif %>%
+  filter(species == "Acer leucoderme") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACLE.range = st_read("../../USTreeAtlas/shp/acerleuc/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACLE.range)  <- 4267 
+```
+
+```{r}
+ACLE_clipped = st_intersection(ACLE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACLE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACLE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACLE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer negundo
+
+```{r}
+ACNE3.occ = gbif %>%
+  filter(species == "Acer negundo") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACNE3.range = st_read("../../USTreeAtlas/shp/acernegu/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACNE3.range)  <- 4267 
+```
+
+```{r}
+ACNE3_clipped = st_intersection(ACNE3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACNE3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACNE3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACNE3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer nigrum
+
+```{r}
+ACNI5.occ = gbif %>%
+  filter(species == "Acer nigrum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACNI5.range = st_read("../../USTreeAtlas/shp/acernigr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACNI5.range)  <- 4267 
+```
+
+```{r}
+ACNI5_clipped = st_intersection(ACNI5.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACNI5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACNI5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACNI5.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer pensylvanicum
+
+```{r}
+ACPE.occ = gbif %>%
+  filter(species == "Acer pensylvanicum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACPE.range = st_read("../../USTreeAtlas/shp/acerpens/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACPE.range)  <- 4267 
+```
+
+```{r}
+ACPE_clipped = st_intersection(ACPE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACPE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACPE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACPE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer rubrum
+
+```{r}
+ACRU.occ = gbif %>%
+  filter(species == "Acer rubrum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACRU.range = st_read("../../USTreeAtlas/shp/acerrubr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACRU.range)  <- 4267 
+```
+
+```{r}
+ACRU_clipped = st_intersection(ACRU.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACRU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACRU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACRU.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer saccharinum
+
+```{r}
+ACSA2.occ = gbif %>%
+  filter(species == "Acer saccharinum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACSA2.range = st_read("../../USTreeAtlas/shp/acersacc/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACSA2.range)  <- 4267 
+```
+
+```{r}
+ACSA2_clipped = st_intersection(ACSA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACSA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACSA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACSA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer saccharum
+
+```{r}
+ACSA3.occ = gbif %>%
+  filter(species == "Acer saccharum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACSA3.range = st_read("../../USTreeAtlas/shp/acersacr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACSA3.range)  <- 4267 
+```
+
+```{r}
+ACSA3_clipped = st_intersection(ACSA3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACSA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACSA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACSA3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Acer spicatum
+
+```{r}
+ACSP2.occ = gbif %>%
+  filter(species == "Acer spicatum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ACSP2.range = st_read("../../USTreeAtlas/shp/acerspic/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ACSP2.range)  <- 4267 
+```
+
+```{r}
+ACSP2_clipped = st_intersection(ACSP2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACSP2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACSP2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ACSP2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Aesculus flava. Range map not available.
+
+```{r}
+AEFL.occ = gbif %>%
+  filter(species == "Aesculus flava") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = AEFL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/AEFL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Aesculus glabra
+
+```{r}
+AEGL.occ = gbif %>%
+  filter(species == "Aesculus glabra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+AEGL.range = st_read("../../USTreeAtlas/shp/aescglab/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(AEGL.range)  <- 4267 
+```
+
+```{r}
+AEGL_clipped = st_intersection(AEGL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = AEGL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = AEGL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/AEGL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ailanthus altissima. Range map not available.
+
+```{r}
+AIAL.occ = gbif %>%
+  filter(species == "Ailanthus altissima") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = AIAL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/AIAL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Annona glabra. Range map not available.
+
+```{r}
+ANGL4.occ = gbif %>%
+  filter(species == "Annona glabra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = ANGL4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ANGL4.range.pdf", width = 12, height = 8)
+```
+
+Subset for Asimina triloba
+
+```{r}
+ASTR.occ = gbif %>%
+  filter(species == "Asimina triloba") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ASTR.range = st_read("../../USTreeAtlas/shp/asimtril/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ASTR.range)  <- 4267 
+```
+
+```{r}
+ASTR_clipped = st_intersection(ASTR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ASTR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ASTR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ASTR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Betula alleghaniensis
+
+```{r}
+BEAL2.occ = gbif %>%
+  filter(species == "Betula alleghaniensis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+BEAL2.range = st_read("../../USTreeAtlas/shp/betualle/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(BEAL2.range)  <- 4267 
+```
+
+```{r}
+BEAL2_clipped = st_intersection(BEAL2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BEAL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BEAL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/BEAL2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Betula lenta
+
+```{r}
+BELE.occ = gbif %>%
+  filter(species == "Betula lenta") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+BELE.range = st_read("../../USTreeAtlas/shp/betulent/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(BELE.range)  <- 4267 
+```
+
+```{r}
+BELE_clipped = st_intersection(BELE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BELE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BELE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/BELE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Betula nigra
+
+```{r}
+BENI.occ = gbif %>%
+  filter(species == "Betula nigra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+BENI.range = st_read("../../USTreeAtlas/shp/betunigr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(BENI.range)  <- 4267 
+```
+
+```{r}
+BENI_clipped = st_intersection(BENI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BENI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BENI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/BENI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Betula papyrifera
+
+```{r}
+BEPA.occ = gbif %>%
+  filter(species == "Betula papyrifera") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+BEPA.range = st_read("../../USTreeAtlas/shp/betupapy/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(BEPA.range)  <- 4267 
+```
+
+```{r}
+BEPA_clipped = st_intersection(BEPA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BEPA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BEPA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/BEPA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Betula populifolia
+
+```{r}
+BEPO.occ = gbif %>%
+  filter(species == "Betula populifolia") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+BEPO.range = st_read("../../USTreeAtlas/shp/betupopu/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(BEPO.range)  <- 4267 
+```
+
+```{r}
+BEPO_clipped = st_intersection(BEPO.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BEPO_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BEPO.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/BEPO.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carpinus caroliniana
+
+```{r}
+CACA18.occ = gbif %>%
+  filter(species == "Carpinus caroliniana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CACA18.range = st_read("../../USTreeAtlas/shp/carpcaro/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CACA18.range)  <- 4267 
+```
+
+```{r}
+CACA18_clipped = st_intersection(CACA18.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CACA18_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CACA18.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CACA18.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carya alba. No range map available
+
+```{r}
+CAAL27.occ = gbif %>%
+  filter(species == "Carya alba") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = CAAL27.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CAAL27.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carya aquatica
+
+```{r}
+CAAQ2.occ = gbif %>%
+  filter(species == "Carya aquatica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CAAQ2.range = st_read("../../USTreeAtlas/shp/caryaqua/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CAAQ2.range)  <- 4267 
+```
+
+```{r}
+CAAQ2_clipped = st_intersection(CAAQ2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAAQ2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAAQ2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CAAQ2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carya cordiformis
+
+```{r}
+CACO15.occ = gbif %>%
+  filter(species == "Carya cordiformis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CACO15.range = st_read("../../USTreeAtlas/shp/carycord/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CACO15.range)  <- 4267 
+```
+
+```{r}
+CACO15_clipped = st_intersection(CACO15.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CACO15_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CACO15.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CACO15.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carya glabra
+
+```{r}
+CAGL8.occ = gbif %>%
+  filter(species == "Carya glabra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CAGL8.range = st_read("../../USTreeAtlas/shp/caryglab/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CAGL8.range)  <- 4267 
+```
+
+```{r}
+CAGL8_clipped = st_intersection(CAGL8.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAGL8_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAGL8.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CAGL8.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carya illinoinensis
+
+```{r}
+CAIL2.occ = gbif %>%
+  filter(species == "Carya illinoinensis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CAIL2.range = st_read("../../USTreeAtlas/shp/caryilli/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CAIL2.range)  <- 4267 
+```
+
+```{r}
+CAIL2_clipped = st_intersection(CAIL2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAIL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAIL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CAIL2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carya ovata
+
+```{r}
+CAOV2.occ = gbif %>%
+  filter(species == "Carya ovata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CAOV2.range = st_read("../../USTreeAtlas/shp/caryovat/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CAOV2.range)  <- 4267 
+```
+
+```{r}
+CAOV2_clipped = st_intersection(CAOV2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAOV2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAOV2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CAOV2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Carya texana
+
+```{r}
+CATE9.occ = gbif %>%
+  filter(species == "Carya texana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CATE9.range = st_read("../../USTreeAtlas/shp/carytexa/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CATE9.range)  <- 4267 
+```
+
+```{r}
+CATE9_clipped = st_intersection(CATE9.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CATE9_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CATE9.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CATE9.range.pdf", width = 12, height = 8)
+```
+
+Subset for Castanea dentata
+
+```{r}
+CADE12.occ = gbif %>%
+  filter(species == "Castanea dentata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CADE12.range = st_read("../../USTreeAtlas/shp/castdent/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CADE12.range)  <- 4267 
+```
+
+```{r}
+CADE12_clipped = st_intersection(CADE12.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CADE12_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CADE12.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CADE12.range.pdf", width = 12, height = 8)
+```
+
+Subset for Celtis laevigata
+
+```{r}
+CELA.occ = gbif %>%
+  filter(species == "Celtis laevigata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CELA.range = st_read("../../USTreeAtlas/shp/celtlaev/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CELA.range)  <- 4267 
+```
+
+```{r}
+CELA_clipped = st_intersection(CELA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CELA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CELA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CELA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Celtis occidentalis
+
+```{r}
+CEOC.occ = gbif %>%
+  filter(species == "Celtis occidentalis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CEOC.range = st_read("../../USTreeAtlas/shp/celtocci/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CEOC.range)  <- 4267 
+```
+
+```{r}
+CEOC_clipped = st_intersection(CEOC.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CEOC_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CEOC.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CEOC.range.pdf", width = 12, height = 8)
+```
+
+Subset for Cercis canadensis. Range map unavailable
+
+```{r}
+CECA4.occ = gbif %>%
+  filter(species == "Cercis canadensis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = CECA4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CECA4.range.pdf", width = 12, height = 8)
+```
+
+Subset for Chamaecyparis thyoides
+
+```{r}
+CHTH2.occ = gbif %>%
+  filter(species == "Chamaecyparis thyoides") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CHTH2.range = st_read("../../USTreeAtlas/shp/chamthyo/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CHTH2.range)  <- 4267 
+```
+
+```{r}
+CHTH2_clipped = st_intersection(CHTH2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CHTH2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CHTH2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CHTH2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Cornus florida
+
+```{r}
+COFL2.occ = gbif %>%
+  filter(species == "Cornus florida") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+COFL2.range = st_read("../../USTreeAtlas/shp/cornflor/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(COFL2.range)  <- 4267 
+```
+
+```{r}
+COFL2_clipped = st_intersection(COFL2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = COFL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = COFL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/COFL2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Diospyros virginiana
+
+```{r}
+DIVI5.occ = gbif %>%
+  filter(species == "Diospyros virginiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+DIVI5.range = st_read("../../USTreeAtlas/shp/diosvirg/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(DIVI5.range)  <- 4267 
+```
+
+```{r}
+DIVI5_clipped = st_intersection(DIVI5.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = DIVI5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = DIVI5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/DIVI5.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fagus grandifolia
+
+```{r}
+FAGR.occ = gbif %>%
+  filter(species == "Fagus grandifolia") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FAGR.range = st_read("../../USTreeAtlas/shp/fagugran/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FAGR.range)  <- 4267 
+```
+
+```{r}
+FAGR_clipped = st_intersection(FAGR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FAGR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FAGR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FAGR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fraxinus americana
+
+```{r}
+FRAM2.occ = gbif %>%
+  filter(species == "Fraxinus americana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FRAM2.range = st_read("../../USTreeAtlas/shp/fraxamer/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FRAM2.range)  <- 4267 
+```
+
+```{r}
+FRAM2_clipped = st_intersection(FRAM2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRAM2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRAM2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FRAM2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fraxinus caroliniana
+
+```{r}
+FRCA3.occ = gbif %>%
+  filter(species == "Fraxinus caroliniana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FRCA3.range = st_read("../../USTreeAtlas/shp/fraxcaro/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FRCA3.range)  <- 4267 
+```
+
+```{r}
+FRCA3_clipped = st_intersection(FRCA3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRCA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRCA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FRCA3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fraxinus nigra
+
+```{r}
+FRNI.occ = gbif %>%
+  filter(species == "Fraxinus nigra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FRNI.range = st_read("../../USTreeAtlas/shp/fraxnigr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FRNI.range)  <- 4267 
+```
+
+```{r}
+FRNI_clipped = st_intersection(FRNI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRNI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRNI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FRNI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fraxinus pennsylvanica
+
+```{r}
+FRPE.occ = gbif %>%
+  filter(species == "Fraxinus pennsylvanica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FRPE.range = st_read("../../USTreeAtlas/shp/fraxpenn/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FRPE.range)  <- 4267 
+```
+
+```{r}
+FRPE_clipped = st_intersection(FRPE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRPE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRPE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FRPE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fraxinus profunda
+
+```{r}
+FRPR.occ = gbif %>%
+  filter(species == "Fraxinus profunda") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FRPR.range = st_read("../../USTreeAtlas/shp/fraxprof/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FRPR.range)  <- 4267 
+```
+
+```{r}
+FRPR_clipped = st_intersection(FRPR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRPR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRPR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FRPR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fraxinus quadrangulata
+
+```{r}
+FRQU.occ = gbif %>%
+  filter(species == "Fraxinus quadrangulata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FRQU.range = st_read("../../USTreeAtlas/shp/fraxquad/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FRQU.range)  <- 4267 
+```
+
+```{r}
+FRQU_clipped = st_intersection(FRQU.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRQU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRQU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FRQU.range.pdf", width = 12, height = 8)
+```
+
+Subset for Fraxinus texensis/Fraxinus albicans (gbif)
+
+```{r}
+FRTE.occ = gbif %>%
+  filter(species == "Fraxinus albicans") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+FRTE.range = st_read("../../USTreeAtlas/shp/fraxtexe/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(FRTE.range)  <- 4267 
+```
+
+```{r}
+FRTE_clipped = st_intersection(FRTE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRTE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRTE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/FRTE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Gleditsia aquatica
+
+```{r}
+GLAQ.occ = gbif %>%
+  filter(species == "Gleditsia aquatica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+GLAQ.range = st_read("../../USTreeAtlas/shp/gledaqua/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(GLAQ.range)  <- 4267 
+```
+
+```{r}
+GLAQ_clipped = st_intersection(GLAQ.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GLAQ_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GLAQ.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/GLAQ.range.pdf", width = 12, height = 8)
+```
+
+Subset for Gleditsia triacanthos
+
+```{r}
+GLTR.occ = gbif %>%
+  filter(species == "Gleditsia triacanthos") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+GLTR.range = st_read("../../USTreeAtlas/shp/gledtria/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(GLTR.range)  <- 4267 
+```
+
+```{r}
+GLTR_clipped = st_intersection(GLTR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GLTR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GLTR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/GLTR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Gordonia lasianthus
+
+```{r}
+GOLA.occ = gbif %>%
+  filter(species == "Gordonia lasianthus") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+GOLA.range = st_read("../../USTreeAtlas/shp/gordlasi/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(GOLA.range)  <- 4267 
+```
+
+```{r}
+GOLA_clipped = st_intersection(GOLA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GOLA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GOLA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/GOLA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Gymnocladus dioicus
+
+```{r}
+GYDI.occ = gbif %>%
+  filter(species == "Gymnocladus dioicus") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+GYDI.range = st_read("../../USTreeAtlas/shp/gymndioi/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(GYDI.range)  <- 4267 
+```
+
+```{r}
+GYDI_clipped = st_intersection(GYDI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GYDI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GYDI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/GYDI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ilex opaca
+
+```{r}
+ILOP.occ = gbif %>%
+  filter(species == "Ilex opaca") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ILOP.range = st_read("../../USTreeAtlas/shp/ilexopac/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ILOP.range)  <- 4267 
+```
+
+```{r}
+ILOP_clipped = st_intersection(ILOP.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ILOP_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ILOP.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ILOP.range.pdf", width = 12, height = 8)
+```
+
+Subset for Juglans cinerea
+
+```{r}
+JUCI.occ = gbif %>%
+  filter(species == "Juglans cinerea") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+JUCI.range = st_read("../../USTreeAtlas/shp/juglcine/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(JUCI.range)  <- 4267 
+```
+
+```{r}
+JUCI_clipped = st_intersection(JUCI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = JUCI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = JUCI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/JUCI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Juglans nigra
+
+```{r}
+JUNI.occ = gbif %>%
+  filter(species == "Juglans nigra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+JUNI.range = st_read("../../USTreeAtlas/shp/juglnigr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(JUNI.range)  <- 4267 
+```
+
+```{r}
+JUNI_clipped = st_intersection(JUNI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = JUNI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = JUNI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/JUNI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Juniperus virginiana
+
+```{r}
+JUVI.occ = gbif %>%
+  filter(species == "Juniperus virginiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+JUVI.range = st_read("../../USTreeAtlas/shp/junivirg/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(JUVI.range)  <- 4267 
+```
+
+```{r}
+JUVI_clipped = st_intersection(JUVI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = JUVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = JUVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/JUVI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Larix laricina
+
+```{r}
+LALA.occ = gbif %>%
+  filter(species == "Larix laricina") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+LALA.range = st_read("../../USTreeAtlas/shp/larilari/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(LALA.range)  <- 4267 
+```
+
+```{r}
+LALA_clipped = st_intersection(LALA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = LALA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = LALA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/LALA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Liquidambar styraciflua
+
+```{r}
+LIST2.occ = gbif %>%
+  filter(species == "Liquidambar styraciflua") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+LIST2.range = st_read("../../USTreeAtlas/shp/liqustyr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(LIST2.range)  <- 4267 
+```
+
+```{r}
+LIST2_clipped = st_intersection(LIST2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = LIST2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = LIST2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/LIST2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Liriodendron tulipifera
+
+```{r}
+LITU.occ = gbif %>%
+  filter(species == "Liriodendron tulipifera") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+LITU.range = st_read("../../USTreeAtlas/shp/lirituli/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(LITU.range)  <- 4267 
+```
+
+```{r}
+LITU_clipped = st_intersection(LITU.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = LITU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = LITU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/LITU.range.pdf", width = 12, height = 8)
+```
+
+Subset for Maclura pomifera
+
+```{r}
+MAPO.occ = gbif %>%
+  filter(species == "Maclura pomifera") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+MAPO.range = st_read("../../USTreeAtlas/shp/maclpomi/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(MAPO.range)  <- 4267 
+```
+
+```{r}
+MAPO_clipped = st_intersection(MAPO.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAPO_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAPO.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/MAPO.range.pdf", width = 12, height = 8)
+```
+
+Subset for Magnolia acuminata
+
+```{r}
+MAAC.occ = gbif %>%
+  filter(species == "Magnolia acuminata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+MAAC.range = st_read("../../USTreeAtlas/shp/magnacum/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(MAAC.range)  <- 4267 
+```
+
+```{r}
+MAAC_clipped = st_intersection(MAAC.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAAC_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAAC.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/MAAC.range.pdf", width = 12, height = 8)
+```
+
+Subset for Magnolia fraseri
+
+```{r}
+MAFR.occ = gbif %>%
+  filter(species == "Magnolia fraseri") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+MAFR.range = st_read("../../USTreeAtlas/shp/magnfras/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(MAFR.range)  <- 4267 
+```
+
+```{r}
+MAFR_clipped = st_intersection(MAFR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAFR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAFR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/MAFR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Magnolia grandiflora
+
+```{r}
+MAGR4.occ = gbif %>%
+  filter(species == "Magnolia grandiflora") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+MAGR4.range = st_read("../../USTreeAtlas/shp/magngran/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(MAGR4.range)  <- 4267 
+```
+
+```{r}
+MAGR4_clipped = st_intersection(MAGR4.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAGR4_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAGR4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/MAGR4.range.pdf", width = 12, height = 8)
+```
+
+Subset for Magnolia macrophylla
+
+```{r}
+MAMA2.occ = gbif %>%
+  filter(species == "Magnolia macrophylla") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+MAMA2.range = st_read("../../USTreeAtlas/shp/magnmacr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(MAMA2.range)  <- 4267 
+```
+
+```{r}
+MAMA2_clipped = st_intersection(MAMA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAMA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAMA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/MAMA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Magnolia virginiana
+
+```{r}
+MAVI2.occ = gbif %>%
+  filter(species == "Magnolia virginiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+MAVI2.range = st_read("../../USTreeAtlas/shp/magnvirg/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(MAVI2.range)  <- 4267 
+```
+
+```{r}
+MAVI2_clipped = st_intersection(MAVI2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAVI2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAVI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/MAVI2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Morus rubra
+
+```{r}
+MORU2.occ = gbif %>%
+  filter(species == "Morus rubra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+MORU2.range = st_read("../../USTreeAtlas/shp/morurubr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(MORU2.range)  <- 4267 
+```
+
+```{r}
+MORU2_clipped = st_intersection(MORU2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MORU2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MORU2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/MORU2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Nyssa aquatica
+
+```{r}
+NYAQ2.occ = gbif %>%
+  filter(species == "Nyssa aquatica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+NYAQ2.range = st_read("../../USTreeAtlas/shp/nyssaqua/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(NYAQ2.range)  <- 4267 
+```
+
+```{r}
+NYAQ2_clipped = st_intersection(NYAQ2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = NYAQ2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = NYAQ2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/NYAQ2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Nyssa biflora. No range map available. 
+
+```{r}
+NYBI.occ = gbif %>%
+  filter(species == "Nyssa biflora") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = NYBI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/NYBI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Nyssa ogeche
+
+```{r}
+NYOG.occ = gbif %>%
+  filter(species == "Nyssa ogeche") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+NYOG.range = st_read("../../USTreeAtlas/shp/nyssogec/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(NYOG.range)  <- 4267 
+```
+
+```{r}
+NYOG_clipped = st_intersection(NYOG.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = NYOG_clipped, col = "red", linewidth = 2)+
+  geom_point(data = NYOG.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/NYOG.range.pdf", width = 12, height = 8)
+```
+
+Subset for Nyssa sylvatica
+
+```{r}
+NYSY.occ = gbif %>%
+  filter(species == "Nyssa sylvatica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+NYSY.range = st_read("../../USTreeAtlas/shp/nysssylv/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(NYSY.range)  <- 4267 
+```
+
+```{r}
+NYSY_clipped = st_intersection(NYSY.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = NYSY_clipped, col = "red", linewidth = 2)+
+  geom_point(data = NYSY.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/NYSY.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ostrya virginiana
+
+```{r}
+OSVI.occ = gbif %>%
+  filter(species == "Ostrya virginiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+OSVI.range = st_read("../../USTreeAtlas/shp/ostrvirg/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(OSVI.range)  <- 4267 
+```
+
+```{r}
+OSVI_clipped = st_intersection(OSVI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = OSVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = OSVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/OSVI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Oxydendrum arboreum
+
+```{r}
+OXAR.occ = gbif %>%
+  filter(species == "Oxydendrum arboreum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+OXAR.range = st_read("../../USTreeAtlas/shp/oxydarbo/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(OXAR.range)  <- 4267 
+```
+
+```{r}
+OXAR_clipped = st_intersection(OXAR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = OXAR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = OXAR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/OXAR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Paulownia tomentosa. No range map available.
+
+```{r}
+PATO2.occ = gbif %>%
+  filter(species == "Paulownia tomentosa") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = PATO2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PATO2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Persea borbonia
+
+```{r}
+PEBO.occ = gbif %>%
+  filter(species == "Persea borbonia") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PEBO.range = st_read("../../USTreeAtlas/shp/persborb/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PEBO.range)  <- 4267 
+```
+
+```{r}
+PEBO_clipped = st_intersection(PEBO.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PEBO_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PEBO.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PEBO.range.pdf", width = 12, height = 8)
+```
+
+Subset for Picea glauca
+
+```{r}
+PIGL.occ = gbif %>%
+  filter(species == "Picea glauca") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIGL.range = st_read("../../USTreeAtlas/shp/piceglau/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIGL.range)  <- 4267 
+```
+
+```{r}
+PIGL_clipped = st_intersection(PIGL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIGL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIGL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIGL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Picea mariana
+
+```{r}
+PIMA.occ = gbif %>%
+  filter(species == "Picea mariana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIMA.range = st_read("../../USTreeAtlas/shp/picemari/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIMA.range)  <- 4267 
+```
+
+```{r}
+PIMA_clipped = st_intersection(PIMA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIMA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIMA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIMA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Picea rubens
+
+```{r}
+PIRU.occ = gbif %>%
+  filter(species == "Picea rubens") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIRU.range = st_read("../../USTreeAtlas/shp/picerube/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIRU.range)  <- 4267 
+```
+
+```{r}
+PIRU_clipped = st_intersection(PIRU.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIRU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIRU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIRU.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus banksiana
+
+```{r}
+PIBA2.occ = gbif %>%
+  filter(species == "Pinus banksiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIBA2.range = st_read("../../USTreeAtlas/shp/pinubank/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIBA2.range)  <- 4267 
+```
+
+```{r}
+PIBA2_clipped = st_intersection(PIBA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIBA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIBA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIBA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus clausa
+
+```{r}
+PICL.occ = gbif %>%
+  filter(species == "Pinus clausa") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PICL.range = st_read("../../USTreeAtlas/shp/pinuclau/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PICL.range)  <- 4267 
+```
+
+```{r}
+PICL_clipped = st_intersection(PICL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PICL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PICL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PICL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus echinata
+
+```{r}
+PIEC2.occ = gbif %>%
+  filter(species == "Pinus echinata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIEC2.range = st_read("../../USTreeAtlas/shp/pinuechi/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIEC2.range)  <- 4267 
+```
+
+```{r}
+PIEC2_clipped = st_intersection(PIEC2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIEC2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIEC2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIEC2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus elliottii
+
+```{r}
+PIEL.occ = gbif %>%
+  filter(species == "Pinus elliottii") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIEL.range = st_read("../../USTreeAtlas/shp/pinuelli/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIEL.range)  <- 4267 
+```
+
+```{r}
+PIEL_clipped = st_intersection(PIEL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIEL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIEL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIEL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus glabra
+
+```{r}
+PIGL2.occ = gbif %>%
+  filter(species == "Pinus glabra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIGL2.range = st_read("../../USTreeAtlas/shp/pinuglab/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIGL2.range)  <- 4267 
+```
+
+```{r}
+PIGL2_clipped = st_intersection(PIGL2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIGL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIGL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIGL2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus palustris
+
+```{r}
+PIPA2.occ = gbif %>%
+  filter(species == "Pinus palustris") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIPA2.range = st_read("../../USTreeAtlas/shp/pinupalu/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIPA2.range)  <- 4267 
+```
+
+```{r}
+PIPA2_clipped = st_intersection(PIPA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIPA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIPA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIPA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus pungens
+
+```{r}
+PIPUS.occ = gbif %>%
+  filter(species == "Pinus pungens") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIPUS.range = st_read("../../USTreeAtlas/shp/pinupung/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIPUS.range)  <- 4267 
+```
+
+```{r}
+PIPUS_clipped = st_intersection(PIPUS.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIPUS_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIPUS.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIPUS.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus resinosa
+
+```{r}
+PIRE.occ = gbif %>%
+  filter(species == "Pinus resinosa") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIRE.range = st_read("../../USTreeAtlas/shp/pinuresi/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIRE.range)  <- 4267 
+```
+
+```{r}
+PIRE_clipped = st_intersection(PIRE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIRE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIRE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIRE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus rigida
+
+```{r}
+PIRI.occ = gbif %>%
+  filter(species == "Pinus rigida") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIRI.range = st_read("../../USTreeAtlas/shp/pinurigi/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIRI.range)  <- 4267 
+```
+
+```{r}
+PIRI_clipped = st_intersection(PIRI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIRI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIRI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIRI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus serotina
+
+```{r}
+PISE.occ = gbif %>%
+  filter(species == "Pinus serotina") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PISE.range = st_read("../../USTreeAtlas/shp/pinusero/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PISE.range)  <- 4267 
+```
+
+```{r}
+PISE_clipped = st_intersection(PISE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PISE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PISE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PISE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus strobus
+
+```{r}
+PIST.occ = gbif %>%
+  filter(species == "Pinus strobus") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIST.range = st_read("../../USTreeAtlas/shp/pinustrb/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIST.range)  <- 4267 
+```
+
+```{r}
+PIST_clipped = st_intersection(PIST.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIST_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIST.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIST.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus taeda
+
+```{r}
+PITA.occ = gbif %>%
+  filter(species == "Pinus taeda") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PITA.range = st_read("../../USTreeAtlas/shp/pinutaed/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PITA.range)  <- 4267 
+```
+
+```{r}
+PITA_clipped = st_intersection(PITA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PITA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PITA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PITA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Pinus virginiana
+
+```{r}
+PIVI2.occ = gbif %>%
+  filter(species == "Pinus virginiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PIVI2.range = st_read("../../USTreeAtlas/shp/pinuvirg/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PIVI2.range)  <- 4267 
+```
+
+```{r}
+PIVI2_clipped = st_intersection(PIVI2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIVI2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIVI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PIVI2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Planera aquatica
+
+```{r}
+PLAQ.occ = gbif %>%
+  filter(species == "Planera aquatica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PLAQ.range = st_read("../../USTreeAtlas/shp/planaqua/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PLAQ.range)  <- 4267 
+```
+
+```{r}
+PLAQ_clipped = st_intersection(PLAQ.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PLAQ_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PLAQ.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PLAQ.range.pdf", width = 12, height = 8)
+```
+
+Subset for Platanus occidentalis
+
+```{r}
+PLOC.occ = gbif %>%
+  filter(species == "Platanus occidentalis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PLOC.range = st_read("../../USTreeAtlas/shp/platocci/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PLOC.range)  <- 4267 
+```
+
+```{r}
+PLOC_clipped = st_intersection(PLOC.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PLOC_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PLOC.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PLOC.range.pdf", width = 12, height = 8)
+```
+
+Subset for Populus balsamifera
+
+```{r}
+POBA2.occ = gbif %>%
+  filter(species == "Populus balsamifera") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+POBA2.range = st_read("../../USTreeAtlas/shp/popubals/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(POBA2.range)  <- 4267 
+```
+
+```{r}
+POBA2_clipped = st_intersection(POBA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POBA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POBA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/POBA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Populus deltoides
+
+```{r}
+PODE3.occ = gbif %>%
+  filter(species == "Populus deltoides") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PODE3.range = st_read("../../USTreeAtlas/shp/popudelt/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PODE3.range)  <- 4267 
+```
+
+```{r}
+PODE3_clipped = st_intersection(PODE3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PODE3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PODE3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PODE3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Populus grandidentata
+
+```{r}
+POGR4.occ = gbif %>%
+  filter(species == "Populus grandidentata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+POGR4.range = st_read("../../USTreeAtlas/shp/popugran/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(POGR4.range)  <- 4267 
+```
+
+```{r}
+POGR4_clipped = st_intersection(POGR4.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POGR4_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POGR4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/POGR4.range.pdf", width = 12, height = 8)
+```
+
+Subset for Populus heterophylla
+
+```{r}
+POHE4.occ = gbif %>%
+  filter(species == "Populus heterophylla") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+POHE4.range = st_read("../../USTreeAtlas/shp/popuhete/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(POHE4.range)  <- 4267 
+```
+
+```{r}
+POHE4_clipped = st_intersection(POHE4.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POHE4_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POHE4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/POHE4.range.pdf", width = 12, height = 8)
+```
+
+Subset for Populus tremuloides
+
+```{r}
+POTR5.occ = gbif %>%
+  filter(species == "Populus tremuloides") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+POTR5.range = st_read("../../USTreeAtlas/shp/poputrem/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(POTR5.range)  <- 4267 
+```
+
+```{r}
+POTR5_clipped = st_intersection(POTR5.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POTR5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POTR5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/POTR5.range.pdf", width = 12, height = 8)
+```
+
+Subset for Prunus americana
+
+```{r}
+PRAM.occ = gbif %>%
+  filter(species == "Prunus americana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PRAM.range = st_read("../../USTreeAtlas/shp/prunamer/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PRAM.range)  <- 4267 
+```
+
+```{r}
+PRAM_clipped = st_intersection(PRAM.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRAM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRAM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PRAM.range.pdf", width = 12, height = 8)
+```
+
+Subset for Prunus pensylvanica
+
+```{r}
+PRPE2.occ = gbif %>%
+  filter(species == "Prunus pensylvanica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PRPE2.range = st_read("../../USTreeAtlas/shp/prunpens/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PRPE2.range)  <- 4267 
+```
+
+```{r}
+PRPE2_clipped = st_intersection(PRPE2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRPE2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRPE2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PRPE2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Prunus serotina
+
+```{r}
+PRSE2.occ = gbif %>%
+  filter(species == "Prunus serotina") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PRSE2.range = st_read("../../USTreeAtlas/shp/prunsero/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PRSE2.range)  <- 4267 
+```
+
+```{r}
+PRSE2_clipped = st_intersection(PRSE2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRSE2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRSE2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PRSE2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Prunus virginiana
+
+```{r}
+PRVI.occ = gbif %>%
+  filter(species == "Prunus virginiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+PRVI.range = st_read("../../USTreeAtlas/shp/prunvirg/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(PRVI.range)  <- 4267 
+```
+
+```{r}
+PRVI_clipped = st_intersection(PRVI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/PRVI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus alba
+
+```{r}
+QUAL.occ = gbif %>%
+  filter(species == "Quercus alba") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUAL.range = st_read("../../USTreeAtlas/shp/queralba/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUAL.range)  <- 4267 
+```
+
+```{r}
+QUAL_clipped = st_intersection(QUAL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUAL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUAL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUAL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus bicolor
+
+```{r}
+QUBI.occ = gbif %>%
+  filter(species == "Quercus bicolor") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUBI.range = st_read("../../USTreeAtlas/shp/querbico/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUBI.range)  <- 4267 
+```
+
+```{r}
+QUBI_clipped = st_intersection(QUBI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUBI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUBI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUBI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus coccinea
+
+```{r}
+QUCO2.occ = gbif %>%
+  filter(species == "Quercus coccinea") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUCO2.range = st_read("../../USTreeAtlas/shp/quercocc/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUCO2.range)  <- 4267 
+```
+
+```{r}
+QUCO2_clipped = st_intersection(QUCO2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUCO2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUCO2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUCO2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus ellipsoidalis
+
+```{r}
+QUEL.occ = gbif %>%
+  filter(species == "Quercus ellipsoidalis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUEL.range = st_read("../../USTreeAtlas/shp/querelli/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUEL.range)  <- 4267 
+```
+
+```{r}
+QUEL_clipped = st_intersection(QUEL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUEL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUEL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUEL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus falcata
+
+```{r}
+QUFA.occ = gbif %>%
+  filter(species == "Quercus falcata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUFA.range = st_read("../../USTreeAtlas/shp/querfalc/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUFA.range)  <- 4267 
+```
+
+```{r}
+QUFA_clipped = st_intersection(QUFA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUFA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUFA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUFA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus ilicifolia
+
+```{r}
+QUIL.occ = gbif %>%
+  filter(species == "Quercus ilicifolia") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUIL.range = st_read("../../USTreeAtlas/shp/querilic/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUIL.range)  <- 4267 
+```
+
+```{r}
+QUIL_clipped = st_intersection(QUIL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUIL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUIL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUIL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus imbricaria
+
+```{r}
+QUIM.occ = gbif %>%
+  filter(species == "Quercus imbricaria") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUIM.range = st_read("../../USTreeAtlas/shp/querimbr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUIM.range)  <- 4267 
+```
+
+```{r}
+QUIM_clipped = st_intersection(QUIM.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUIM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUIM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUIM.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus incana
+
+```{r}
+QUIN.occ = gbif %>%
+  filter(species == "Quercus incana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUIN.range = st_read("../../USTreeAtlas/shp/querinca/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUIN.range)  <- 4267 
+```
+
+```{r}
+QUIN_clipped = st_intersection(QUIN.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUIN_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUIN.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUIN.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus laevis
+
+```{r}
+QULA2.occ = gbif %>%
+  filter(species == "Quercus laevis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QULA2.range = st_read("../../USTreeAtlas/shp/querlaev/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QULA2.range)  <- 4267 
+```
+
+```{r}
+QULA2_clipped = st_intersection(QULA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QULA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QULA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QULA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus laurifolia
+
+```{r}
+QULA3.occ = gbif %>%
+  filter(species == "Quercus laurifolia") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QULA3.range = st_read("../../USTreeAtlas/shp/querlaur/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QULA3.range)  <- 4267 
+```
+
+```{r}
+QULA3_clipped = st_intersection(QULA3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QULA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QULA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QULA3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus lyrata
+
+```{r}
+QULY.occ = gbif %>%
+  filter(species == "Quercus lyrata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QULY.range = st_read("../../USTreeAtlas/shp/querlyra/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QULY.range)  <- 4267 
+```
+
+```{r}
+QULY_clipped = st_intersection(QULY.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QULY_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QULY.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QULY.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus macrocarpa
+
+```{r}
+QUMA2.occ = gbif %>%
+  filter(species == "Quercus macrocarpa") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUMA2.range = st_read("../../USTreeAtlas/shp/quermacr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUMA2.range)  <- 4267 
+```
+
+```{r}
+QUMA2_clipped = st_intersection(QUMA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUMA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus margaretta. No range map available
+
+```{r}
+QUMA6.occ = gbif %>%
+  filter(species == "Quercus margaretta") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = QUMA6.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUMA6.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus marilandica
+
+```{r}
+QUMA3.occ = gbif %>%
+  filter(species == "Quercus marilandica") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUMA3.range = st_read("../../USTreeAtlas/shp/quermari/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUMA3.range)  <- 4267 
+```
+
+```{r}
+QUMA3_clipped = st_intersection(QUMA3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUMA3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus michauxii (gbif) and Quercus prinus
+
+```{r}
+QUMI.occ = gbif %>%
+  filter(species == "Quercus michauxii") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUMI.range = st_read("../../USTreeAtlas/shp/quermich/")
+QUPR2.range = st_read("../../USTreeAtlas/shp/querprin/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUMI.range)  <- 4267 
+st_crs(QUPR2.range)  <- 4267 
+```
+
+```{r}
+QUMI_clipped = st_intersection(QUMI.range, states.map)
+QUPR2_clipped = st_intersection(QUPR2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMI_clipped, col = "red", linewidth = 2)+
+  geom_sf(data = QUPR2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUMI.range.pdf", width = 12, height = 8)
+```
+
+
+Subset for Quercus minima. No range map available.
+
+```{r}
+QUMI2.occ = gbif %>%
+  filter(species == "Quercus minima") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = QUMI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUMI2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus muehlenbergii
+
+```{r}
+QUMU.occ = gbif %>%
+  filter(species == "Quercus muehlenbergii") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUMU.range = st_read("../../USTreeAtlas/shp/quermueh/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUMU.range)  <- 4267 
+```
+
+```{r}
+QUMU_clipped = st_intersection(QUMU.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUMU.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus nigra
+
+```{r}
+QUNI.occ = gbif %>%
+  filter(species == "Quercus nigra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUNI.range = st_read("../../USTreeAtlas/shp/quernigr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUNI.range)  <- 4267 
+```
+
+```{r}
+QUNI_clipped = st_intersection(QUNI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUNI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUNI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUNI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus pagoda. No range map available.
+
+```{r}
+QUPA5.occ = gbif %>%
+  filter(species == "Quercus pagoda") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = QUPA5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUPA5.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus palustris
+
+```{r}
+QUPA2.occ = gbif %>%
+  filter(species == "Quercus palustris") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUPA2.range = st_read("../../USTreeAtlas/shp/querpalu/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUPA2.range)  <- 4267 
+```
+
+```{r}
+QUPA2_clipped = st_intersection(QUPA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUPA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUPA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUPA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus phellos
+
+```{r}
+QUPH.occ = gbif %>%
+  filter(species == "Quercus phellos") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUPH.range = st_read("../../USTreeAtlas/shp/querphel/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUPH.range)  <- 4267 
+```
+
+```{r}
+QUPH_clipped = st_intersection(QUPH.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUPH_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUPH.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUPH.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus rubra
+
+```{r}
+QURU.occ = gbif %>%
+  filter(species == "Quercus rubra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QURU.range = st_read("../../USTreeAtlas/shp/querrubr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QURU.range)  <- 4267 
+```
+
+```{r}
+QURU_clipped = st_intersection(QURU.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QURU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QURU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QURU.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus shumardii
+
+```{r}
+QUSH.occ = gbif %>%
+  filter(species == "Quercus shumardii") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUSH.range = st_read("../../USTreeAtlas/shp/quershum/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUSH.range)  <- 4267 
+```
+
+```{r}
+QUSH_clipped = st_intersection(QUSH.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUSH_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUSH.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUSH.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus sinuata. No range map available.
+
+```{r}
+QUSIS.occ = gbif %>%
+  filter(species == "Quercus sinuata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = QUSIS.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUSIS.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus stellata
+
+```{r}
+QUST.occ = gbif %>%
+  filter(species == "Quercus stellata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUST.range = st_read("../../USTreeAtlas/shp/querstel/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUST.range)  <- 4267 
+```
+
+```{r}
+QUST_clipped = st_intersection(QUST.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUST_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUST.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUST.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus texana. No range map available.
+
+```{r}
+QUTE.occ = gbif %>%
+  filter(species == "Quercus texana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = QUTE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUTE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus velutina
+
+```{r}
+QUVE.occ = gbif %>%
+  filter(species == "Quercus velutina") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUVE.range = st_read("../../USTreeAtlas/shp/quervelu/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUVE.range)  <- 4267 
+```
+
+```{r}
+QUVE_clipped = st_intersection(QUVE.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUVE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUVE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUVE.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus virginiana
+
+```{r}
+QUVI.occ = gbif %>%
+  filter(species == "Quercus virginiana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+QUVI.range = st_read("../../USTreeAtlas/shp/quervirg/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(QUVI.range)  <- 4267 
+```
+
+```{r}
+QUVI_clipped = st_intersection(QUVI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUVI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Robinia pseudoacacia
+
+```{r}
+ROPS.occ = gbif %>%
+  filter(species == "Robinia pseudoacacia") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ROPS.range = st_read("../../USTreeAtlas/shp/robipseu/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ROPS.range)  <- 4267 
+```
+
+```{r}
+ROPS_clipped = st_intersection(ROPS.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ROPS_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ROPS.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ROPS.range.pdf", width = 12, height = 8)
+```
+
+Subset for Salix caroliniana
+
+```{r}
+CACA5.occ = gbif %>%
+  filter(species == "Salix caroliniana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+CACA5.range = st_read("../../USTreeAtlas/shp/salicaro/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(CACA5.range)  <- 4267 
+```
+
+```{r}
+CACA5_clipped = st_intersection(CACA5.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CACA5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CACA5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/CACA5.range.pdf", width = 12, height = 8)
+```
+
+Subset for Salix nigra
+
+```{r}
+SANI.occ = gbif %>%
+  filter(species == "Salix nigra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+SANI.range = st_read("../../USTreeAtlas/shp/salinigr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(SANI.range)  <- 4267 
+```
+
+```{r}
+SANI_clipped = st_intersection(SANI.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = SANI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = SANI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/SANI.range.pdf", width = 12, height = 8)
+```
+
+Subset for Sassafras albidum
+
+```{r}
+SAAL5.occ = gbif %>%
+  filter(species == "Sassafras albidum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+SAAL5.range = st_read("../../USTreeAtlas/shp/sassalbi/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(SAAL5.range)  <- 4267 
+```
+
+```{r}
+SAAL5_clipped = st_intersection(SAAL5.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = SAAL5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = SAAL5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/SAAL5.range.pdf", width = 12, height = 8)
+```
+
+Subset for Sorbus americana
+
+```{r}
+SOAM3.occ = gbif %>%
+  filter(species == "Sorbus americana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+SOAM3.range = st_read("../../USTreeAtlas/shp/sorbamer/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(SOAM3.range)  <- 4267 
+```
+
+```{r}
+SOAM3_clipped = st_intersection(SOAM3.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = SOAM3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = SOAM3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/SOAM3.range.pdf", width = 12, height = 8)
+```
+
+Subset for Taxodium distichum (gbif) and Taxodium ascendens
+
+```{r}
+TADI2.occ = gbif %>%
+  filter(species == "Taxodium distichum") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+TADI2.range = st_read("../../USTreeAtlas/shp/taxodist/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(TADI2.range)  <- 4267 
+```
+
+```{r}
+TADI2_clipped = st_intersection(TADI2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TADI2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TADI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/TADI2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Thuja occidentalis
+
+```{r}
+THOC2.occ = gbif %>%
+  filter(species == "Thuja occidentalis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+THOC2.range = st_read("../../USTreeAtlas/shp/thujocci/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(THOC2.range)  <- 4267 
+```
+
+```{r}
+THOC2_clipped = st_intersection(THOC2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = THOC2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = THOC2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/THOC2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Tilia americana
+
+```{r}
+TIAM.occ = gbif %>%
+  filter(species == "Tilia americana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+TIAM.range = st_read("../../USTreeAtlas/shp/tiliamer/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(TIAM.range)  <- 4267 
+```
+
+```{r}
+TIAM_clipped = st_intersection(TIAM.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TIAM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TIAM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/TIAM.range.pdf", width = 12, height = 8)
+```
+
+Subset for Triadica sebifera. No range map available.
+
+```{r}
+TRSE6.occ = gbif %>%
+  filter(species == "Triadica sebifera") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_point(data = TRSE6.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/TRSE6.range.pdf", width = 12, height = 8)
+```
+
+
+Subset for Tsuga canadensis
+
+```{r}
+TSCA.occ = gbif %>%
+  filter(species == "Tsuga canadensis") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+TSCA.range = st_read("../../USTreeAtlas/shp/tsugcana/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(TSCA.range)  <- 4267 
+```
+
+```{r}
+TSCA_clipped = st_intersection(TSCA.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TSCA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TSCA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/TSCA.range.pdf", width = 12, height = 8)
+```
+
+Subset for Tsuga caroliniana
+
+```{r}
+TSCA2.occ = gbif %>%
+  filter(species == "Tsuga caroliniana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+TSCA2.range = st_read("../../USTreeAtlas/shp/tsugcaro/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(TSCA2.range)  <- 4267 
+```
+
+```{r}
+TSCA2_clipped = st_intersection(TSCA2.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TSCA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TSCA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/TSCA2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ulmus alata
+
+```{r}
+ULAL.occ = gbif %>%
+  filter(species == "Ulmus alata") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ULAL.range = st_read("../../USTreeAtlas/shp/ulmualat/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ULAL.range)  <- 4267 
+```
+
+```{r}
+ULAL_clipped = st_intersection(ULAL.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULAL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULAL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ULAL.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ulmus americana
+
+```{r}
+ULAM.occ = gbif %>%
+  filter(species == "Ulmus americana") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ULAM.range = st_read("../../USTreeAtlas/shp/ulmuamer/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ULAM.range)  <- 4267 
+```
+
+```{r}
+ULAM_clipped = st_intersection(ULAM.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULAM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULAM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ULAM.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ulmus crassifolia
+
+```{r}
+ULCR.occ = gbif %>%
+  filter(species == "Ulmus crassifolia") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ULCR.range = st_read("../../USTreeAtlas/shp/ulmucras/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ULCR.range)  <- 4267 
+```
+
+```{r}
+ULCR_clipped = st_intersection(ULCR.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULCR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULCR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ULCR.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ulmus rubra
+
+```{r}
+ULRU.occ = gbif %>%
+  filter(species == "Ulmus rubra") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ULRU.range = st_read("../../USTreeAtlas/shp/ulmurubr/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ULRU.range)  <- 4267 
+```
+
+```{r}
+ULRU_clipped = st_intersection(ULRU.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULRU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULRU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ULRU.range.pdf", width = 12, height = 8)
+```
+
+Subset for Ulmus thomasii
+
+```{r}
+ULTH.occ = gbif %>%
+  filter(species == "Ulmus thomasii") %>%
+  select(species,decimalLatitude,decimalLongitude)
+```
+
+Read in range map
+
+```{r}
+ULTH.range = st_read("../../USTreeAtlas/shp/ulmuthom/")
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The ellipsoid is Clarke 1866, and the transformation parameters 
+
+```{r}
+st_crs(ULTH.range)  <- 4267 
+```
+
+```{r}
+ULTH_clipped = st_intersection(ULTH.range, states.map)
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULTH_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULTH.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ULTH.range.pdf", width = 12, height = 8)
+```
+
+
+
+
+

@@ -226,18 +226,31 @@ Already removed coordinates with uncertainty >=10000m
 range(d.5$coordinateUncertaintyInMeters, na.rm = TRUE)
 ```
 
-Removing duplicated coordinates. 2287 removed
+Look at the year range of the observations
+
+```{r}
+range(d.5$year, na.rm=TRUE)
+```
+
+Remove records older than 1900. Removes 15662 observations that range from 1527 to 1899.
 
 ```{r}
 d.6 = d.5 %>%
+  filter(year >=1900)
+```
+
+Removing duplicated coordinates. 155988 removed, 1609365 final number
+
+```{r}
+d.7 = d.6 %>%
   group_by(species) %>%
-  distinct(decimalLatitude,decimalLongitude)
+  distinct(decimalLatitude,decimalLongitude, .keep_all = TRUE)
 ```
 
 Check Map
 
 ```{r}
-plot(d.6$decimalLongitude, d.6$decimalLatitude, asp=1, cex=0.3)
+plot(d.7$decimalLongitude, d.7$decimalLatitude, asp=1, cex=0.3)
 ```
 
 ```{r}
@@ -249,7 +262,7 @@ us_states <- map_data("state")
 
 map = ggplot() +
   geom_polygon(data = us_states, aes(x = long, y = lat, group = group), fill = "white") +
-  geom_point(data = d.6,
+  geom_point(data = d.7,
              aes(x = decimalLongitude, y = decimalLatitude), alpha = 0.5)
 map
 ```
@@ -257,12 +270,12 @@ map
 Investigating samples that seem to be in the great lakes
 
 ```{r}
-lake.sub = d.6 %>%
+lake.sub = d.7 %>%
   filter(decimalLatitude > 39 & decimalLatitude < 45 & decimalLongitude < -79 & decimalLongitude > -86)
 ```
 
 ```{r}
-write.csv(d.6, file="../Formatted.Data/gbif.filtered.csv")
+write.csv(d.7, file="../Formatted.Data/gbif.filtered.csv")
 ```
 
 ### Plotting
@@ -270,7 +283,7 @@ write.csv(d.6, file="../Formatted.Data/gbif.filtered.csv")
 Plotting the distribution of records per species
 
 ```{r}
-freq.df = as.data.frame(table(d.6$species))
+freq.df = as.data.frame(table(d.7$species))
 head(freq.df)
 ```
 
