@@ -31,11 +31,27 @@ Link to github for R package <https://github.com/matthewkling/topoclimate.pred>
 Load R package
 
 ```{r}
-devtools::install_github("matthewkling/topoclimate.pred")
+#devtools::install_github("matthewkling/topoclimate.pred")
 ```
 
 ```{r}
 library(topoclimate.pred)
+```
+
+Lat/Long are Easting and Northing. They are in NE State Plane Coordinates. Need to convert these to same NAD83 crs, same as DEM. Convert the corners of the plot first.
+
+```{r}
+easting = c(498282.6473,498127.8007,498788.1970,498633.3845)          
+northing = c(327208.3156,327533.3118,327449.1881,327774.1614)
+nio.corners = data.frame(easting,northing)
+```
+
+Code for NAD83 is 4269 for DEM, code is 32104 for Nebrasaka State Plane.
+
+```{r}
+coordinates(nio.corners) = ~ easting + northing
+proj4string(nio.corners) = CRS("+init=epsg:32104")
+latlong.corners = data.frame(spTransform(nio.corners, CRS("+init=epsg:4269")))
 ```
 
 Read in elevation raster for Niobrara
@@ -49,14 +65,14 @@ elev <- raster("../Raw.Data/USGS_13_n43w101_20220726.tif")
 names(elev) <- "elevation"
 ```
 
-Crop to make smaller 
+Crop to focus on Niobrara plot  
 
 ```{r}
-ext <- extent(-100.1, -100, 42.7, 42.8)
+ext <- extent(-100.03, -100.01, 42.77, 42.79)
 et <- crop(elev, ext)
 ```
 
-Make a quick terrain map of the landscape
+Make a quick terrain map of the entire landscape
 
 ```{r}
 hillshade <- hillShade(terrain(elev, "slope"), terrain(elev, "aspect"))
@@ -69,14 +85,59 @@ Terrian map of cropped area
 hillshade.crop <- hillShade(terrain(et, "slope"), terrain(et, "aspect"))
 plot(hillshade.crop, col = colorRampPalette(c("black", "white"))(50), legend = F)
 ```
-Get microclimate. Set include_inputs = TRUE to get macroclimate variables to output
+Get microclimate for Niobrara. Set include_inputs = TRUE to get macroclimate variables to output. Took 10 minutes to run.
 
 ```{r}
 clim <- bioclimate(et, include_inputs = TRUE)
 ```
-Plotting
+
+Save RasterStack
 
 ```{r}
-plot(clim, col = viridis::viridis_pal()(50), nrow = 1)
+writeRaster(clim, filename="../Formatted.Data/niobrara.micro.tif", options="INTERLEAVE=BAND", overwrite=TRUE)
 ```
 
+Plotting. Macro climate variables are monthly data extracted from CHELSA representing climatic averages from 1979-2009 at 1km resolution. From these, they derived total annual precipitation (bio12), mean annual temperature (bio1), maximum temperature of the warmest month (bio5), and minimum temperature of the coldest month (bio6). Northness and Eastness were calculated from slope and aspect. Windward exposure represents how a plot's windiness is expected to deviate from the average windiness of level sites on the local landscape. mTPI measures how a site's elevation compares to the elevation of the surrounding neighborhood, with positive values for hilltops and negative values for valley bottoms. 
+
+```{r}
+plot(clim, col = viridis::viridis_pal()(50))
+```
+
+### Extracting microclimate data for a few niobrara trees.
+
+Read in Niobrara data points
+
+```{r}
+nio.dat = read.csv("../Raw.Data/20220829_NVP_allStems_final-toJS_EN.csv", row.names = 1)
+```
+
+Get info for trees close to microclimate stations from Bailey's data
+
+```{r}
+trees = nio.dat %>%
+  filter(PtID %in% c(1808008,1313058,1909036,1413015,2213001,1211010,1807015)) %>%
+  distinct(Easting, Northing, .keep_all = TRUE)
+
+```
+
+```{r}
+tree.coords = trees %>%
+  select(Easting, Northing)
+coordinates(tree.coords) = ~ Easting + Northing
+proj4string(tree.coords) = CRS("+init=epsg:32104")
+trees.lat.long = data.frame(spTransform(tree.coords, CRS("+init=epsg:4269")))
+```
+
+Extract data for these trees
+
+```{r}
+trees.lat.long.2 = trees.lat.long[,c(1:2)]
+tree.clim = raster::extract(clim,trees.lat.long.2)
+colnames(tree.clim) = c("high_temp_C","low_temp_C","moisture_mm","northness","eastness","windward_exposure","mTPI","macro_bio1_mean_annual_temp_C","macro_bio12_total_annual_precip_mm","macro_bio5_max_temp_warm_month_C","macro_bi06_min_temp_cold_month_C")
+tree.clim.2 = cbind(trees,tree.clim)
+```
+
+```{r}
+tree.clim.2$local = c("Low Canyon East","Low Canyon Botton","Low Canyon West",
+                      "High Canyon East","Hihg Canyon Bottom","High Canyon West","Upland")
+```
