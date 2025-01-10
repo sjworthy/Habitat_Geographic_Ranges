@@ -85,6 +85,7 @@ Terrian map of cropped area
 hillshade.crop <- hillShade(terrain(et, "slope"), terrain(et, "aspect"))
 plot(hillshade.crop, col = colorRampPalette(c("black", "white"))(50), legend = F)
 ```
+
 Get microclimate for Niobrara. Set include_inputs = TRUE to get macroclimate variables to output. Took 10 minutes to run.
 
 ```{r}
