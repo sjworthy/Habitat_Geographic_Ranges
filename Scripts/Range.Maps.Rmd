@@ -3181,6 +3181,24 @@ ggplot()+
   geom_sf(data = MAVI2_clipped, col = "red", linewidth = 2)+
   geom_point(data = MAVI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+MAVI2_clipped$species = "Magnolia virginiana"
+MAVI2_flag = cc_iucn(x = MAVI2.occ, range = MAVI2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+MAVI2_occ_final = MAVI2.occ[MAVI2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAVI2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAVI2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/MAVI2.range.pdf", width = 12, height = 8)
 ```
 
@@ -3213,6 +3231,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = MORU2_clipped, col = "red", linewidth = 2)+
   geom_point(data = MORU2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+MORU2_clipped$species = "Morus rubra"
+MORU2_flag = cc_iucn(x = MORU2.occ, range = MORU2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+MORU2_occ_final = MORU2.occ[MORU2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MORU2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MORU2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/MORU2.range.pdf", width = 12, height = 8)
 ```
@@ -3247,16 +3283,35 @@ ggplot()+
   geom_sf(data = NYAQ2_clipped, col = "red", linewidth = 2)+
   geom_point(data = NYAQ2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+NYAQ2_clipped$species = "Nyssa aquatica"
+NYAQ2_flag = cc_iucn(x = NYAQ2.occ, range = NYAQ2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+NYAQ2_occ_final = NYAQ2.occ[NYAQ2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = NYAQ2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = NYAQ2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/NYAQ2.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Nyssa biflora. No range map available. 
+Subset for Nyssa biflora. Little range map not available. BIEN range map not available.
 
 ```{r}
 NYBI.occ = gbif %>%
   filter(species == "Nyssa biflora") %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
+
 
 ```{r}
 ggplot()+
@@ -3296,6 +3351,24 @@ ggplot()+
   geom_sf(data = NYOG_clipped, col = "red", linewidth = 2)+
   geom_point(data = NYOG.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+NYOG_clipped$species = "Nyssa ogeche"
+NYOG_flag = cc_iucn(x = NYOG.occ, range = NYOG_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+NYOG_occ_final = NYOG.occ[NYOG_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = NYOG_clipped, col = "red", linewidth = 2)+
+  geom_point(data = NYOG_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/NYOG.range.pdf", width = 12, height = 8)
 ```
 
@@ -3328,6 +3401,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = NYSY_clipped, col = "red", linewidth = 2)+
   geom_point(data = NYSY.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+NYSY_clipped$species = "Nyssa sylvatica"
+NYSY_flag = cc_iucn(x = NYSY.occ, range = NYSY_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+NYSY_occ_final = NYSY.occ[NYSY_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = NYSY_clipped, col = "red", linewidth = 2)+
+  geom_point(data = NYSY_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/NYSY.range.pdf", width = 12, height = 8)
 ```
@@ -3362,6 +3453,24 @@ ggplot()+
   geom_sf(data = OSVI_clipped, col = "red", linewidth = 2)+
   geom_point(data = OSVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+OSVI_clipped$species = "Ostrya virginiana"
+OSVI_flag = cc_iucn(x = OSVI.occ, range = OSVI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+OSVI_occ_final = OSVI.occ[OSVI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = OSVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = OSVI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/OSVI.range.pdf", width = 12, height = 8)
 ```
 
@@ -3395,10 +3504,28 @@ ggplot()+
   geom_sf(data = OXAR_clipped, col = "red", linewidth = 2)+
   geom_point(data = OXAR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+OXAR_clipped$species = "Oxydendrum arboreum"
+OXAR_flag = cc_iucn(x = OXAR.occ, range = OXAR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+OXAR_occ_final = OXAR.occ[OXAR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = OXAR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = OXAR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/OXAR.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Paulownia tomentosa. No range map available.
+Subset for Paulownia tomentosa. Little range map not available.
 
 ```{r}
 PATO2.occ = gbif %>%
@@ -3406,10 +3533,54 @@ PATO2.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(PATO2.range.sf <- BIEN_ranges_load_species('Paulownia tomentosa'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+PATO2.range.2 = PATO2.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+PATO2.range.3 = terra::vect(PATO2.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+PATO2.range.4 = terra::intersect(PATO2.range.3, states.map.2)
+```
+
+```{r}
+PATO2.range.5 = st_as_sf(PATO2.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = PATO2.range.5, col = "red", linewidth = 2)+
   geom_point(data = PATO2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PATO2.range.5$species = "Paulownia tomentosa"
+PATO2_flag = cc_iucn(x = PATO2.occ, range = PATO2.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PATO2_occ_final = PATO2.occ[PATO2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PATO2.range.5, col = "red", linewidth = 2)+
+  geom_point(data = PATO2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PATO2.range.pdf", width = 12, height = 8)
 ```
@@ -3444,6 +3615,24 @@ ggplot()+
   geom_sf(data = PEBO_clipped, col = "red", linewidth = 2)+
   geom_point(data = PEBO.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PEBO_clipped$species = "Persea borbonia"
+PEBO_flag = cc_iucn(x = PEBO.occ, range = PEBO_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PEBO_occ_final = PEBO.occ[PEBO_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PEBO_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PEBO_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PEBO.range.pdf", width = 12, height = 8)
 ```
 
@@ -3476,6 +3665,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PIGL_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIGL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PIGL_clipped$species = "Picea glauca"
+PIGL_flag = cc_iucn(x = PIGL.occ, range = PIGL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIGL_occ_final = PIGL.occ[PIGL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIGL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIGL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PIGL.range.pdf", width = 12, height = 8)
 ```
@@ -3510,6 +3717,24 @@ ggplot()+
   geom_sf(data = PIMA_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIMA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIMA_clipped$species = "Picea mariana"
+PIMA_flag = cc_iucn(x = PIMA.occ, range = PIMA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIMA_occ_final = PIMA.occ[PIMA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIMA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIMA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIMA.range.pdf", width = 12, height = 8)
 ```
 
@@ -3542,6 +3767,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PIRU_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIRU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PIRU_clipped$species = "Picea rubens"
+PIRU_flag = cc_iucn(x = PIRU.occ, range = PIRU_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIRU_occ_final = PIRU.occ[PIRU_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIRU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIRU_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PIRU.range.pdf", width = 12, height = 8)
 ```
@@ -3576,6 +3819,24 @@ ggplot()+
   geom_sf(data = PIBA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIBA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIBA2_clipped$species = "Pinus banksiana"
+PIBA2_flag = cc_iucn(x = PIBA2.occ, range = PIBA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIBA2_occ_final = PIBA2.occ[PIBA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIBA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIBA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIBA2.range.pdf", width = 12, height = 8)
 ```
 
@@ -3608,6 +3869,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PICL_clipped, col = "red", linewidth = 2)+
   geom_point(data = PICL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PICL_clipped$species = "Pinus clausa"
+PICL_flag = cc_iucn(x = PICL.occ, range = PICL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PICL_occ_final = PICL.occ[PICL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PICL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PICL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PICL.range.pdf", width = 12, height = 8)
 ```
@@ -3642,6 +3921,24 @@ ggplot()+
   geom_sf(data = PIEC2_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIEC2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIEC2_clipped$species = "Pinus echinata"
+PIEC2_flag = cc_iucn(x = PIEC2.occ, range = PIEC2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIEC2_occ_final = PIEC2.occ[PIEC2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIEC2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIEC2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIEC2.range.pdf", width = 12, height = 8)
 ```
 
@@ -3674,6 +3971,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PIEL_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIEL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PIEL_clipped$species = "Pinus elliottii"
+PIEL_flag = cc_iucn(x = PIEL.occ, range = PIEL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIEL_occ_final = PIEL.occ[PIEL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIEL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIEL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PIEL.range.pdf", width = 12, height = 8)
 ```
@@ -3708,6 +4023,24 @@ ggplot()+
   geom_sf(data = PIGL2_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIGL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIGL2_clipped$species = "Pinus glabra"
+PIGL2_flag = cc_iucn(x = PIGL2.occ, range = PIGL2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIGL2_occ_final = PIGL2.occ[PIGL2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIGL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIGL2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIGL2.range.pdf", width = 12, height = 8)
 ```
 
@@ -3740,6 +4073,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PIPA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIPA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PIPA2_clipped$species = "Pinus palustris"
+PIPA2_flag = cc_iucn(x = PIPA2.occ, range = PIPA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIPA2_occ_final = PIPA2.occ[PIPA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIPA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIPA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PIPA2.range.pdf", width = 12, height = 8)
 ```
@@ -3774,6 +4125,24 @@ ggplot()+
   geom_sf(data = PIPUS_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIPUS.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIPUS_clipped$species = "Pinus pungens"
+PIPUS_flag = cc_iucn(x = PIPUS.occ, range = PIPUS_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIPUS_occ_final = PIPUS.occ[PIPUS_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIPUS_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIPUS_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIPUS.range.pdf", width = 12, height = 8)
 ```
 
@@ -3806,6 +4175,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PIRE_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIRE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PIRE_clipped$species = "Pinus resinosa"
+PIRE_flag = cc_iucn(x = PIRE.occ, range = PIRE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIRE_occ_final = PIRE.occ[PIRE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIRE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIRE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PIRE.range.pdf", width = 12, height = 8)
 ```
@@ -3840,6 +4227,24 @@ ggplot()+
   geom_sf(data = PIRI_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIRI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIRI_clipped$species = "Pinus rigida"
+PIRI_flag = cc_iucn(x = PIRI.occ, range = PIRI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIRI_occ_final = PIRI.occ[PIRI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIRI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIRI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIRI.range.pdf", width = 12, height = 8)
 ```
 
@@ -3872,6 +4277,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PISE_clipped, col = "red", linewidth = 2)+
   geom_point(data = PISE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PISE_clipped$species = "Pinus serotina"
+PISE_flag = cc_iucn(x = PISE.occ, range = PISE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PISE_occ_final = PISE.occ[PISE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PISE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PISE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PISE.range.pdf", width = 12, height = 8)
 ```
@@ -3906,6 +4329,24 @@ ggplot()+
   geom_sf(data = PIST_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIST.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIST_clipped$species = "Pinus strobus"
+PIST_flag = cc_iucn(x = PIST.occ, range = PIST_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIST_occ_final = PIST.occ[PIST_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIST_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIST_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIST.range.pdf", width = 12, height = 8)
 ```
 
@@ -3938,6 +4379,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PITA_clipped, col = "red", linewidth = 2)+
   geom_point(data = PITA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PITA_clipped$species = "Pinus taeda"
+PITA_flag = cc_iucn(x = PITA.occ, range = PITA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PITA_occ_final = PITA.occ[PITA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PITA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PITA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PITA.range.pdf", width = 12, height = 8)
 ```
@@ -3972,6 +4431,24 @@ ggplot()+
   geom_sf(data = PIVI2_clipped, col = "red", linewidth = 2)+
   geom_point(data = PIVI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PIVI2_clipped$species = "Pinus virginiana"
+PIVI2_flag = cc_iucn(x = PIVI2.occ, range = PIVI2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PIVI2_occ_final = PIVI2.occ[PIVI2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PIVI2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PIVI2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PIVI2.range.pdf", width = 12, height = 8)
 ```
 
@@ -4004,6 +4481,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PLAQ_clipped, col = "red", linewidth = 2)+
   geom_point(data = PLAQ.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PLAQ_clipped$species = "Planera aquatica"
+PLAQ_flag = cc_iucn(x = PLAQ.occ, range = PLAQ_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PLAQ_occ_final = PLAQ.occ[PLAQ_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PLAQ_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PLAQ_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PLAQ.range.pdf", width = 12, height = 8)
 ```
@@ -4038,6 +4533,24 @@ ggplot()+
   geom_sf(data = PLOC_clipped, col = "red", linewidth = 2)+
   geom_point(data = PLOC.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PLOC_clipped$species = "Platanus occidentalis"
+PLOC_flag = cc_iucn(x = PLOC.occ, range = PLOC_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PLOC_occ_final = PLOC.occ[PLOC_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PLOC_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PLOC_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PLOC.range.pdf", width = 12, height = 8)
 ```
 
@@ -4070,6 +4583,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = POBA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = POBA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+POBA2_clipped$species = "Populus balsamifera"
+POBA2_flag = cc_iucn(x = POBA2.occ, range = POBA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+POBA2_occ_final = POBA2.occ[POBA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POBA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POBA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/POBA2.range.pdf", width = 12, height = 8)
 ```
@@ -4104,6 +4635,24 @@ ggplot()+
   geom_sf(data = PODE3_clipped, col = "red", linewidth = 2)+
   geom_point(data = PODE3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PODE3_clipped$species = "Populus deltoides"
+PODE3_flag = cc_iucn(x = PODE3.occ, range = PODE3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PODE3_occ_final = PODE3.occ[PODE3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PODE3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PODE3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PODE3.range.pdf", width = 12, height = 8)
 ```
 
@@ -4136,6 +4685,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = POGR4_clipped, col = "red", linewidth = 2)+
   geom_point(data = POGR4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+POGR4_clipped$species = "Populus grandidentata"
+POGR4_flag = cc_iucn(x = POGR4.occ, range = POGR4_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+POGR4_occ_final = POGR4.occ[POGR4_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POGR4_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POGR4_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/POGR4.range.pdf", width = 12, height = 8)
 ```
@@ -4170,6 +4737,24 @@ ggplot()+
   geom_sf(data = POHE4_clipped, col = "red", linewidth = 2)+
   geom_point(data = POHE4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+POHE4_clipped$species = "Populus heterophylla"
+POHE4_flag = cc_iucn(x = POHE4.occ, range = POHE4_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+POHE4_occ_final = POHE4.occ[POHE4_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POHE4_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POHE4_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/POHE4.range.pdf", width = 12, height = 8)
 ```
 
@@ -4202,6 +4787,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = POTR5_clipped, col = "red", linewidth = 2)+
   geom_point(data = POTR5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+POTR5_clipped$species = "Populus tremuloides"
+POTR5_flag = cc_iucn(x = POTR5.occ, range = POTR5_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+POTR5_occ_final = POTR5.occ[POTR5_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = POTR5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = POTR5_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/POTR5.range.pdf", width = 12, height = 8)
 ```
@@ -4236,6 +4839,24 @@ ggplot()+
   geom_sf(data = PRAM_clipped, col = "red", linewidth = 2)+
   geom_point(data = PRAM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PRAM_clipped$species = "Prunus americana"
+PRAM_flag = cc_iucn(x = PRAM.occ, range = PRAM_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PRAM_occ_final = PRAM.occ[PRAM_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRAM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRAM_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PRAM.range.pdf", width = 12, height = 8)
 ```
 
@@ -4268,6 +4889,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PRPE2_clipped, col = "red", linewidth = 2)+
   geom_point(data = PRPE2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PRPE2_clipped$species = "Prunus pensylvanica"
+PRPE2_flag = cc_iucn(x = PRPE2.occ, range = PRPE2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PRPE2_occ_final = PRPE2.occ[PRPE2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRPE2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRPE2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PRPE2.range.pdf", width = 12, height = 8)
 ```
@@ -4302,6 +4941,24 @@ ggplot()+
   geom_sf(data = PRSE2_clipped, col = "red", linewidth = 2)+
   geom_point(data = PRSE2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+PRSE2_clipped$species = "Prunus serotina"
+PRSE2_flag = cc_iucn(x = PRSE2.occ, range = PRSE2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PRSE2_occ_final = PRSE2.occ[PRSE2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRSE2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRSE2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/PRSE2.range.pdf", width = 12, height = 8)
 ```
 
@@ -4334,6 +4991,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = PRVI_clipped, col = "red", linewidth = 2)+
   geom_point(data = PRVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+PRVI_clipped$species = "Prunus virginiana"
+PRVI_flag = cc_iucn(x = PRVI.occ, range = PRVI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+PRVI_occ_final = PRVI.occ[PRVI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = PRVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = PRVI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/PRVI.range.pdf", width = 12, height = 8)
 ```
@@ -4368,6 +5043,24 @@ ggplot()+
   geom_sf(data = QUAL_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUAL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUAL_clipped$species = "Quercus alba"
+QUAL_flag = cc_iucn(x = QUAL.occ, range = QUAL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUAL_occ_final = QUAL.occ[QUAL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUAL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUAL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUAL.range.pdf", width = 12, height = 8)
 ```
 
@@ -4400,6 +5093,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = QUBI_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUBI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUBI_clipped$species = "Quercus bicolor"
+QUBI_flag = cc_iucn(x = QUBI.occ, range = QUBI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUBI_occ_final = QUBI.occ[QUBI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUBI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUBI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUBI.range.pdf", width = 12, height = 8)
 ```
@@ -4434,6 +5145,24 @@ ggplot()+
   geom_sf(data = QUCO2_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUCO2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUCO2_clipped$species = "Quercus coccinea"
+QUCO2_flag = cc_iucn(x = QUCO2.occ, range = QUCO2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUCO2_occ_final = QUCO2.occ[QUCO2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUCO2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUCO2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUCO2.range.pdf", width = 12, height = 8)
 ```
 
@@ -4466,6 +5195,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = QUEL_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUEL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUEL_clipped$species = "Quercus ellipsoidalis"
+QUEL_flag = cc_iucn(x = QUEL.occ, range = QUEL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUEL_occ_final = QUEL.occ[QUEL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUEL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUEL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUEL.range.pdf", width = 12, height = 8)
 ```
@@ -4500,6 +5247,24 @@ ggplot()+
   geom_sf(data = QUFA_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUFA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUFA_clipped$species = "Quercus falcata"
+QUFA_flag = cc_iucn(x = QUFA.occ, range = QUFA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUFA_occ_final = QUFA.occ[QUFA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUFA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUFA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUFA.range.pdf", width = 12, height = 8)
 ```
 
@@ -4532,6 +5297,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = QUIL_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUIL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUIL_clipped$species = "Quercus ilicifolia"
+QUIL_flag = cc_iucn(x = QUIL.occ, range = QUIL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUIL_occ_final = QUIL.occ[QUIL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUIL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUIL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUIL.range.pdf", width = 12, height = 8)
 ```
@@ -4566,6 +5349,24 @@ ggplot()+
   geom_sf(data = QUIM_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUIM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUIM_clipped$species = "Quercus imbricaria"
+QUIM_flag = cc_iucn(x = QUIM.occ, range = QUIM_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUIM_occ_final = QUIM.occ[QUIM_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUIM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUIM_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUIM.range.pdf", width = 12, height = 8)
 ```
 
@@ -4598,6 +5399,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = QUIN_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUIN.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUIN_clipped$species = "Quercus incana"
+QUIN_flag = cc_iucn(x = QUIN.occ, range = QUIN_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUIN_occ_final = QUIN.occ[QUIN_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUIN_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUIN_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUIN.range.pdf", width = 12, height = 8)
 ```
@@ -4632,6 +5451,24 @@ ggplot()+
   geom_sf(data = QULA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = QULA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QULA2_clipped$species = "Quercus laevis"
+QULA2_flag = cc_iucn(x = QULA2.occ, range = QULA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QULA2_occ_final = QULA2.occ[QULA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QULA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QULA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QULA2.range.pdf", width = 12, height = 8)
 ```
 
@@ -4664,6 +5501,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = QULA3_clipped, col = "red", linewidth = 2)+
   geom_point(data = QULA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QULA3_clipped$species = "Quercus laurifolia"
+QULA3_flag = cc_iucn(x = QULA3.occ, range = QULA3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QULA3_occ_final = QULA3.occ[QULA3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QULA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QULA3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QULA3.range.pdf", width = 12, height = 8)
 ```
@@ -4698,6 +5553,24 @@ ggplot()+
   geom_sf(data = QULY_clipped, col = "red", linewidth = 2)+
   geom_point(data = QULY.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QULY_clipped$species = "Quercus lyrata"
+QULY_flag = cc_iucn(x = QULY.occ, range = QULY_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QULY_occ_final = QULY.occ[QULY_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QULY_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QULY_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QULY.range.pdf", width = 12, height = 8)
 ```
 
@@ -4731,10 +5604,28 @@ ggplot()+
   geom_sf(data = QUMA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUMA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUMA2_clipped$species = "Quercus macrocarpa"
+QUMA2_flag = cc_iucn(x = QUMA2.occ, range = QUMA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUMA2_occ_final = QUMA2.occ[QUMA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUMA2.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Quercus margaretta. No range map available
+Subset for Quercus margaretta. Little range map not available. Quercus margarettiae in Atlas. Quercus margarettae in BIEN.
 
 ```{r}
 QUMA6.occ = gbif %>%
@@ -4742,10 +5633,54 @@ QUMA6.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(QUMA6.range.sf <- BIEN_ranges_load_species('Quercus margarettae'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+QUMA6.range.2 = QUMA6.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+QUMA6.range.3 = terra::vect(QUMA6.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+QUMA6.range.4 = terra::intersect(QUMA6.range.3, states.map.2)
+```
+
+```{r}
+QUMA6.range.5 = st_as_sf(QUMA6.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = QUMA6.range.5, col = "red", linewidth = 2)+
   geom_point(data = QUMA6.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUMA6.range.5$species = "Quercus margaretta"
+QUMA6_flag = cc_iucn(x = QUMA6.occ, range = QUMA6.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUMA6_occ_final = QUMA6.occ[QUMA6_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMA6.range.5, col = "red", linewidth = 2)+
+  geom_point(data = QUMA6_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUMA6.range.pdf", width = 12, height = 8)
 ```
@@ -4780,6 +5715,24 @@ ggplot()+
   geom_sf(data = QUMA3_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUMA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUMA3_clipped$species = "Quercus marilandica"
+QUMA3_flag = cc_iucn(x = QUMA3.occ, range = QUMA3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUMA3_occ_final = QUMA3.occ[QUMA3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMA3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUMA3.range.pdf", width = 12, height = 8)
 ```
 
@@ -4806,22 +5759,42 @@ st_crs(QUPR2.range)  <- 4267
 ```
 
 ```{r}
-QUMI_clipped = st_intersection(QUMI.range, states.map)
-QUPR2_clipped = st_intersection(QUPR2.range, states.map)
+QUMI_QUPR2.range = bind_rows(QUMI.range, QUPR2.range)
+```
+
+
+```{r}
+QUMI_QUPR2_clipped = st_intersection(QUMI_QUPR2.range, states.map)
 ```
 
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
-  geom_sf(data = QUMI_clipped, col = "red", linewidth = 2)+
-  geom_sf(data = QUPR2_clipped, col = "red", linewidth = 2)+
+  geom_sf(data = QUMI_QUPR2_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUMI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
-ggsave("../Plots/QUMI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUMI_QUPR2_clipped$species = "Quercus michauxii"
+QUMI_QUPR2_flag = cc_iucn(x = QUMI.occ, range = QUMI_QUPR2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
 
-Subset for Quercus minima. No range map available.
+```{r}
+QUMI_QUPR2_occ_final = QUMI.occ[QUMI_QUPR2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMI_QUPR2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMI_QUPR2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/QUPR2.range.pdf", width = 12, height = 8)
+```
+
+Subset for Quercus minima. Little range map not available.
 
 ```{r}
 QUMI2.occ = gbif %>%
@@ -4829,10 +5802,55 @@ QUMI2.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(QUMI2.range.sf <- BIEN_ranges_load_species('Quercus minima'))
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+QUMI2.range.2 = QUMI2.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+QUMI2.range.3 = terra::vect(QUMI2.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+QUMI2.range.4 = terra::intersect(QUMI2.range.3, states.map.2)
+```
+
+```{r}
+QUMI2.range.5 = st_as_sf(QUMI2.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = QUMI2.range.5, col = "red", linewidth = 2)+
   geom_point(data = QUMI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUMI2.range.5$species = "Quercus minima"
+QUMI2_flag = cc_iucn(x = QUMI2.occ, range = QUMI2.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUMI2_occ_final = QUMI2.occ[QUMI2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMI2.range.5, col = "red", linewidth = 2)+
+  geom_point(data = QUMI2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUMI2.range.pdf", width = 12, height = 8)
 ```
@@ -4867,6 +5885,24 @@ ggplot()+
   geom_sf(data = QUMU_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUMU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUMU_clipped$species = "Quercus muehlenbergii"
+QUMU_flag = cc_iucn(x = QUMU.occ, range = QUMU_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUMU_occ_final = QUMU.occ[QUMU_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUMU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUMU_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUMU.range.pdf", width = 12, height = 8)
 ```
 
@@ -4900,10 +5936,28 @@ ggplot()+
   geom_sf(data = QUNI_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUNI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUNI_clipped$species = "Quercus nigra"
+QUNI_flag = cc_iucn(x = QUNI.occ, range = QUNI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUNI_occ_final = QUNI.occ[QUNI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUNI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUNI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUNI.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Quercus pagoda. No range map available.
+Subset for Quercus pagoda. Little range map available not available.
 
 ```{r}
 QUPA5.occ = gbif %>%
@@ -4911,10 +5965,55 @@ QUPA5.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(QUPA5.range.sf <- BIEN_ranges_load_species('Quercus pagoda'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+QUPA5.range.2 = QUPA5.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+QUPA5.range.3 = terra::vect(QUPA5.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+QUPA5.range.4 = terra::intersect(QUPA5.range.3, states.map.2)
+```
+
+```{r}
+QUPA5.range.5 = st_as_sf(QUPA5.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = QUPA5.range.5, col = "red", linewidth = 2)+
   geom_point(data = QUPA5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+
+```{r}
+QUPA5.range.5$species = "Quercus pagoda"
+QUPA5_flag = cc_iucn(x = QUPA5.occ, range = QUPA5.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUPA5_occ_final = QUPA5.occ[QUPA5_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUPA5.range.5, col = "red", linewidth = 2)+
+  geom_point(data = QUPA5_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUPA5.range.pdf", width = 12, height = 8)
 ```
@@ -4949,6 +6048,24 @@ ggplot()+
   geom_sf(data = QUPA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUPA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUPA2_clipped$species = "Quercus palustris"
+QUPA2_flag = cc_iucn(x = QUPA2.occ, range = QUPA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUPA2_occ_final = QUPA2.occ[QUPA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUPA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUPA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUPA2.range.pdf", width = 12, height = 8)
 ```
 
@@ -4981,6 +6098,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = QUPH_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUPH.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUPH_clipped$species = "Quercus phellos"
+QUPH_flag = cc_iucn(x = QUPH.occ, range = QUPH_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUPH_occ_final = QUPH.occ[QUPH_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUPH_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUPH_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUPH.range.pdf", width = 12, height = 8)
 ```
@@ -5015,6 +6150,24 @@ ggplot()+
   geom_sf(data = QURU_clipped, col = "red", linewidth = 2)+
   geom_point(data = QURU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QURU_clipped$species = "Quercus rubra"
+QURU_flag = cc_iucn(x = QURU.occ, range = QURU_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QURU_occ_final = QURU.occ[QURU_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QURU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QURU_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QURU.range.pdf", width = 12, height = 8)
 ```
 
@@ -5048,10 +6201,28 @@ ggplot()+
   geom_sf(data = QUSH_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUSH.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUSH_clipped$species = "Quercus shumardii"
+QUSH_flag = cc_iucn(x = QUSH.occ, range = QUSH_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUSH_occ_final = QUSH.occ[QUSH_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUSH_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUSH_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUSH.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Quercus sinuata. No range map available.
+Subset for Quercus sinuata. Little range map not available.
 
 ```{r}
 QUSIS.occ = gbif %>%
@@ -5059,10 +6230,54 @@ QUSIS.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(QUSIS.range.sf <- BIEN_ranges_load_species('Quercus sinuata'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+QUSIS.range.2 = QUSIS.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+QUSIS.range.3 = terra::vect(QUSIS.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+QUSIS.range.4 = terra::intersect(QUSIS.range.3, states.map.2)
+```
+
+```{r}
+QUSIS.range.5 = st_as_sf(QUSIS.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = QUSIS.range.5, col = "red", linewidth = 2)+
   geom_point(data = QUSIS.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUSIS.range.5$species = "Quercus sinuata"
+QUSIS_flag = cc_iucn(x = QUSIS.occ, range = QUSIS.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUSIS_occ_final = QUSIS.occ[QUSIS_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUSIS.range.5, col = "red", linewidth = 2)+
+  geom_point(data = QUSIS_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUSIS.range.pdf", width = 12, height = 8)
 ```
@@ -5097,10 +6312,28 @@ ggplot()+
   geom_sf(data = QUST_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUST.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUST_clipped$species = "Quercus stellata"
+QUST_flag = cc_iucn(x = QUST.occ, range = QUST_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUST_occ_final = QUST.occ[QUST_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUST_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUST_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUST.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Quercus texana. No range map available.
+Subset for Quercus texana. Little range map not available.
 
 ```{r}
 QUTE.occ = gbif %>%
@@ -5108,10 +6341,54 @@ QUTE.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(QUTE.range.sf <- BIEN_ranges_load_species('Quercus texana'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+QUTE.range.2 = QUTE.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+QUTE.range.3 = terra::vect(QUTE.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+QUTE.range.4 = terra::intersect(QUTE.range.3, states.map.2)
+```
+
+```{r}
+QUTE.range.5 = st_as_sf(QUTE.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = QUTE.range.5, col = "red", linewidth = 2)+
   geom_point(data = QUTE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUTE.range.5$species = "Quercus texana"
+QUTE_flag = cc_iucn(x = QUTE.occ, range = QUTE.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUTE_occ_final = QUTE.occ[QUTE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUTE.range.5, col = "red", linewidth = 2)+
+  geom_point(data = QUTE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUTE.range.pdf", width = 12, height = 8)
 ```
@@ -5146,6 +6423,24 @@ ggplot()+
   geom_sf(data = QUVE_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUVE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+QUVE_clipped$species = "Quercus velutina"
+QUVE_flag = cc_iucn(x = QUVE.occ, range = QUVE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUVE_occ_final = QUVE.occ[QUVE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUVE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUVE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/QUVE.range.pdf", width = 12, height = 8)
 ```
 
@@ -5178,6 +6473,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = QUVI_clipped, col = "red", linewidth = 2)+
   geom_point(data = QUVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+QUVI_clipped$species = "Quercus virginiana"
+QUVI_flag = cc_iucn(x = QUVI.occ, range = QUVI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+QUVI_occ_final = QUVI.occ[QUVI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = QUVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = QUVI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/QUVI.range.pdf", width = 12, height = 8)
 ```
@@ -5212,6 +6525,24 @@ ggplot()+
   geom_sf(data = ROPS_clipped, col = "red", linewidth = 2)+
   geom_point(data = ROPS.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ROPS_clipped$species = "Robinia pseudoacacia"
+ROPS_flag = cc_iucn(x = ROPS.occ, range = ROPS_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ROPS_occ_final = ROPS.occ[ROPS_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ROPS_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ROPS_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ROPS.range.pdf", width = 12, height = 8)
 ```
 
@@ -5244,6 +6575,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = CACA5_clipped, col = "red", linewidth = 2)+
   geom_point(data = CACA5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+CACA5_clipped$species = "Salix caroliniana"
+CACA5_flag = cc_iucn(x = CACA5.occ, range = CACA5_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CACA5_occ_final = CACA5.occ[CACA5_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CACA5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CACA5_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/CACA5.range.pdf", width = 12, height = 8)
 ```
@@ -5278,6 +6627,24 @@ ggplot()+
   geom_sf(data = SANI_clipped, col = "red", linewidth = 2)+
   geom_point(data = SANI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+SANI_clipped$species = "Salix nigra"
+SANI_flag = cc_iucn(x = SANI.occ, range = SANI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+SANI_occ_final = SANI.occ[SANI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = SANI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = SANI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/SANI.range.pdf", width = 12, height = 8)
 ```
 
@@ -5310,6 +6677,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = SAAL5_clipped, col = "red", linewidth = 2)+
   geom_point(data = SAAL5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+SAAL5_clipped$species = "Sassafras albidum"
+SAAL5_flag = cc_iucn(x = SAAL5.occ, range = SAAL5_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+SAAL5_occ_final = SAAL5.occ[SAAL5_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = SAAL5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = SAAL5_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/SAAL5.range.pdf", width = 12, height = 8)
 ```
@@ -5344,6 +6729,24 @@ ggplot()+
   geom_sf(data = SOAM3_clipped, col = "red", linewidth = 2)+
   geom_point(data = SOAM3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+SOAM3_clipped$species = "Sorbus americana"
+SOAM3_flag = cc_iucn(x = SOAM3.occ, range = SOAM3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+SOAM3_occ_final = SOAM3.occ[SOAM3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = SOAM3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = SOAM3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/SOAM3.range.pdf", width = 12, height = 8)
 ```
 
@@ -5376,6 +6779,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = TADI2_clipped, col = "red", linewidth = 2)+
   geom_point(data = TADI2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+TADI2_clipped$species = "Taxodium distichum"
+TADI2_flag = cc_iucn(x = TADI2.occ, range = TADI2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+TADI2_occ_final = TADI2.occ[TADI2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TADI2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TADI2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/TADI2.range.pdf", width = 12, height = 8)
 ```
@@ -5410,6 +6831,24 @@ ggplot()+
   geom_sf(data = THOC2_clipped, col = "red", linewidth = 2)+
   geom_point(data = THOC2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+THOC2_clipped$species = "Thuja occidentalis"
+THOC2_flag = cc_iucn(x = THOC2.occ, range = THOC2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+THOC2_occ_final = THOC2.occ[THOC2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = THOC2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = THOC2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/THOC2.range.pdf", width = 12, height = 8)
 ```
 
@@ -5443,10 +6882,28 @@ ggplot()+
   geom_sf(data = TIAM_clipped, col = "red", linewidth = 2)+
   geom_point(data = TIAM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+TIAM_clipped$species = "Tilia americana"
+TIAM_flag = cc_iucn(x = TIAM.occ, range = TIAM_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+TIAM_occ_final = TIAM.occ[TIAM_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TIAM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TIAM_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/TIAM.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Triadica sebifera. No range map available.
+Subset for Triadica sebifera. Little No range map available.
 
 ```{r}
 TRSE6.occ = gbif %>%
@@ -5454,10 +6911,54 @@ TRSE6.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(TRSE6.range.sf <- BIEN_ranges_load_species('Triadica sebifera'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+TRSE6.range.2 = TRSE6.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+TRSE6.range.3 = terra::vect(TRSE6.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+TRSE6.range.4 = terra::intersect(TRSE6.range.3, states.map.2)
+```
+
+```{r}
+TRSE6.range.5 = st_as_sf(TRSE6.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = TRSE6.range.5, col = "red", linewidth = 2)+
   geom_point(data = TRSE6.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+TRSE6.range.5$species = "Triadica sebifera"
+TRSE6_flag = cc_iucn(x = TRSE6.occ, range = TRSE6.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+TRSE6_occ_final = TRSE6.occ[TRSE6_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TRSE6.range.5, col = "red", linewidth = 2)+
+  geom_point(data = TRSE6_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/TRSE6.range.pdf", width = 12, height = 8)
 ```
@@ -5493,6 +6994,24 @@ ggplot()+
   geom_sf(data = TSCA_clipped, col = "red", linewidth = 2)+
   geom_point(data = TSCA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+TSCA_clipped$species = "Tsuga canadensis"
+TSCA_flag = cc_iucn(x = TSCA.occ, range = TSCA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+TSCA_occ_final = TSCA.occ[TSCA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TSCA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TSCA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/TSCA.range.pdf", width = 12, height = 8)
 ```
 
@@ -5525,6 +7044,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = TSCA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = TSCA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+TSCA2_clipped$species = "Tsuga caroliniana"
+TSCA2_flag = cc_iucn(x = TSCA2.occ, range = TSCA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+TSCA2_occ_final = TSCA2.occ[TSCA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = TSCA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = TSCA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/TSCA2.range.pdf", width = 12, height = 8)
 ```
@@ -5559,6 +7096,24 @@ ggplot()+
   geom_sf(data = ULAL_clipped, col = "red", linewidth = 2)+
   geom_point(data = ULAL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ULAL_clipped$species = "Ulmus alata"
+ULAL_flag = cc_iucn(x = ULAL.occ, range = ULAL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ULAL_occ_final = ULAL.occ[ULAL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULAL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULAL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ULAL.range.pdf", width = 12, height = 8)
 ```
 
@@ -5591,6 +7146,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ULAM_clipped, col = "red", linewidth = 2)+
   geom_point(data = ULAM.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ULAM_clipped$species = "Ulmus americana"
+ULAM_flag = cc_iucn(x = ULAM.occ, range = ULAM_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ULAM_occ_final = ULAM.occ[ULAM_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULAM_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULAM_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ULAM.range.pdf", width = 12, height = 8)
 ```
@@ -5625,6 +7198,24 @@ ggplot()+
   geom_sf(data = ULCR_clipped, col = "red", linewidth = 2)+
   geom_point(data = ULCR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ULCR_clipped$species = "Ulmus crassifolia"
+ULCR_flag = cc_iucn(x = ULCR.occ, range = ULCR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ULCR_occ_final = ULCR.occ[ULCR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULCR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULCR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ULCR.range.pdf", width = 12, height = 8)
 ```
 
@@ -5657,6 +7248,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ULRU_clipped, col = "red", linewidth = 2)+
   geom_point(data = ULRU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ULRU_clipped$species = "Ulmus rubra"
+ULRU_flag = cc_iucn(x = ULRU.occ, range = ULRU_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ULRU_occ_final = ULRU.occ[ULRU_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULRU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULRU_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ULRU.range.pdf", width = 12, height = 8)
 ```
@@ -5691,10 +7300,26 @@ ggplot()+
   geom_sf(data = ULTH_clipped, col = "red", linewidth = 2)+
   geom_point(data = ULTH.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
-ggsave("../Plots/ULTH.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ULTH_clipped$species = "Ulmus thomasii"
+ULTH_flag = cc_iucn(x = ULTH.occ, range = ULTH_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
 
+```{r}
+ULTH_occ_final = ULTH.occ[ULTH_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ULTH_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ULTH_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+ggsave("../Plots/ULTH.range.pdf", width = 12, height = 8)
+```
 
 
 
