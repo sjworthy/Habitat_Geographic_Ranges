@@ -18,6 +18,8 @@ library(maps)
 library(tidyverse)
 library(tigris)
 options(tigris_use_cache = TRUE)
+library(CoordinateCleaner)
+library(BIEN)
 ```
 
 Read in the GBIF data points
@@ -101,8 +103,27 @@ ggplot()+
   geom_sf(data = ABBA_clipped, col = "red", linewidth = 2)+
   geom_point(data = ABBA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ABBA_clipped$species = "Abies balsamea"
+ABBA_flag = cc_iucn(x = ABBA.occ, range = ABBA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ABBA_occ_final = ABBA.occ[ABBA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ABBA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ABBA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ABBA.range.pdf", width = 12, height = 8)
 ```
+
 
 ### Repeat basics of steps above for all other species ####
 
@@ -135,6 +156,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ABFR_clipped, col = "red", linewidth = 2)+
   geom_point(data = ABFR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ABFR_clipped$species = "Abies fraseri"
+ABFR_flag = cc_iucn(x = ABFR.occ, range = ABFR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ABFR_occ_final = ABFR.occ[ABFR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ABFR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ABFR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ABFR.range.pdf", width = 12, height = 8)
 ```
@@ -169,6 +208,24 @@ ggplot()+
   geom_sf(data = ACBA3_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACBA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ACBA3_clipped$species = "Acer barbatum"
+ACBA3_flag = cc_iucn(x = ACBA3.occ, range = ACBA3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACBA3_occ_final = ACBA3.occ[ACBA3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACBA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACBA3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ACBA3.range.pdf", width = 12, height = 8)
 ```
 
@@ -201,6 +258,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ACLE_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACLE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ACLE_clipped$species = "Acer leucoderme"
+ACLE_flag = cc_iucn(x = ACLE.occ, range = ACLE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACLE_occ_final = ACLE.occ[ACLE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACLE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACLE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ACLE.range.pdf", width = 12, height = 8)
 ```
@@ -235,6 +310,24 @@ ggplot()+
   geom_sf(data = ACNE3_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACNE3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ACNE3_clipped$species = "Acer negundo"
+ACNE3_flag = cc_iucn(x = ACNE3.occ, range = ACNE3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACNE3_occ_final = ACNE3.occ[ACNE3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACNE3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACNE3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ACNE3.range.pdf", width = 12, height = 8)
 ```
 
@@ -267,6 +360,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ACNI5_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACNI5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ACNI5_clipped$species = "Acer nigrum"
+ACNI5_flag = cc_iucn(x = ACNI5.occ, range = ACNI5_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACNI5_occ_final = ACNI5.occ[ACNI5_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACNI5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACNI5_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ACNI5.range.pdf", width = 12, height = 8)
 ```
@@ -301,6 +412,24 @@ ggplot()+
   geom_sf(data = ACPE_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACPE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ACPE_clipped$species = "Acer pensylvanicum"
+ACPE_flag = cc_iucn(x = ACPE.occ, range = ACPE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACPE_occ_final = ACPE.occ[ACPE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACPE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACPE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ACPE.range.pdf", width = 12, height = 8)
 ```
 
@@ -333,6 +462,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ACRU_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACRU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ACRU_clipped$species = "Acer rubrum"
+ACRU_flag = cc_iucn(x = ACRU.occ, range = ACRU_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACRU_occ_final = ACRU.occ[ACRU_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACRU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACRU_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ACRU.range.pdf", width = 12, height = 8)
 ```
@@ -367,6 +514,24 @@ ggplot()+
   geom_sf(data = ACSA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACSA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ACSA2_clipped$species = "Acer saccharinum"
+ACSA2_flag = cc_iucn(x = ACSA2.occ, range = ACSA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACSA2_occ_final = ACSA2.occ[ACSA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACSA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACSA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ACSA2.range.pdf", width = 12, height = 8)
 ```
 
@@ -399,6 +564,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ACSA3_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACSA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ACSA3_clipped$species = "Acer saccharum"
+ACSA3_flag = cc_iucn(x = ACSA3.occ, range = ACSA3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACSA3_occ_final = ACSA3.occ[ACSA3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACSA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACSA3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ACSA3.range.pdf", width = 12, height = 8)
 ```
@@ -433,10 +616,28 @@ ggplot()+
   geom_sf(data = ACSP2_clipped, col = "red", linewidth = 2)+
   geom_point(data = ACSP2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ACSP2_clipped$species = "Acer spicatum"
+ACSP2_flag = cc_iucn(x = ACSP2.occ, range = ACSP2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ACSP2_occ_final = ACSP2.occ[ACSP2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ACSP2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ACSP2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ACSP2.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Aesculus flava. Range map not available.
+Subset for Aesculus flava. Little range map not available.
 
 ```{r}
 AEFL.occ = gbif %>%
@@ -444,9 +645,35 @@ AEFL.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(AEFL.range.sf <- BIEN_ranges_load_species('Aesculus flava'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+AEFL.range.2 = AEFL.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+AEFL.range.3 = terra::vect(AEFL.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+AEFL.range.4 = terra::intersect(AEFL.range.3, states.map.2)
+```
+
+```{r}
+AEFL.range.5 = st_as_sf(AEFL.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = AEFL.range.5, col = "red", linewidth = 2)+
   geom_point(data = AEFL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/AEFL.range.pdf", width = 12, height = 8)
@@ -482,10 +709,28 @@ ggplot()+
   geom_sf(data = AEGL_clipped, col = "red", linewidth = 2)+
   geom_point(data = AEGL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+AEGL_clipped$species = "Aesculus glabra"
+AEGL_flag = cc_iucn(x = AEGL.occ, range = AEGL_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+AEGL_occ_final = AEGL.occ[AEGL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = AEGL_clipped, col = "red", linewidth = 2)+
+  geom_point(data = AEGL_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/AEGL.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Ailanthus altissima. Range map not available.
+Subset for Ailanthus altissima. Little range map not available.
 
 ```{r}
 AIAL.occ = gbif %>%
@@ -493,15 +738,60 @@ AIAL.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(AIAL.range.sf <- BIEN_ranges_load_species('Ailanthus altissima'))
+```
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+AIAL.range.2 = AIAL.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+AIAL.range.3 = terra::vect(AIAL.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+AIAL.range.4 = terra::intersect(AIAL.range.3, states.map.2)
+```
+
+```{r}
+AIAL.range.5 = st_as_sf(AIAL.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = AIAL.range.5, col = "red", linewidth = 2)+
   geom_point(data = AIAL.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+AIAL.range.5$species = "Ailanthus altissima"
+AIAL_flag = cc_iucn(x = AIAL.occ, range = AIAL.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+
+```{r}
+AIAL.occ_final = AIAL.occ[AIAL_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = AIAL.range.5, col = "red", linewidth = 2)+
+  geom_point(data = AIAL.occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/AIAL.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Annona glabra. Range map not available.
+Subset for Annona glabra. Little range map not available.
 
 ```{r}
 ANGL4.occ = gbif %>%
@@ -509,9 +799,36 @@ ANGL4.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(ANGL4.range.sf <- BIEN_ranges_load_species('Annona glabra'))
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+ANGL4.range.2 = ANGL4.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+ANGL4.range.3 = terra::vect(ANGL4.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+ANGL4.range.4 = terra::intersect(ANGL4.range.3, states.map.2)
+```
+
+```{r}
+ANGL4.range.5 = st_as_sf(ANGL4.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = ANGL4.range.5, col = "red", linewidth = 2)+
   geom_point(data = ANGL4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ANGL4.range.pdf", width = 12, height = 8)
@@ -547,6 +864,24 @@ ggplot()+
   geom_sf(data = ASTR_clipped, col = "red", linewidth = 2)+
   geom_point(data = ASTR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+ASTR_clipped$species = "Asimina triloba"
+ASTR_flag = cc_iucn(x = ASTR.occ, range = ASTR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ASTR_occ_final = ASTR.occ[ASTR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ASTR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ASTR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/ASTR.range.pdf", width = 12, height = 8)
 ```
 
@@ -579,6 +914,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = BEAL2_clipped, col = "red", linewidth = 2)+
   geom_point(data = BEAL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+BEAL2_clipped$species = "Betula alleghaniensis"
+BEAL2_flag = cc_iucn(x = BEAL2.occ, range = BEAL2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+BEAL2_occ_final = BEAL2.occ[BEAL2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BEAL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BEAL2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/BEAL2.range.pdf", width = 12, height = 8)
 ```
@@ -613,6 +966,24 @@ ggplot()+
   geom_sf(data = BELE_clipped, col = "red", linewidth = 2)+
   geom_point(data = BELE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+BELE_clipped$species = "Betula lenta"
+BELE_flag = cc_iucn(x = BELE.occ, range = BELE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+BELE_occ_final = BELE.occ[BELE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BELE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BELE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/BELE.range.pdf", width = 12, height = 8)
 ```
 
@@ -645,6 +1016,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = BENI_clipped, col = "red", linewidth = 2)+
   geom_point(data = BENI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+BENI_clipped$species = "Betula nigra"
+BENI_flag = cc_iucn(x = BENI.occ, range = BENI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+BENI_occ_final = BENI.occ[BENI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BENI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BENI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/BENI.range.pdf", width = 12, height = 8)
 ```
@@ -679,6 +1068,24 @@ ggplot()+
   geom_sf(data = BEPA_clipped, col = "red", linewidth = 2)+
   geom_point(data = BEPA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+BEPA_clipped$species = "Betula papyrifera"
+BEPA_flag = cc_iucn(x = BEPA.occ, range = BEPA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+BEPA_occ_final = BEPA.occ[BEPA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BEPA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BEPA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/BEPA.range.pdf", width = 12, height = 8)
 ```
 
@@ -711,6 +1118,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = BEPO_clipped, col = "red", linewidth = 2)+
   geom_point(data = BEPO.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+BEPO_clipped$species = "Betula populifolia"
+BEPO_flag = cc_iucn(x = BEPO.occ, range = BEPO_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+BEPO_occ_final = BEPO.occ[BEPO_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = BEPO_clipped, col = "red", linewidth = 2)+
+  geom_point(data = BEPO_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/BEPO.range.pdf", width = 12, height = 8)
 ```
@@ -745,10 +1170,28 @@ ggplot()+
   geom_sf(data = CACA18_clipped, col = "red", linewidth = 2)+
   geom_point(data = CACA18.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+CACA18_clipped$species = "Carpinus caroliniana"
+CACA18_flag = cc_iucn(x = CACA18.occ, range = CACA18_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CACA18_occ_final = CACA18.occ[CACA18_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CACA18_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CACA18_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/CACA18.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Carya alba. No range map available
+Subset for Carya alba. Little range map unavailable.
 
 ```{r}
 CAAL27.occ = gbif %>%
@@ -756,13 +1199,59 @@ CAAL27.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(CAAL27.range.sf <- BIEN_ranges_load_species('Carya alba'))
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+CAAL27.range.2 = CAAL27.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+CAAL27.range.3 = terra::vect(CAAL27.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+CAAL27.range.4 = terra::intersect(CAAL27.range.3, states.map.2)
+```
+
+```{r}
+CAAL27.range.5 = st_as_sf(CAAL27.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = CAAL27.range.5, col = "red", linewidth = 2)+
   geom_point(data = CAAL27.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+CAAL27.range.5$species = "Carya alba"
+CAAL27_flag = cc_iucn(x = CAAL27.occ, range = CAAL27.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CAAL27_occ_final = CAAL27.occ[CAAL27_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAAL27.range.5, col = "red", linewidth = 2)+
+  geom_point(data = CAAL27_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/CAAL27.range.pdf", width = 12, height = 8)
 ```
+
 
 Subset for Carya aquatica
 
@@ -793,6 +1282,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = CAAQ2_clipped, col = "red", linewidth = 2)+
   geom_point(data = CAAQ2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+CAAQ2_clipped$species = "Carya aquatica"
+CAAQ2_flag = cc_iucn(x = CAAQ2.occ, range = CAAQ2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CAAQ2_occ_final = CAAQ2.occ[CAAQ2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAAQ2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAAQ2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/CAAQ2.range.pdf", width = 12, height = 8)
 ```
@@ -827,6 +1334,24 @@ ggplot()+
   geom_sf(data = CACO15_clipped, col = "red", linewidth = 2)+
   geom_point(data = CACO15.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+CACO15_clipped$species = "Carya cordiformis"
+CACO15_flag = cc_iucn(x = CACO15.occ, range = CACO15_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CACO15_occ_final = CACO15.occ[CACO15_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CACO15_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CACO15_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/CACO15.range.pdf", width = 12, height = 8)
 ```
 
@@ -859,6 +1384,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = CAGL8_clipped, col = "red", linewidth = 2)+
   geom_point(data = CAGL8.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+CAGL8_clipped$species = "Carya glabra"
+CAGL8_flag = cc_iucn(x = CAGL8.occ, range = CAGL8_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CAGL8_occ_final = CAGL8.occ[CAGL8_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAGL8_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAGL8_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/CAGL8.range.pdf", width = 12, height = 8)
 ```
@@ -893,6 +1436,24 @@ ggplot()+
   geom_sf(data = CAIL2_clipped, col = "red", linewidth = 2)+
   geom_point(data = CAIL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+CAIL2_clipped$species = "Carya illinoinensis"
+CAIL2_flag = cc_iucn(x = CAIL2.occ, range = CAIL2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CAIL2_occ_final = CAIL2.occ[CAIL2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAIL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAIL2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/CAIL2.range.pdf", width = 12, height = 8)
 ```
 
@@ -925,6 +1486,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = CAOV2_clipped, col = "red", linewidth = 2)+
   geom_point(data = CAOV2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+CAOV2_clipped$species = "Carya ovata"
+CAOV2_flag = cc_iucn(x = CAOV2.occ, range = CAOV2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CAOV2_occ_final = CAOV2.occ[CAOV2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CAOV2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CAOV2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/CAOV2.range.pdf", width = 12, height = 8)
 ```
@@ -959,6 +1538,24 @@ ggplot()+
   geom_sf(data = CATE9_clipped, col = "red", linewidth = 2)+
   geom_point(data = CATE9.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+CATE9_clipped$species = "Carya texana"
+CATE9_flag = cc_iucn(x = CATE9.occ, range = CATE9_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CATE9_occ_final = CATE9.occ[CATE9_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CATE9_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CATE9_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/CATE9.range.pdf", width = 12, height = 8)
 ```
 
@@ -991,6 +1588,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = CADE12_clipped, col = "red", linewidth = 2)+
   geom_point(data = CADE12.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+CADE12_clipped$species = "Castanea dentata"
+CADE12_flag = cc_iucn(x = CADE12.occ, range = CADE12_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CADE12_occ_final = CADE12.occ[CADE12_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CADE12_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CADE12_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/CADE12.range.pdf", width = 12, height = 8)
 ```
@@ -1025,6 +1640,24 @@ ggplot()+
   geom_sf(data = CELA_clipped, col = "red", linewidth = 2)+
   geom_point(data = CELA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+CELA_clipped$species = "Celtis laevigata"
+CELA_flag = cc_iucn(x = CELA.occ, range = CELA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CELA_occ_final = CELA.occ[CELA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CELA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CELA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/CELA.range.pdf", width = 12, height = 8)
 ```
 
@@ -1058,10 +1691,28 @@ ggplot()+
   geom_sf(data = CEOC_clipped, col = "red", linewidth = 2)+
   geom_point(data = CEOC.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+CEOC_clipped$species = "Celtis occidentalis"
+CEOC_flag = cc_iucn(x = CEOC.occ, range = CEOC_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CEOC_occ_final = CEOC.occ[CEOC_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CEOC_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CEOC_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/CEOC.range.pdf", width = 12, height = 8)
 ```
 
-Subset for Cercis canadensis. Range map unavailable
+Subset for Cercis canadensis. Little range map unavailable
 
 ```{r}
 CECA4.occ = gbif %>%
@@ -1069,10 +1720,55 @@ CECA4.occ = gbif %>%
   select(species,decimalLatitude,decimalLongitude)
 ```
 
+Get range map from BIEN
+
+```{r}
+(CECA4.range.sf <- BIEN_ranges_load_species('Cercis canadensis'))
+```
+
+The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. The BIEN ranges are WG84.
+
+```{r}
+CECA4.range.2 = CECA4.range.sf %>%
+  st_transform(st_crs(states.map))
+```
+
+```{r}
+CECA4.range.3 = terra::vect(CECA4.range.2)
+states.map.2 = terra::vect(states.map)
+```
+
+```{r}
+CECA4.range.4 = terra::intersect(CECA4.range.3, states.map.2)
+```
+
+```{r}
+CECA4.range.5 = st_as_sf(CECA4.range.4)
+```
+
 ```{r}
 ggplot()+
   geom_sf(data = states.map, fill = "white")+
+  geom_sf(dat = CECA4.range.5, col = "red", linewidth = 2)+
   geom_point(data = CECA4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+CECA4.range.5$species = "Cercis canadensis"
+CECA4_flag = cc_iucn(x = CECA4.occ, range = CECA4.range.5, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CECA4_occ_final = CECA4.occ[CECA4_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CECA4.range.5, col = "red", linewidth = 2)+
+  geom_point(data = CECA4_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/CECA4.range.pdf", width = 12, height = 8)
 ```
@@ -1107,6 +1803,24 @@ ggplot()+
   geom_sf(data = CHTH2_clipped, col = "red", linewidth = 2)+
   geom_point(data = CHTH2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+CHTH2_clipped$species = "Chamaecyparis thyoides"
+CHTH2_flag = cc_iucn(x = CHTH2.occ, range = CHTH2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+CHTH2_occ_final = CHTH2.occ[CHTH2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = CHTH2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = CHTH2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/CHTH2.range.pdf", width = 12, height = 8)
 ```
 
@@ -1139,6 +1853,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = COFL2_clipped, col = "red", linewidth = 2)+
   geom_point(data = COFL2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+COFL2_clipped$species = "Cornus florida"
+COFL2_flag = cc_iucn(x = COFL2.occ, range = COFL2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+COFL2_occ_final = COFL2.occ[COFL2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = COFL2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = COFL2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/COFL2.range.pdf", width = 12, height = 8)
 ```
@@ -1173,6 +1905,24 @@ ggplot()+
   geom_sf(data = DIVI5_clipped, col = "red", linewidth = 2)+
   geom_point(data = DIVI5.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+DIVI5_clipped$species = "Diospyros virginiana"
+DIVI5_flag = cc_iucn(x = DIVI5.occ, range = DIVI5_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+DIVI5_occ_final = DIVI5.occ[DIVI5_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = DIVI5_clipped, col = "red", linewidth = 2)+
+  geom_point(data = DIVI5_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/DIVI5.range.pdf", width = 12, height = 8)
 ```
 
@@ -1205,6 +1955,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = FAGR_clipped, col = "red", linewidth = 2)+
   geom_point(data = FAGR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+FAGR_clipped$species = "Fagus grandifolia"
+FAGR_flag = cc_iucn(x = FAGR.occ, range = FAGR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FAGR_occ_final = FAGR.occ[FAGR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FAGR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FAGR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/FAGR.range.pdf", width = 12, height = 8)
 ```
@@ -1239,6 +2007,24 @@ ggplot()+
   geom_sf(data = FRAM2_clipped, col = "red", linewidth = 2)+
   geom_point(data = FRAM2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+FRAM2_clipped$species = "Fraxinus americana"
+FRAM2_flag = cc_iucn(x = FRAM2.occ, range = FRAM2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FRAM2_occ_final = FRAM2.occ[FRAM2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRAM2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRAM2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/FRAM2.range.pdf", width = 12, height = 8)
 ```
 
@@ -1271,6 +2057,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = FRCA3_clipped, col = "red", linewidth = 2)+
   geom_point(data = FRCA3.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+FRCA3_clipped$species = "Fraxinus caroliniana"
+FRCA3_flag = cc_iucn(x = FRCA3.occ, range = FRCA3_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FRCA3_occ_final = FRCA3.occ[FRCA3_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRCA3_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRCA3_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/FRCA3.range.pdf", width = 12, height = 8)
 ```
@@ -1305,6 +2109,24 @@ ggplot()+
   geom_sf(data = FRNI_clipped, col = "red", linewidth = 2)+
   geom_point(data = FRNI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+FRNI_clipped$species = "Fraxinus nigra"
+FRNI_flag = cc_iucn(x = FRNI.occ, range = FRNI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FRNI_occ_final = FRNI.occ[FRNI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRNI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRNI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/FRNI.range.pdf", width = 12, height = 8)
 ```
 
@@ -1337,6 +2159,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = FRPE_clipped, col = "red", linewidth = 2)+
   geom_point(data = FRPE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+FRPE_clipped$species = "Fraxinus pennsylvanica"
+FRPE_flag = cc_iucn(x = FRPE.occ, range = FRPE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FRPE_occ_final = FRPE.occ[FRPE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRPE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRPE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/FRPE.range.pdf", width = 12, height = 8)
 ```
@@ -1371,6 +2211,24 @@ ggplot()+
   geom_sf(data = FRPR_clipped, col = "red", linewidth = 2)+
   geom_point(data = FRPR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+FRPR_clipped$species = "Fraxinus profunda"
+FRPR_flag = cc_iucn(x = FRPR.occ, range = FRPR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FRPR_occ_final = FRPR.occ[FRPR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRPR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRPR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/FRPR.range.pdf", width = 12, height = 8)
 ```
 
@@ -1403,6 +2261,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = FRQU_clipped, col = "red", linewidth = 2)+
   geom_point(data = FRQU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+FRQU_clipped$species = "Fraxinus quadrangulata"
+FRQU_flag = cc_iucn(x = FRQU.occ, range = FRQU_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FRQU_occ_final = FRQU.occ[FRQU_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRQU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRQU_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/FRQU.range.pdf", width = 12, height = 8)
 ```
@@ -1437,6 +2313,24 @@ ggplot()+
   geom_sf(data = FRTE_clipped, col = "red", linewidth = 2)+
   geom_point(data = FRTE.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+FRTE_clipped$species = "Fraxinus albicans"
+FRTE_flag = cc_iucn(x = FRTE.occ, range = FRTE_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+FRTE_occ_final = FRTE.occ[FRTE_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = FRTE_clipped, col = "red", linewidth = 2)+
+  geom_point(data = FRTE_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/FRTE.range.pdf", width = 12, height = 8)
 ```
 
@@ -1469,6 +2363,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = GLAQ_clipped, col = "red", linewidth = 2)+
   geom_point(data = GLAQ.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+GLAQ_clipped$species = "Gleditsia aquatica"
+GLAQ_flag = cc_iucn(x = GLAQ.occ, range = GLAQ_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+GLAQ_occ_final = GLAQ.occ[GLAQ_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GLAQ_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GLAQ_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/GLAQ.range.pdf", width = 12, height = 8)
 ```
@@ -1503,6 +2415,24 @@ ggplot()+
   geom_sf(data = GLTR_clipped, col = "red", linewidth = 2)+
   geom_point(data = GLTR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+GLTR_clipped$species = "Gleditsia triacanthos"
+GLTR_flag = cc_iucn(x = GLTR.occ, range = GLTR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+GLTR_occ_final = GLTR.occ[GLTR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GLTR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GLTR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/GLTR.range.pdf", width = 12, height = 8)
 ```
 
@@ -1535,6 +2465,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = GOLA_clipped, col = "red", linewidth = 2)+
   geom_point(data = GOLA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+GOLA_clipped$species = "Gordonia lasianthus"
+GOLA_flag = cc_iucn(x = GOLA.occ, range = GOLA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+GOLA_occ_final = GOLA.occ[GOLA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GOLA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GOLA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/GOLA.range.pdf", width = 12, height = 8)
 ```
@@ -1569,8 +2517,27 @@ ggplot()+
   geom_sf(data = GYDI_clipped, col = "red", linewidth = 2)+
   geom_point(data = GYDI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+GYDI_clipped$species = "Gymnocladus dioicus"
+GYDI_flag = cc_iucn(x = GYDI.occ, range = GYDI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+GYDI_occ_final = GYDI.occ[GYDI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = GYDI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = GYDI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/GYDI.range.pdf", width = 12, height = 8)
 ```
+
 
 Subset for Ilex opaca
 
@@ -1601,6 +2568,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = ILOP_clipped, col = "red", linewidth = 2)+
   geom_point(data = ILOP.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+ILOP_clipped$species = "Ilex opaca"
+ILOP_flag = cc_iucn(x = ILOP.occ, range = ILOP_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+ILOP_occ_final = ILOP.occ[ILOP_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = ILOP_clipped, col = "red", linewidth = 2)+
+  geom_point(data = ILOP_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/ILOP.range.pdf", width = 12, height = 8)
 ```
@@ -1635,6 +2620,24 @@ ggplot()+
   geom_sf(data = JUCI_clipped, col = "red", linewidth = 2)+
   geom_point(data = JUCI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+JUCI_clipped$species = "Juglans cinerea"
+JUCI_flag = cc_iucn(x = JUCI.occ, range = JUCI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+JUCI_occ_final = JUCI.occ[JUCI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = JUCI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = JUCI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/JUCI.range.pdf", width = 12, height = 8)
 ```
 
@@ -1667,6 +2670,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = JUNI_clipped, col = "red", linewidth = 2)+
   geom_point(data = JUNI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+JUNI_clipped$species = "Juglans nigra"
+JUNI_flag = cc_iucn(x = JUNI.occ, range = JUNI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+JUNI_occ_final = JUNI.occ[JUNI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = JUNI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = JUNI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/JUNI.range.pdf", width = 12, height = 8)
 ```
@@ -1701,6 +2722,24 @@ ggplot()+
   geom_sf(data = JUVI_clipped, col = "red", linewidth = 2)+
   geom_point(data = JUVI.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+JUVI_clipped$species = "Juniperus virginiana"
+JUVI_flag = cc_iucn(x = JUVI.occ, range = JUVI_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+JUVI_occ_final = JUVI.occ[JUVI_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = JUVI_clipped, col = "red", linewidth = 2)+
+  geom_point(data = JUVI_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/JUVI.range.pdf", width = 12, height = 8)
 ```
 
@@ -1733,6 +2772,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = LALA_clipped, col = "red", linewidth = 2)+
   geom_point(data = LALA.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+LALA_clipped$species = "Larix laricina"
+LALA_flag = cc_iucn(x = LALA.occ, range = LALA_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+LALA_occ_final = LALA.occ[LALA_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = LALA_clipped, col = "red", linewidth = 2)+
+  geom_point(data = LALA_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/LALA.range.pdf", width = 12, height = 8)
 ```
@@ -1767,6 +2824,24 @@ ggplot()+
   geom_sf(data = LIST2_clipped, col = "red", linewidth = 2)+
   geom_point(data = LIST2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+LIST2_clipped$species = "Liquidambar styraciflua"
+LIST2_flag = cc_iucn(x = LIST2.occ, range = LIST2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+LIST2_occ_final = LIST2.occ[LIST2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = LIST2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = LIST2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/LIST2.range.pdf", width = 12, height = 8)
 ```
 
@@ -1799,6 +2874,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = LITU_clipped, col = "red", linewidth = 2)+
   geom_point(data = LITU.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+LITU_clipped$species = "Liriodendron tulipifera"
+LITU_flag = cc_iucn(x = LITU.occ, range = LITU_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+LITU_occ_final = LITU.occ[LITU_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = LITU_clipped, col = "red", linewidth = 2)+
+  geom_point(data = LITU_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/LITU.range.pdf", width = 12, height = 8)
 ```
@@ -1833,6 +2926,24 @@ ggplot()+
   geom_sf(data = MAPO_clipped, col = "red", linewidth = 2)+
   geom_point(data = MAPO.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+MAPO_clipped$species = "Maclura pomifera"
+MAPO_flag = cc_iucn(x = MAPO.occ, range = MAPO_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+MAPO_occ_final = MAPO.occ[MAPO_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAPO_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAPO_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/MAPO.range.pdf", width = 12, height = 8)
 ```
 
@@ -1865,6 +2976,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = MAAC_clipped, col = "red", linewidth = 2)+
   geom_point(data = MAAC.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+MAAC_clipped$species = "Magnolia acuminata"
+MAAC_flag = cc_iucn(x = MAAC.occ, range = MAAC_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+MAAC_occ_final = MAAC.occ[MAAC_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAAC_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAAC_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/MAAC.range.pdf", width = 12, height = 8)
 ```
@@ -1899,6 +3028,24 @@ ggplot()+
   geom_sf(data = MAFR_clipped, col = "red", linewidth = 2)+
   geom_point(data = MAFR.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+MAFR_clipped$species = "Magnolia fraseri"
+MAFR_flag = cc_iucn(x = MAFR.occ, range = MAFR_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+MAFR_occ_final = MAFR.occ[MAFR_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAFR_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAFR_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/MAFR.range.pdf", width = 12, height = 8)
 ```
 
@@ -1932,6 +3079,24 @@ ggplot()+
   geom_sf(data = MAGR4_clipped, col = "red", linewidth = 2)+
   geom_point(data = MAGR4.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
+```
+
+```{r}
+MAGR4_clipped$species = "Magnolia grandiflora"
+MAGR4_flag = cc_iucn(x = MAGR4.occ, range = MAGR4_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+MAGR4_occ_final = MAGR4.occ[MAGR4_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAGR4_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAGR4_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
 ggsave("../Plots/MAGR4.range.pdf", width = 12, height = 8)
 ```
 
@@ -1964,6 +3129,24 @@ ggplot()+
   geom_sf(data = states.map, fill = "white")+
   geom_sf(data = MAMA2_clipped, col = "red", linewidth = 2)+
   geom_point(data = MAMA2.occ, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
+  theme_classic()
+```
+
+```{r}
+MAMA2_clipped$species = "Magnolia macrophylla"
+MAMA2_flag = cc_iucn(x = MAMA2.occ, range = MAMA2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+                    value = "flagged", buffer = 50000)
+```
+
+```{r}
+MAMA2_occ_final = MAMA2.occ[MAMA2_flag, ]
+```
+
+```{r}
+ggplot()+
+  geom_sf(data = states.map, fill = "white")+
+  geom_sf(data = MAMA2_clipped, col = "red", linewidth = 2)+
+  geom_point(data = MAMA2_occ_final, aes(x = decimalLongitude, y = decimalLatitude), color = "black", alpha = 0.7)+
   theme_classic()
 ggsave("../Plots/MAMA2.range.pdf", width = 12, height = 8)
 ```
