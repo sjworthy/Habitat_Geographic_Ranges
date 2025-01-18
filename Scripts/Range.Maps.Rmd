@@ -7321,5 +7321,13 @@ ggplot()+
 ggsave("../Plots/ULTH.range.pdf", width = 12, height = 8)
 ```
 
+Merge all the final, filtered occurrence data
 
+```{r}
+gbif.range.filtered = rbind(ABBA_occ_final,ABFR_occ_final,ACBA3_occ_final,ACLE_occ_final,ACNE3_occ_final,ACNI5_occ_final,ACPE_occ_final,ACRU_occ_final,ACSA2_occ_final,ACSA3_occ_final,ACSP2_occ_final,AEFL.occ,AEGL_occ_final,AIAL.occ_final, ANGL4.occ,ASTR_occ_final,BEAL2_occ_final,BELE_occ_final,BENI_occ_final,BEPA_occ_final,BEPO_occ_final,CAAL27_occ_final,CAAQ2_occ_final,CACA18_occ_final,CACA5_occ_final,CACO15_occ_final,CADE12_occ_final,CAGL8_occ_final,CAIL2_occ_final,CAOV2_occ_final,CATE9_occ_final,CECA4_occ_final,CELA_occ_final,CEOC_occ_final,CHTH2_occ_final,COFL2_occ_final,DIVI5_occ_final,FAGR_occ_final,FRAM2_occ_final,FRCA3_occ_final,FRNI_occ_final,FRPE_occ_final,FRPR_occ_final,FRQU_occ_final,FRTE_occ_final,GLAQ_occ_final,GLTR_occ_final,GOLA_occ_final,GYDI_occ_final,ILOP_occ_final,JUCI_occ_final,JUNI_occ_final,JUVI_occ_final,LALA_occ_final,LIST2_occ_final,LITU_occ_final,MAAC_occ_final,MAFR_occ_final,MAGR4_occ_final,MAMA2_occ_final,MAPO_occ_final,MAVI2_occ_final,MORU2_occ_final,NYAQ2_occ_final,NYBI.occ,NYOG_occ_final,NYSY_occ_final,OSVI_occ_final,OXAR_occ_final,PATO2_occ_final,PEBO_occ_final,PIBA2_occ_final,PICL_occ_final,PIEC2_occ_final,PIEL_occ_final,PIGL_occ_final,PIGL2_occ_final,PIMA_occ_final,PIPA2_occ_final,PIPUS_occ_final,PIRE_occ_final,PIRI_occ_final,PIRU_occ_final,PISE_occ_final,PIST_occ_final,PITA_occ_final,PIVI2_occ_final,PLAQ_occ_final,PLOC_occ_final,POBA2_occ_final,PODE3_occ_final,POGR4_occ_final,POHE4_occ_final,POTR5_occ_final,PRAM_occ_final,PRPE2_occ_final,PRSE2_occ_final,PRVI_occ_final,QUAL_occ_final,QUBI_occ_final,QUCO2_occ_final,QUEL_occ_final,QUFA_occ_final,QUIL_occ_final,QUIM_occ_final,QUIN_occ_final,QULA2_occ_final,QULA3_occ_final,QULY_occ_final,QUMA2_occ_final,QUMA3_occ_final,QUMA6_occ_final,QUMI.occ,QUMI2_occ_final,QUMU_occ_final,QUNI_occ_final,QUPA2_occ_final,QUPA5_occ_final,QUPH_occ_final,QURU_occ_final,QUSH_occ_final,QUSIS_occ_final,QUST_occ_final,QUTE_occ_final,QUVE_occ_final,QUVI_occ_final,ROPS_occ_final,SAAL5_occ_final,SANI_occ_final,SOAM3_occ_final,TADI2_occ_final,THOC2_occ_final,TIAM_occ_final,TRSE6_occ_final,TSCA_occ_final,TSCA2_occ_final,ULAL_occ_final,ULAM_occ_final,ULCR_occ_final,ULRU_occ_final,ULTH_occ_final)
+```
+
+```{r}
+write.csv(gbif.range.filtered, file = "../Formatted.Data/final.gbif.data.csv")
+```
 
