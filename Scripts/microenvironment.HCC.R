@@ -45,12 +45,16 @@ foreach(raster_file = raster_files, .packages = c("raster","tidyverse","bioclim"
   # extract data for trees in this DEM
   trees.lat.long = gbif.crop[,c(2:3)]
   tree.clim = raster::extract(clim, trees.lat.long)
+  tree.elev = raster::extract(et, trees.lat.long)
   
   # change column names
-  colnames(tree.clim) = c("high_temp_C","low_temp_C","moisture_mm","northness","eastness","windward_exposure","mTPI","macro_bio1_mean_annual_temp_C","macro_bio12_total_annual_precip_mm","macro_bio5_max_temp_warm_month_C","macro_bi06_min_temp_cold_month_C")
+  colnames(tree.clim) = c("high_temp_C","low_temp_C","moisture_mm","northness","eastness","windward_exposure","mTPI","slope","aspect",
+                          "macro_bio1_mean_annual_temp_C","macro_bio12_total_annual_precip_mm","macro_bio5_max_temp_warm_month_C",
+                          "macro_bi06_min_temp_cold_month_C","elevation")
   
+
   # combine with original data
-  tree.clim.2 = cbind(gbif.crop,tree.clim)
+  tree.clim.2 = cbind(gbif.crop,tree.clim,tree.elev)
   
   # Define output file name based on raster file name
   output_file <- paste0("micro_clim_", basename(raster_file), ".csv")

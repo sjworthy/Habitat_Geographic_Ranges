@@ -86,7 +86,7 @@ hillshade.crop <- hillShade(terrain(et, "slope"), terrain(et, "aspect"))
 plot(hillshade.crop, col = colorRampPalette(c("black", "white"))(50), legend = F)
 ```
 
-Get microclimate for Niobrara. Set include_inputs = TRUE to get macroclimate variables to output. Took 10 minutes to run.
+Get microclimate for Niobrara. Set include_inputs = TRUE to get macroclimate variables to output. Took 10 minutes to run. Use functions.R that adapts bioclimate function.
 
 ```{r}
 clim <- bioclimate(et, include_inputs = TRUE)
@@ -134,11 +134,36 @@ Extract data for these trees
 ```{r}
 trees.lat.long.2 = trees.lat.long[,c(1:2)]
 tree.clim = raster::extract(clim,trees.lat.long.2)
+```
+
+
+```{r}
+test = raster::extract(et,trees.lat.long.2)
+test.2 = cbind(tree.clim,test)
+```
+
+
+```{r}
+tree.clim.2 = cbind(trees,tree.clim,test)
+```
+
+
+```{r}
+trees.lat.long.2 = trees.lat.long[,c(1:2)]
+tree.clim = raster::extract(clim,trees.lat.long.2)
 colnames(tree.clim) = c("high_temp_C","low_temp_C","moisture_mm","northness","eastness","windward_exposure","mTPI","macro_bio1_mean_annual_temp_C","macro_bio12_total_annual_precip_mm","macro_bio5_max_temp_warm_month_C","macro_bi06_min_temp_cold_month_C")
 tree.clim.2 = cbind(trees,tree.clim)
 ```
 
 ```{r}
+trees.lat.long.2 = trees.lat.long[,c(1:2)]
+test = raster::extract(et,trees.lat.long.2)
+```
+
+
+```{r}
 tree.clim.2$local = c("Low Canyon East","Low Canyon Botton","Low Canyon West",
                       "High Canyon East","Hihg Canyon Bottom","High Canyon West","Upland")
 ```
+
+
