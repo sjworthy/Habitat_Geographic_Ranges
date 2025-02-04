@@ -4,22 +4,26 @@ if(!require(tidyverse)) install.packages("tidyverse")
 if(!require(foreach)) install.packages("foreach")
 if(!require(doParallel)) install.packages("doParallel")
 if(!require(devtools)) install.packages("devtools")
-devtools::install_github("matthewkling/topoclimate.pred")
+if(!require(topoclimate.pred)) install_github("matthewkling/topoclimate.pred")
+  
+
 
 # setup parallel backend
-num_cores = 8
+num_cores = 2
 cluster = makeCluster(num_cores)
 registerDoParallel(cluster)
 
 # Load GBIF data
-gbif = read.csv("./Formatted.Data/final.gbif.data.csv", row.names = 1)
+gbif = read.csv("final.gbif.data.csv", row.names = 1)
 
 # Read in the raster files as a list
-raster_files <- list.files("./Raw.Data/", pattern = "*.tif", full.names = TRUE)
+raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
 
 # Use foreach to parallelize the for-loop
-foreach(raster_file = raster_files, .packages = c("raster","tidyverse","bioclim")) %dopar% {
+foreach(raster_file = raster_files, .packages = c("raster","tidyverse","topoclimate.pred")) %dopar% {
 
+  source("functions.R")
+  
   # Load the DEM
   elev <- raster(raster_file)
   names(elev) <- "elevation"
@@ -40,7 +44,7 @@ foreach(raster_file = raster_files, .packages = c("raster","tidyverse","bioclim"
   et <- crop(elev, ext)
   
   # Get microclimate data
-  clim <- bioclimate(et, include_inputs = TRUE)
+  clim <- bioclimate_2(et, include_inputs = TRUE)
   
   # extract data for trees in this DEM
   trees.lat.long = gbif.crop[,c(2:3)]
@@ -50,7 +54,7 @@ foreach(raster_file = raster_files, .packages = c("raster","tidyverse","bioclim"
   # change column names
   colnames(tree.clim) = c("high_temp_C","low_temp_C","moisture_mm","northness","eastness","windward_exposure","mTPI","slope","aspect",
                           "macro_bio1_mean_annual_temp_C","macro_bio12_total_annual_precip_mm","macro_bio5_max_temp_warm_month_C",
-                          "macro_bi06_min_temp_cold_month_C","elevation")
+                          "macro_bi06_min_temp_cold_month_C")
   
 
   # combine with original data

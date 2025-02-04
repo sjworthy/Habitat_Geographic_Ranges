@@ -35,6 +35,11 @@ Load R package
 ```
 
 ```{r}
+source("functions.R")
+```
+
+
+```{r}
 library(topoclimate.pred)
 ```
 
@@ -89,7 +94,7 @@ plot(hillshade.crop, col = colorRampPalette(c("black", "white"))(50), legend = F
 Get microclimate for Niobrara. Set include_inputs = TRUE to get macroclimate variables to output. Took 10 minutes to run. Use functions.R that adapts bioclimate function.
 
 ```{r}
-clim <- bioclimate(et, include_inputs = TRUE)
+clim <- bioclimate_2(et, include_inputs = TRUE)
 ```
 
 Save RasterStack

@@ -266,7 +266,7 @@ microclimate <- function(md, d, deltas, macro){
 #' @return A raster stack of topoclimate variables, including "high_temperature" (in deg C), "low_temperature" (in deg C), and "moisture" (in mm).
 #' @references Kling, Baer, & Ackerly (2023), in review.
 #' @export
-bioclimate <- function(dem, include_inputs = FALSE){
+bioclimate_2 <- function(dem, include_inputs = FALSE){
 
       message("Calculating biogially effective topoclimate\n",
               "(Note: you can safely ignore any 'attempt to apply non-function' error messages;\n",
