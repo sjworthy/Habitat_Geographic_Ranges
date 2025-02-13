@@ -35,12 +35,32 @@ Load R package
 ```
 
 ```{r}
-source("functions.R")
+install.packages("splines2")
 ```
 
 
 ```{r}
+library(tidyverse)
+library(conflicted)
+library(raster)
+#library(splines2)
+```
+
+
+```{r}
+source("functions.R")
+```
+
+```{r}
+conflicts_prefer(dplyr::select(),
+                 dplyr::filter())
+```
+
+
+
+```{r}
 library(topoclimate.pred)
+
 ```
 
 Lat/Long are Easting and Northing. They are in NE State Plane Coordinates. Need to convert these to same NAD83 crs, same as DEM. Convert the corners of the plot first.
@@ -139,36 +159,36 @@ Extract data for these trees
 ```{r}
 trees.lat.long.2 = trees.lat.long[,c(1:2)]
 tree.clim = raster::extract(clim,trees.lat.long.2)
-```
-
-
-```{r}
-test = raster::extract(et,trees.lat.long.2)
-test.2 = cbind(tree.clim,test)
-```
-
-
-```{r}
-tree.clim.2 = cbind(trees,tree.clim,test)
-```
-
-
-```{r}
-trees.lat.long.2 = trees.lat.long[,c(1:2)]
-tree.clim = raster::extract(clim,trees.lat.long.2)
-colnames(tree.clim) = c("high_temp_C","low_temp_C","moisture_mm","northness","eastness","windward_exposure","mTPI","macro_bio1_mean_annual_temp_C","macro_bio12_total_annual_precip_mm","macro_bio5_max_temp_warm_month_C","macro_bi06_min_temp_cold_month_C")
-tree.clim.2 = cbind(trees,tree.clim)
+tree.elev = raster::extract(et, trees.lat.long.2)
 ```
 
 ```{r}
-trees.lat.long.2 = trees.lat.long[,c(1:2)]
-test = raster::extract(et,trees.lat.long.2)
+# change column names
+  colnames(tree.clim) = c("high_temp_C","low_temp_C","moisture_mm","northness","eastness","windward_exposure","mTPI","slope","aspect",
+                          "macro_bio1_mean_annual_temp_C","macro_bio12_total_annual_precip_mm","macro_bio5_max_temp_warm_month_C",
+                          "macro_bi06_min_temp_cold_month_C")
+```
+  
+```{r}
+# combine with original data
+tree.clim.2 = cbind(trees,tree.clim,tree.elev)
 ```
 
 
 ```{r}
 tree.clim.2$local = c("Low Canyon East","Low Canyon Botton","Low Canyon West",
                       "High Canyon East","Hihg Canyon Bottom","High Canyon West","Upland")
+```
+
+
+```{r}
+# Define output file name based on raster file name
+  output_file <- paste0("microclim_", basename(elev@file@name), ".csv")
+```
+
+```{r}
+  # Write out the data for this raster
+  write.csv(tree.clim.2, file = output_file)
 ```
 
 

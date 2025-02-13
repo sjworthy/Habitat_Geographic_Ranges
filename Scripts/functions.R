@@ -35,10 +35,13 @@ mtpi <- function(dem){
 #' @export
 northeast <- function(terr){
       message("... computing northness & eastness ...")
-      northness <- sin(terr$slope) * cos(terr$aspect)
-      eastness <- sin(terr$slope) * sin(terr$aspect)
-      ne <- stack(northness, eastness)
-      ne <- setNames(ne, c("northness", "eastness"))
+  slope_layer = terr$slope
+  aspect_layer = terr$aspect
+  # Assign the CRS (projection) to each layer manually
+  projection(slope_layer) <- projection(elev)
+  projection(aspect_layer) <- projection(elev)
+  northness <- sin(slope_layer) * cos(aspect_layer)
+  eastness <- sin(slope_layer) * sin(aspect_layer)
       ne
 }
 
@@ -55,7 +58,7 @@ northeast <- function(terr){
 windex <- function(ne, terr){
       message("... computing windward exposure ...")
 
-      wind <- stack(topo_data("wind.tif"))
+      wind <- stack("wind.tif")
       wind <- setNames(wind, c("wspeed", "wdir", "waniso", "wu", "wv"))
       wind <- projectRaster(wind, terr[[1]])
 
@@ -83,7 +86,7 @@ macroclimate <- function(dem, interpolation = "bilinear"){
       message("... preparing macroclimate ...")
 
       # load CHELSA rasters
-      f <- list.files(topo_data(), pattern = "CHELSA", full.names = T)
+      f <- list.files(".", pattern = "CHELSA", full.names = T)
       clim <- stack(f[!grepl("xml", f)])
       names(clim) <- paste0("bio", c(1, 12, 5, 6))
 
@@ -158,7 +161,7 @@ get_deltas <- function(md, # model metadata
                    basis = basis %% n_bases,
                    basis = ifelse(basis == 0, n_bases, basis),
                    clim_var = vars[as.integer(clim_var)]) %>%
-            select(-i)
+            dplyr::select(-i)
 
       message("... computing deltas ...")
       delt <- function(gs){
@@ -280,6 +283,7 @@ bioclimate_2 <- function(dem, include_inputs = FALSE){
 
       # prep predictor data
       terr <- terrain(dem, c("slope", "aspect"))
+      projection(terr) = projection(elev)
       ne <- northeast(terr)
       wind <- windex(ne, terr)
       tpi <- mtpi(dem)

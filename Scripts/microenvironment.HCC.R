@@ -1,17 +1,19 @@
 
 # load libraries
-if(!require(tidyverse)) install.packages("tidyverse")
-if(!require(foreach)) install.packages("foreach")
-if(!require(doParallel)) install.packages("doParallel")
-if(!require(devtools)) install.packages("devtools")
-if(!require(topoclimate.pred)) install_github("matthewkling/topoclimate.pred")
-  
+install.packages("tidyverse")
+library(tidyverse)
+install.packages("devtools")
+library(devtools)
+install_github("matthewkling/topoclimate.pred")
+library(topoclimate.pred)
+install.packages("conflicted")
+library(conflicted)
 
+conflicts_prefer("select", "dplyr")
+conflict_prefer("filter", "dplyr")
 
-# setup parallel backend
-num_cores = 2
-cluster = makeCluster(num_cores)
-registerDoParallel(cluster)
+source("functions.R")
+
 
 # Load GBIF data
 gbif = read.csv("final.gbif.data.csv", row.names = 1)
@@ -19,10 +21,7 @@ gbif = read.csv("final.gbif.data.csv", row.names = 1)
 # Read in the raster files as a list
 raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
 
-# Use foreach to parallelize the for-loop
-foreach(raster_file = raster_files, .packages = c("raster","tidyverse","topoclimate.pred")) %dopar% {
-
-  source("functions.R")
+for(raster_file in raster_files){
   
   # Load the DEM
   elev <- raster(raster_file)
@@ -71,14 +70,5 @@ foreach(raster_file = raster_files, .packages = c("raster","tidyverse","topoclim
   gc()
   
 }
-
-stopCluster(cl = cluster)
-
-
-
-
-
-
-
 
 
