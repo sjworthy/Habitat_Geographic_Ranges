@@ -1,6 +1,8 @@
 ---
 title: "Range.Maps"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 date: "2025-01-08"
 ---
 
@@ -20,6 +22,7 @@ library(tigris)
 options(tigris_use_cache = TRUE)
 library(CoordinateCleaner)
 library(BIEN)
+library(divvy)
 ```
 
 Read in the GBIF data points
@@ -33,7 +36,7 @@ Subset for Abies balsamea
 ```{r}
 ABBA.occ = gbif %>%
   filter(species == "Abies balsamea") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -124,6 +127,14 @@ ggplot()+
 ggsave("../Plots/ABBA.range.pdf", width = 12, height = 8)
 ```
 
+Estimating Range Size for Abies balsamea: Output includes number of occurrence points, x and y centroids, latitudinal range (degrees), great circle distance (km), mean pairwise distance (km), summed minimum spanning tree length (km)
+
+```{r}
+ABBA.coords = ABBA_occ_final[c(3,2)]
+rangeSize(ABBA.coords, crs = "epsg:4267")
+```
+
+
 
 ### Repeat basics of steps above for all other species ####
 
@@ -132,7 +143,7 @@ Subset for Abies fraseri
 ```{r}
 ABFR.occ = gbif %>%
   filter(species == "Abies fraseri") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -178,12 +189,17 @@ ggplot()+
 ggsave("../Plots/ABFR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ABFR.coords = ABFR_occ_final[c(3,2)]
+rangeSize(ABFR.coords, crs = "epsg:4267")
+```
+
 Subset for Acer barbatum
 
 ```{r}
 ACBA3.occ = gbif %>%
   filter(species == "Acer barbatum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -229,12 +245,18 @@ ggplot()+
 ggsave("../Plots/ACBA3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACBA3.coords = ACBA3_occ_final[c(3,2)]
+rangeSize(ACBA3.coords, crs = "epsg:4267")
+```
+
+
 Subset for Acer leucoderme
 
 ```{r}
 ACLE.occ = gbif %>%
   filter(species == "Acer leucoderme") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -280,12 +302,17 @@ ggplot()+
 ggsave("../Plots/ACLE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACLE.coords = ACLE_occ_final[c(3,2)]
+rangeSize(ACLE.coords, crs = "epsg:4267")
+```
+
 Subset for Acer negundo
 
 ```{r}
 ACNE3.occ = gbif %>%
   filter(species == "Acer negundo") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -331,12 +358,17 @@ ggplot()+
 ggsave("../Plots/ACNE3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACNE3.coords = ACNE3_occ_final[c(3,2)]
+rangeSize(ACNE3.coords, crs = "epsg:4267")
+```
+
 Subset for Acer nigrum
 
 ```{r}
 ACNI5.occ = gbif %>%
   filter(species == "Acer nigrum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -382,12 +414,17 @@ ggplot()+
 ggsave("../Plots/ACNI5.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACNI5.coords = ACNI5_occ_final[c(3,2)]
+rangeSize(ACNI5.coords, crs = "epsg:4267")
+```
+
 Subset for Acer pensylvanicum
 
 ```{r}
 ACPE.occ = gbif %>%
   filter(species == "Acer pensylvanicum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -433,12 +470,17 @@ ggplot()+
 ggsave("../Plots/ACPE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACPE.coords = ACPE_occ_final[c(3,2)]
+rangeSize(ACPE.coords, crs = "epsg:4267")
+```
+
 Subset for Acer rubrum
 
 ```{r}
 ACRU.occ = gbif %>%
   filter(species == "Acer rubrum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -484,12 +526,17 @@ ggplot()+
 ggsave("../Plots/ACRU.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACRU.coords = ACRU_occ_final[c(3,2)]
+rangeSize(ACRU.coords, crs = "epsg:4267")
+```
+
 Subset for Acer saccharinum
 
 ```{r}
 ACSA2.occ = gbif %>%
   filter(species == "Acer saccharinum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -535,12 +582,17 @@ ggplot()+
 ggsave("../Plots/ACSA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACSA2.coords = ACSA2_occ_final[c(3,2)]
+rangeSize(ACSA2.coords, crs = "epsg:4267")
+```
+
 Subset for Acer saccharum
 
 ```{r}
 ACSA3.occ = gbif %>%
   filter(species == "Acer saccharum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -586,12 +638,17 @@ ggplot()+
 ggsave("../Plots/ACSA3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACSA3.coords = ACSA3_occ_final[c(3,2)]
+rangeSize(ACSA3.coords, crs = "epsg:4267")
+```
+
 Subset for Acer spicatum
 
 ```{r}
 ACSP2.occ = gbif %>%
   filter(species == "Acer spicatum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -637,12 +694,17 @@ ggplot()+
 ggsave("../Plots/ACSP2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ACSP2.coords = ACSP2_occ_final[c(3,2)]
+rangeSize(ACSP2.coords, crs = "epsg:4267")
+```
+
 Subset for Aesculus flava. Little range map not available.
 
 ```{r}
 AEFL.occ = gbif %>%
   filter(species == "Aesculus flava") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -679,12 +741,17 @@ ggplot()+
 ggsave("../Plots/AEFL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+AEFL.coords = AEFL_occ_final[c(3,2)]
+rangeSize(AEFL.coords, crs = "epsg:4267")
+```
+
 Subset for Aesculus glabra
 
 ```{r}
 AEGL.occ = gbif %>%
   filter(species == "Aesculus glabra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -730,12 +797,17 @@ ggplot()+
 ggsave("../Plots/AEGL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+AEGL.coords = AEGL_occ_final[c(3,2)]
+rangeSize(AEGL.coords, crs = "epsg:4267")
+```
+
 Subset for Ailanthus altissima. Little range map not available.
 
 ```{r}
 AIAL.occ = gbif %>%
   filter(species == "Ailanthus altissima") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -791,12 +863,17 @@ ggplot()+
 ggsave("../Plots/AIAL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+AIAL.coords = AIAL_occ_final[c(3,2)]
+rangeSize(AIAL.coords, crs = "epsg:4267")
+```
+
 Subset for Annona glabra. Little range map not available.
 
 ```{r}
 ANGL4.occ = gbif %>%
   filter(species == "Annona glabra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -834,12 +911,17 @@ ggplot()+
 ggsave("../Plots/ANGL4.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ANGL4.coords = ANGL4_occ_final[c(3,2)]
+rangeSize(ANGL4.coords, crs = "epsg:4267")
+```
+
 Subset for Asimina triloba
 
 ```{r}
 ASTR.occ = gbif %>%
   filter(species == "Asimina triloba") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -885,12 +967,18 @@ ggplot()+
 ggsave("../Plots/ASTR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ASTR.coords = ASTR_occ_final[c(3,2)]
+rangeSize(ASTR.coords, crs = "epsg:4267")
+```
+
+
 Subset for Betula alleghaniensis
 
 ```{r}
 BEAL2.occ = gbif %>%
   filter(species == "Betula alleghaniensis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -936,12 +1024,17 @@ ggplot()+
 ggsave("../Plots/BEAL2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+BEAL2.coords = BEAL2_occ_final[c(3,2)]
+rangeSize(BEAL2.coords, crs = "epsg:4267")
+```
+
 Subset for Betula lenta
 
 ```{r}
 BELE.occ = gbif %>%
   filter(species == "Betula lenta") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -987,12 +1080,17 @@ ggplot()+
 ggsave("../Plots/BELE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+BELE.coords = BELE_occ_final[c(3,2)]
+rangeSize(BELE.coords, crs = "epsg:4267")
+```
+
 Subset for Betula nigra
 
 ```{r}
 BENI.occ = gbif %>%
   filter(species == "Betula nigra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1038,12 +1136,17 @@ ggplot()+
 ggsave("../Plots/BENI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+BENI.coords = BENI_occ_final[c(3,2)]
+rangeSize(BENI.coords, crs = "epsg:4267")
+```
+
 Subset for Betula papyrifera
 
 ```{r}
 BEPA.occ = gbif %>%
   filter(species == "Betula papyrifera") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1089,12 +1192,17 @@ ggplot()+
 ggsave("../Plots/BEPA.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+BEPA.coords = BEPA_occ_final[c(3,2)]
+rangeSize(BEPA.coords, crs = "epsg:4267")
+```
+
 Subset for Betula populifolia
 
 ```{r}
 BEPO.occ = gbif %>%
   filter(species == "Betula populifolia") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1140,12 +1248,17 @@ ggplot()+
 ggsave("../Plots/BEPO.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+BEPO.coords = BEPO_occ_final[c(3,2)]
+rangeSize(BEPO.coords, crs = "epsg:4267")
+```
+
 Subset for Carpinus caroliniana
 
 ```{r}
 CACA18.occ = gbif %>%
   filter(species == "Carpinus caroliniana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1191,12 +1304,17 @@ ggplot()+
 ggsave("../Plots/CACA18.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CACA18.coords = CACA18_occ_final[c(3,2)]
+rangeSize(CACA18.coords, crs = "epsg:4267")
+```
+
 Subset for Carya alba. Little range map unavailable.
 
 ```{r}
 CAAL27.occ = gbif %>%
   filter(species == "Carya alba") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -1252,13 +1370,17 @@ ggplot()+
 ggsave("../Plots/CAAL27.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CAAL27.coords = CAAL27_occ_final[c(3,2)]
+rangeSize(CAAL27.coords, crs = "epsg:4267")
+```
 
 Subset for Carya aquatica
 
 ```{r}
 CAAQ2.occ = gbif %>%
   filter(species == "Carya aquatica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1304,12 +1426,17 @@ ggplot()+
 ggsave("../Plots/CAAQ2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CAAQ2.coords = CAAQ2_occ_final[c(3,2)]
+rangeSize(CAAQ2.coords, crs = "epsg:4267")
+```
+
 Subset for Carya cordiformis
 
 ```{r}
 CACO15.occ = gbif %>%
   filter(species == "Carya cordiformis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1355,12 +1482,18 @@ ggplot()+
 ggsave("../Plots/CACO15.range.pdf", width = 12, height = 8)
 ```
 
+
+```{r}
+CACO15.coords = CACO15_occ_final[c(3,2)]
+rangeSize(CACO15.coords, crs = "epsg:4267")
+```
+
 Subset for Carya glabra
 
 ```{r}
 CAGL8.occ = gbif %>%
   filter(species == "Carya glabra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1406,12 +1539,17 @@ ggplot()+
 ggsave("../Plots/CAGL8.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CAGL8.coords = CAGL8_occ_final[c(3,2)]
+rangeSize(CAGL8.coords, crs = "epsg:4267")
+```
+
 Subset for Carya illinoinensis
 
 ```{r}
 CAIL2.occ = gbif %>%
   filter(species == "Carya illinoinensis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1457,12 +1595,17 @@ ggplot()+
 ggsave("../Plots/CAIL2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CAIL2.coords = CAIL2_occ_final[c(3,2)]
+rangeSize(CAIL2.coords, crs = "epsg:4267")
+```
+
 Subset for Carya ovata
 
 ```{r}
 CAOV2.occ = gbif %>%
   filter(species == "Carya ovata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1508,12 +1651,17 @@ ggplot()+
 ggsave("../Plots/CAOV2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CAOV2.coords = CAOV2_occ_final[c(3,2)]
+rangeSize(CAOV2.coords, crs = "epsg:4267")
+```
+
 Subset for Carya texana
 
 ```{r}
 CATE9.occ = gbif %>%
   filter(species == "Carya texana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1559,12 +1707,17 @@ ggplot()+
 ggsave("../Plots/CATE9.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CATE9.coords = CATE9_occ_final[c(3,2)]
+rangeSize(CATE9.coords, crs = "epsg:4267")
+```
+
 Subset for Castanea dentata
 
 ```{r}
 CADE12.occ = gbif %>%
   filter(species == "Castanea dentata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1610,12 +1763,17 @@ ggplot()+
 ggsave("../Plots/CADE12.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CADE12.coords = CADE12_occ_final[c(3,2)]
+rangeSize(CADE12.coords, crs = "epsg:4267")
+```
+
 Subset for Celtis laevigata
 
 ```{r}
 CELA.occ = gbif %>%
   filter(species == "Celtis laevigata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1661,12 +1819,17 @@ ggplot()+
 ggsave("../Plots/CELA.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CELA.coords = CELA_occ_final[c(3,2)]
+rangeSize(CELA.coords, crs = "epsg:4267")
+```
+
 Subset for Celtis occidentalis
 
 ```{r}
 CEOC.occ = gbif %>%
   filter(species == "Celtis occidentalis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1712,12 +1875,18 @@ ggplot()+
 ggsave("../Plots/CEOC.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CEOC.coords = CEOC_occ_final[c(3,2)]
+rangeSize(CEOC.coords, crs = "epsg:4267")
+```
+
+
 Subset for Cercis canadensis. Little range map unavailable
 
 ```{r}
 CECA4.occ = gbif %>%
   filter(species == "Cercis canadensis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -1773,12 +1942,17 @@ ggplot()+
 ggsave("../Plots/CECA4.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CECA4.coords = CECA4_occ_final[c(3,2)]
+rangeSize(CECA4.coords, crs = "epsg:4267")
+```
+
 Subset for Chamaecyparis thyoides
 
 ```{r}
 CHTH2.occ = gbif %>%
   filter(species == "Chamaecyparis thyoides") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1824,12 +1998,17 @@ ggplot()+
 ggsave("../Plots/CHTH2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CHTH2.coords = CHTH2_occ_final[c(3,2)]
+rangeSize(CHTH2.coords, crs = "epsg:4267")
+```
+
 Subset for Cornus florida
 
 ```{r}
 COFL2.occ = gbif %>%
   filter(species == "Cornus florida") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1875,12 +2054,17 @@ ggplot()+
 ggsave("../Plots/COFL2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+COFL2.coords = COFL2_occ_final[c(3,2)]
+rangeSize(COFL2.coords, crs = "epsg:4267")
+```
+
 Subset for Diospyros virginiana
 
 ```{r}
 DIVI5.occ = gbif %>%
   filter(species == "Diospyros virginiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1926,12 +2110,18 @@ ggplot()+
 ggsave("../Plots/DIVI5.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+DIVI5.coords = DIVI5_occ_final[c(3,2)]
+rangeSize(DIVI5.coords, crs = "epsg:4267")
+```
+
+
 Subset for Fagus grandifolia
 
 ```{r}
 FAGR.occ = gbif %>%
   filter(species == "Fagus grandifolia") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -1977,12 +2167,17 @@ ggplot()+
 ggsave("../Plots/FAGR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FAGR.coords = FAGR_occ_final[c(3,2)]
+rangeSize(FAGR.coords, crs = "epsg:4267")
+```
+
 Subset for Fraxinus americana
 
 ```{r}
 FRAM2.occ = gbif %>%
   filter(species == "Fraxinus americana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2028,12 +2223,18 @@ ggplot()+
 ggsave("../Plots/FRAM2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FRAM2.coords = FRAM2_occ_final[c(3,2)]
+rangeSize(FRAM2.coords, crs = "epsg:4267")
+```
+
+
 Subset for Fraxinus caroliniana
 
 ```{r}
 FRCA3.occ = gbif %>%
   filter(species == "Fraxinus caroliniana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2079,12 +2280,17 @@ ggplot()+
 ggsave("../Plots/FRCA3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FRCA3.coords = FRCA3_occ_final[c(3,2)]
+rangeSize(FRCA3.coords, crs = "epsg:4267")
+```
+
 Subset for Fraxinus nigra
 
 ```{r}
 FRNI.occ = gbif %>%
   filter(species == "Fraxinus nigra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2130,12 +2336,17 @@ ggplot()+
 ggsave("../Plots/FRNI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FRNI.coords = FRNI_occ_final[c(3,2)]
+rangeSize(FRNI.coords, crs = "epsg:4267")
+```
+
 Subset for Fraxinus pennsylvanica
 
 ```{r}
 FRPE.occ = gbif %>%
   filter(species == "Fraxinus pennsylvanica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2181,12 +2392,17 @@ ggplot()+
 ggsave("../Plots/FRPE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FRPE.coords = FRPE_occ_final[c(3,2)]
+rangeSize(FRPE.coords, crs = "epsg:4267")
+```
+
 Subset for Fraxinus profunda
 
 ```{r}
 FRPR.occ = gbif %>%
   filter(species == "Fraxinus profunda") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2232,12 +2448,17 @@ ggplot()+
 ggsave("../Plots/FRPR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FRPR.coords = FRPR_occ_final[c(3,2)]
+rangeSize(FRPR.coords, crs = "epsg:4267")
+```
+
 Subset for Fraxinus quadrangulata
 
 ```{r}
 FRQU.occ = gbif %>%
   filter(species == "Fraxinus quadrangulata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2283,12 +2504,18 @@ ggplot()+
 ggsave("../Plots/FRQU.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FRQU.coords = FRQU_occ_final[c(3,2)]
+rangeSize(FRQU.coords, crs = "epsg:4267")
+```
+
+
 Subset for Fraxinus texensis/Fraxinus albicans (gbif)
 
 ```{r}
 FRTE.occ = gbif %>%
   filter(species == "Fraxinus albicans") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2334,12 +2561,17 @@ ggplot()+
 ggsave("../Plots/FRTE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+FRTE.coords = FRTE_occ_final[c(3,2)]
+rangeSize(FRTE.coords, crs = "epsg:4267")
+```
+
 Subset for Gleditsia aquatica
 
 ```{r}
 GLAQ.occ = gbif %>%
   filter(species == "Gleditsia aquatica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2385,12 +2617,17 @@ ggplot()+
 ggsave("../Plots/GLAQ.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+GLAQ.coords = GLAQ_occ_final[c(3,2)]
+rangeSize(GLAQ.coords, crs = "epsg:4267")
+```
+
 Subset for Gleditsia triacanthos
 
 ```{r}
 GLTR.occ = gbif %>%
   filter(species == "Gleditsia triacanthos") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2436,12 +2673,17 @@ ggplot()+
 ggsave("../Plots/GLTR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+GLTR.coords = GLTR_occ_final[c(3,2)]
+rangeSize(GLTR.coords, crs = "epsg:4267")
+```
+
 Subset for Gordonia lasianthus
 
 ```{r}
 GOLA.occ = gbif %>%
   filter(species == "Gordonia lasianthus") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2487,12 +2729,17 @@ ggplot()+
 ggsave("../Plots/GOLA.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+GOLA.coords = GOLA_occ_final[c(3,2)]
+rangeSize(GOLA.coords, crs = "epsg:4267")
+```
+
 Subset for Gymnocladus dioicus
 
 ```{r}
 GYDI.occ = gbif %>%
   filter(species == "Gymnocladus dioicus") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2538,13 +2785,17 @@ ggplot()+
 ggsave("../Plots/GYDI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+GYDI.coords = GYDI_occ_final[c(3,2)]
+rangeSize(GYDI.coords, crs = "epsg:4267")
+```
 
 Subset for Ilex opaca
 
 ```{r}
 ILOP.occ = gbif %>%
   filter(species == "Ilex opaca") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2590,12 +2841,17 @@ ggplot()+
 ggsave("../Plots/ILOP.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ILOP.coords = ILOP_occ_final[c(3,2)]
+rangeSize(ILOP.coords, crs = "epsg:4267")
+```
+
 Subset for Juglans cinerea
 
 ```{r}
 JUCI.occ = gbif %>%
   filter(species == "Juglans cinerea") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2641,12 +2897,17 @@ ggplot()+
 ggsave("../Plots/JUCI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+JUCI.coords = JUCI_occ_final[c(3,2)]
+rangeSize(JUCI.coords, crs = "epsg:4267")
+```
+
 Subset for Juglans nigra
 
 ```{r}
 JUNI.occ = gbif %>%
   filter(species == "Juglans nigra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2692,12 +2953,17 @@ ggplot()+
 ggsave("../Plots/JUNI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+JUNI.coords = JUNI_occ_final[c(3,2)]
+rangeSize(JUNI.coords, crs = "epsg:4267")
+```
+
 Subset for Juniperus virginiana
 
 ```{r}
 JUVI.occ = gbif %>%
   filter(species == "Juniperus virginiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2743,12 +3009,17 @@ ggplot()+
 ggsave("../Plots/JUVI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+JUNV.coords = JUVI_occ_final[c(3,2)]
+rangeSize(JUVI.coords, crs = "epsg:4267")
+```
+
 Subset for Larix laricina
 
 ```{r}
 LALA.occ = gbif %>%
   filter(species == "Larix laricina") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2794,12 +3065,17 @@ ggplot()+
 ggsave("../Plots/LALA.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+LALA.coords = LALA_occ_final[c(3,2)]
+rangeSize(LALA.coords, crs = "epsg:4267")
+```
+
 Subset for Liquidambar styraciflua
 
 ```{r}
 LIST2.occ = gbif %>%
   filter(species == "Liquidambar styraciflua") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2845,12 +3121,17 @@ ggplot()+
 ggsave("../Plots/LIST2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+LIST2.coords = LIST2_occ_final[c(3,2)]
+rangeSize(LIST2.coords, crs = "epsg:4267")
+```
+
 Subset for Liriodendron tulipifera
 
 ```{r}
 LITU.occ = gbif %>%
   filter(species == "Liriodendron tulipifera") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2896,12 +3177,17 @@ ggplot()+
 ggsave("../Plots/LITU.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+LITU.coords = LITU_occ_final[c(3,2)]
+rangeSize(LITU.coords, crs = "epsg:4267")
+```
+
 Subset for Maclura pomifera
 
 ```{r}
 MAPO.occ = gbif %>%
   filter(species == "Maclura pomifera") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2947,12 +3233,17 @@ ggplot()+
 ggsave("../Plots/MAPO.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+MAPO.coords = MAPO_occ_final[c(3,2)]
+rangeSize(MAPO.coords, crs = "epsg:4267")
+```
+
 Subset for Magnolia acuminata
 
 ```{r}
 MAAC.occ = gbif %>%
   filter(species == "Magnolia acuminata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -2998,12 +3289,17 @@ ggplot()+
 ggsave("../Plots/MAAC.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+MAAC.coords = MAAC_occ_final[c(3,2)]
+rangeSize(MAAC.coords, crs = "epsg:4267")
+```
+
 Subset for Magnolia fraseri
 
 ```{r}
 MAFR.occ = gbif %>%
   filter(species == "Magnolia fraseri") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3049,12 +3345,17 @@ ggplot()+
 ggsave("../Plots/MAFR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+MAFR.coords = MAFR_occ_final[c(3,2)]
+rangeSize(MAFR.coords, crs = "epsg:4267")
+```
+
 Subset for Magnolia grandiflora
 
 ```{r}
 MAGR4.occ = gbif %>%
   filter(species == "Magnolia grandiflora") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3100,12 +3401,18 @@ ggplot()+
 ggsave("../Plots/MAGR4.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+MAGR4.coords = MAGR4_occ_final[c(3,2)]
+rangeSize(MAGR4.coords, crs = "epsg:4267")
+```
+
+
 Subset for Magnolia macrophylla
 
 ```{r}
 MAMA2.occ = gbif %>%
   filter(species == "Magnolia macrophylla") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3151,12 +3458,17 @@ ggplot()+
 ggsave("../Plots/MAMA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+MAMA2.coords = MAMA2_occ_final[c(3,2)]
+rangeSize(MAMA2.coords, crs = "epsg:4267")
+```
+
 Subset for Magnolia virginiana
 
 ```{r}
 MAVI2.occ = gbif %>%
   filter(species == "Magnolia virginiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3202,12 +3514,18 @@ ggplot()+
 ggsave("../Plots/MAVI2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+MAVI2.coords = MAVI2_occ_final[c(3,2)]
+rangeSize(MAVI2.coords, crs = "epsg:4267")
+```
+
+
 Subset for Morus rubra
 
 ```{r}
 MORU2.occ = gbif %>%
   filter(species == "Morus rubra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3253,12 +3571,17 @@ ggplot()+
 ggsave("../Plots/MORU2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+MORU2.coords = MORU2_occ_final[c(3,2)]
+rangeSize(MORU2.coords, crs = "epsg:4267")
+```
+
 Subset for Nyssa aquatica
 
 ```{r}
 NYAQ2.occ = gbif %>%
   filter(species == "Nyssa aquatica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3304,12 +3627,17 @@ ggplot()+
 ggsave("../Plots/NYAQ2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+NYAQ2.coords = NYAQ2_occ_final[c(3,2)]
+rangeSize(NYAQ2.coords, crs = "epsg:4267")
+```
+
 Subset for Nyssa biflora. Little range map not available. BIEN range map not available.
 
 ```{r}
 NYBI.occ = gbif %>%
   filter(species == "Nyssa biflora") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 
@@ -3326,7 +3654,7 @@ Subset for Nyssa ogeche
 ```{r}
 NYOG.occ = gbif %>%
   filter(species == "Nyssa ogeche") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3372,12 +3700,17 @@ ggplot()+
 ggsave("../Plots/NYOG.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+NYOG.coords = NYOG_occ_final[c(3,2)]
+rangeSize(NYOG.coords, crs = "epsg:4267")
+```
+
 Subset for Nyssa sylvatica
 
 ```{r}
 NYSY.occ = gbif %>%
   filter(species == "Nyssa sylvatica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3423,12 +3756,17 @@ ggplot()+
 ggsave("../Plots/NYSY.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+NYSY.coords = NYSY_occ_final[c(3,2)]
+rangeSize(NYSY.coords, crs = "epsg:4267")
+```
+
 Subset for Ostrya virginiana
 
 ```{r}
 OSVI.occ = gbif %>%
   filter(species == "Ostrya virginiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3474,12 +3812,17 @@ ggplot()+
 ggsave("../Plots/OSVI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+OSVI.coords = OSVI_occ_final[c(3,2)]
+rangeSize(OSVI.coords, crs = "epsg:4267")
+```
+
 Subset for Oxydendrum arboreum
 
 ```{r}
 OXAR.occ = gbif %>%
   filter(species == "Oxydendrum arboreum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3525,12 +3868,18 @@ ggplot()+
 ggsave("../Plots/OXAR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+OXAR.coords = OXAR_occ_final[c(3,2)]
+rangeSize(OXAR.coords, crs = "epsg:4267")
+```
+
+
 Subset for Paulownia tomentosa. Little range map not available.
 
 ```{r}
 PATO2.occ = gbif %>%
   filter(species == "Paulownia tomentosa") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -3585,12 +3934,17 @@ ggplot()+
 ggsave("../Plots/PATO2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PATO2.coords = PATO2_occ_final[c(3,2)]
+rangeSize(PATO2.coords, crs = "epsg:4267")
+```
+
 Subset for Persea borbonia
 
 ```{r}
 PEBO.occ = gbif %>%
   filter(species == "Persea borbonia") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3636,12 +3990,17 @@ ggplot()+
 ggsave("../Plots/PEBO.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PEBO.coords = PEBO_occ_final[c(3,2)]
+rangeSize(PEBO.coords, crs = "epsg:4267")
+```
+
 Subset for Picea glauca
 
 ```{r}
 PIGL.occ = gbif %>%
   filter(species == "Picea glauca") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3687,12 +4046,17 @@ ggplot()+
 ggsave("../Plots/PIGL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIGL.coords = PIGL_occ_final[c(3,2)]
+rangeSize(PIGL.coords, crs = "epsg:4267")
+```
+
 Subset for Picea mariana
 
 ```{r}
 PIMA.occ = gbif %>%
   filter(species == "Picea mariana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3738,12 +4102,17 @@ ggplot()+
 ggsave("../Plots/PIMA.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIMA.coords = PIMA_occ_final[c(3,2)]
+rangeSize(PIMA.coords, crs = "epsg:4267")
+```
+
 Subset for Picea rubens
 
 ```{r}
 PIRU.occ = gbif %>%
   filter(species == "Picea rubens") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3789,12 +4158,17 @@ ggplot()+
 ggsave("../Plots/PIRU.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIRU.coords = PIRU_occ_final[c(3,2)]
+rangeSize(PIRU.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus banksiana
 
 ```{r}
 PIBA2.occ = gbif %>%
   filter(species == "Pinus banksiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3840,12 +4214,17 @@ ggplot()+
 ggsave("../Plots/PIBA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIBA2.coords = PIBA2_occ_final[c(3,2)]
+rangeSize(PIBA2.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus clausa
 
 ```{r}
 PICL.occ = gbif %>%
   filter(species == "Pinus clausa") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3891,12 +4270,18 @@ ggplot()+
 ggsave("../Plots/PICL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PICL.coords = PICL_occ_final[c(3,2)]
+rangeSize(PICL.coords, crs = "epsg:4267")
+```
+
+
 Subset for Pinus echinata
 
 ```{r}
 PIEC2.occ = gbif %>%
   filter(species == "Pinus echinata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3942,12 +4327,17 @@ ggplot()+
 ggsave("../Plots/PIEC2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIEC2.coords = PIEC2_occ_final[c(3,2)]
+rangeSize(PIEC2.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus elliottii
 
 ```{r}
 PIEL.occ = gbif %>%
   filter(species == "Pinus elliottii") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -3993,12 +4383,17 @@ ggplot()+
 ggsave("../Plots/PIEL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIEL.coords = PIEL_occ_final[c(3,2)]
+rangeSize(PIEL.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus glabra
 
 ```{r}
 PIGL2.occ = gbif %>%
   filter(species == "Pinus glabra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4044,12 +4439,17 @@ ggplot()+
 ggsave("../Plots/PIGL2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIGL2.coords = PIGL2_occ_final[c(3,2)]
+rangeSize(PIGL2.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus palustris
 
 ```{r}
 PIPA2.occ = gbif %>%
   filter(species == "Pinus palustris") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4095,12 +4495,17 @@ ggplot()+
 ggsave("../Plots/PIPA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIPA2.coords = PIPA2_occ_final[c(3,2)]
+rangeSize(PIPA2.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus pungens
 
 ```{r}
 PIPUS.occ = gbif %>%
   filter(species == "Pinus pungens") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4146,12 +4551,17 @@ ggplot()+
 ggsave("../Plots/PIPUS.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIPUS.coords = PIPUS_occ_final[c(3,2)]
+rangeSize(PIPUS.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus resinosa
 
 ```{r}
 PIRE.occ = gbif %>%
   filter(species == "Pinus resinosa") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4197,12 +4607,17 @@ ggplot()+
 ggsave("../Plots/PIRE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIRE.coords = PIRE_occ_final[c(3,2)]
+rangeSize(PIRE.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus rigida
 
 ```{r}
 PIRI.occ = gbif %>%
   filter(species == "Pinus rigida") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4248,12 +4663,17 @@ ggplot()+
 ggsave("../Plots/PIRI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIRI.coords = PIRI_occ_final[c(3,2)]
+rangeSize(PIRI.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus serotina
 
 ```{r}
 PISE.occ = gbif %>%
   filter(species == "Pinus serotina") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4299,12 +4719,17 @@ ggplot()+
 ggsave("../Plots/PISE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PISE.coords = PISE_occ_final[c(3,2)]
+rangeSize(PISE.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus strobus
 
 ```{r}
 PIST.occ = gbif %>%
   filter(species == "Pinus strobus") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4350,12 +4775,17 @@ ggplot()+
 ggsave("../Plots/PIST.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIST.coords = PIST_occ_final[c(3,2)]
+rangeSize(PIST.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus taeda
 
 ```{r}
 PITA.occ = gbif %>%
   filter(species == "Pinus taeda") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4401,12 +4831,17 @@ ggplot()+
 ggsave("../Plots/PITA.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PITA.coords = PITA_occ_final[c(3,2)]
+rangeSize(PITA.coords, crs = "epsg:4267")
+```
+
 Subset for Pinus virginiana
 
 ```{r}
 PIVI2.occ = gbif %>%
   filter(species == "Pinus virginiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4452,12 +4887,17 @@ ggplot()+
 ggsave("../Plots/PIVI2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PIVI2.coords = PIVI2_occ_final[c(3,2)]
+rangeSize(PIVI2.coords, crs = "epsg:4267")
+```
+
 Subset for Planera aquatica
 
 ```{r}
 PLAQ.occ = gbif %>%
   filter(species == "Planera aquatica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4503,12 +4943,17 @@ ggplot()+
 ggsave("../Plots/PLAQ.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PLAQ.coords = PLAQ_occ_final[c(3,2)]
+rangeSize(PLAQ.coords, crs = "epsg:4267")
+```
+
 Subset for Platanus occidentalis
 
 ```{r}
 PLOC.occ = gbif %>%
   filter(species == "Platanus occidentalis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4554,12 +4999,17 @@ ggplot()+
 ggsave("../Plots/PLOC.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PLOC.coords = PLOC_occ_final[c(3,2)]
+rangeSize(PLOC.coords, crs = "epsg:4267")
+```
+
 Subset for Populus balsamifera
 
 ```{r}
 POBA2.occ = gbif %>%
   filter(species == "Populus balsamifera") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4605,12 +5055,17 @@ ggplot()+
 ggsave("../Plots/POBA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+POBA2.coords = POBA2_occ_final[c(3,2)]
+rangeSize(POBA2.coords, crs = "epsg:4267")
+```
+
 Subset for Populus deltoides
 
 ```{r}
 PODE3.occ = gbif %>%
   filter(species == "Populus deltoides") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4656,12 +5111,17 @@ ggplot()+
 ggsave("../Plots/PODE3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PODE3.coords = PODE3_occ_final[c(3,2)]
+rangeSize(PODE3.coords, crs = "epsg:4267")
+```
+
 Subset for Populus grandidentata
 
 ```{r}
 POGR4.occ = gbif %>%
   filter(species == "Populus grandidentata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4707,12 +5167,17 @@ ggplot()+
 ggsave("../Plots/POGR4.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+POGR4.coords = POGR4_occ_final[c(3,2)]
+rangeSize(POGR4.coords, crs = "epsg:4267")
+```
+
 Subset for Populus heterophylla
 
 ```{r}
 POHE4.occ = gbif %>%
   filter(species == "Populus heterophylla") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4758,12 +5223,17 @@ ggplot()+
 ggsave("../Plots/POHE4.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+POHE4.coords = POHE4_occ_final[c(3,2)]
+rangeSize(POHE4.coords, crs = "epsg:4267")
+```
+
 Subset for Populus tremuloides
 
 ```{r}
 POTR5.occ = gbif %>%
   filter(species == "Populus tremuloides") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4809,12 +5279,17 @@ ggplot()+
 ggsave("../Plots/POTR5.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+POTR5.coords = POTR5_occ_final[c(3,2)]
+rangeSize(POTR5.coords, crs = "epsg:4267")
+```
+
 Subset for Prunus americana
 
 ```{r}
 PRAM.occ = gbif %>%
   filter(species == "Prunus americana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4860,12 +5335,17 @@ ggplot()+
 ggsave("../Plots/PRAM.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PRAM.coords = PRAM_occ_final[c(3,2)]
+rangeSize(PRAM.coords, crs = "epsg:4267")
+```
+
 Subset for Prunus pensylvanica
 
 ```{r}
 PRPE2.occ = gbif %>%
   filter(species == "Prunus pensylvanica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4911,12 +5391,17 @@ ggplot()+
 ggsave("../Plots/PRPE2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PRPE2.coords = PRPE2_occ_final[c(3,2)]
+rangeSize(PRPE2.coords, crs = "epsg:4267")
+```
+
 Subset for Prunus serotina
 
 ```{r}
 PRSE2.occ = gbif %>%
   filter(species == "Prunus serotina") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -4962,12 +5447,17 @@ ggplot()+
 ggsave("../Plots/PRSE2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PRSE2.coords = PRSE2_occ_final[c(3,2)]
+rangeSize(PRSE2.coords, crs = "epsg:4267")
+```
+
 Subset for Prunus virginiana
 
 ```{r}
 PRVI.occ = gbif %>%
   filter(species == "Prunus virginiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5013,12 +5503,17 @@ ggplot()+
 ggsave("../Plots/PRVI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+PRVI.coords = PRVI_occ_final[c(3,2)]
+rangeSize(PRVI.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus alba
 
 ```{r}
 QUAL.occ = gbif %>%
   filter(species == "Quercus alba") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5064,12 +5559,17 @@ ggplot()+
 ggsave("../Plots/QUAL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUAL.coords = QUAL_occ_final[c(3,2)]
+rangeSize(QUAL.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus bicolor
 
 ```{r}
 QUBI.occ = gbif %>%
   filter(species == "Quercus bicolor") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5115,12 +5615,17 @@ ggplot()+
 ggsave("../Plots/QUBI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUBI.coords = QUBI_occ_final[c(3,2)]
+rangeSize(QUBI.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus coccinea
 
 ```{r}
 QUCO2.occ = gbif %>%
   filter(species == "Quercus coccinea") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5166,12 +5671,17 @@ ggplot()+
 ggsave("../Plots/QUCO2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUCO2.coords = QUCO2_occ_final[c(3,2)]
+rangeSize(QUCO2.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus ellipsoidalis
 
 ```{r}
 QUEL.occ = gbif %>%
   filter(species == "Quercus ellipsoidalis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5217,12 +5727,17 @@ ggplot()+
 ggsave("../Plots/QUEL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUEL.coords = QUEL_occ_final[c(3,2)]
+rangeSize(QUEL.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus falcata
 
 ```{r}
 QUFA.occ = gbif %>%
   filter(species == "Quercus falcata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5268,12 +5783,17 @@ ggplot()+
 ggsave("../Plots/QUFA.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUFA.coords = QUFA_occ_final[c(3,2)]
+rangeSize(QUFA.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus ilicifolia
 
 ```{r}
 QUIL.occ = gbif %>%
   filter(species == "Quercus ilicifolia") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5319,12 +5839,18 @@ ggplot()+
 ggsave("../Plots/QUIL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUIL.coords = QUIL_occ_final[c(3,2)]
+rangeSize(QUIL.coords, crs = "epsg:4267")
+```
+
+
 Subset for Quercus imbricaria
 
 ```{r}
 QUIM.occ = gbif %>%
   filter(species == "Quercus imbricaria") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5370,12 +5896,17 @@ ggplot()+
 ggsave("../Plots/QUIM.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUIM.coords = QUIM_occ_final[c(3,2)]
+rangeSize(QUIM.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus incana
 
 ```{r}
 QUIN.occ = gbif %>%
   filter(species == "Quercus incana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5421,12 +5952,17 @@ ggplot()+
 ggsave("../Plots/QUIN.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUIN.coords = QUIN_occ_final[c(3,2)]
+rangeSize(QUIN.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus laevis
 
 ```{r}
 QULA2.occ = gbif %>%
   filter(species == "Quercus laevis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5472,12 +6008,17 @@ ggplot()+
 ggsave("../Plots/QULA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QULA2.coords = QULA2_occ_final[c(3,2)]
+rangeSize(QULA2.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus laurifolia
 
 ```{r}
 QULA3.occ = gbif %>%
   filter(species == "Quercus laurifolia") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5523,12 +6064,17 @@ ggplot()+
 ggsave("../Plots/QULA3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QULA3.coords = QULA3_occ_final[c(3,2)]
+rangeSize(QULA3.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus lyrata
 
 ```{r}
 QULY.occ = gbif %>%
   filter(species == "Quercus lyrata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5574,12 +6120,18 @@ ggplot()+
 ggsave("../Plots/QULY.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QULY.coords = QULY_occ_final[c(3,2)]
+rangeSize(QULY.coords, crs = "epsg:4267")
+```
+
+
 Subset for Quercus macrocarpa
 
 ```{r}
 QUMA2.occ = gbif %>%
   filter(species == "Quercus macrocarpa") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5625,12 +6177,17 @@ ggplot()+
 ggsave("../Plots/QUMA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUMA2.coords = QUMA2_occ_final[c(3,2)]
+rangeSize(QUMA2.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus margaretta. Little range map not available. Quercus margarettiae in Atlas. Quercus margarettae in BIEN.
 
 ```{r}
 QUMA6.occ = gbif %>%
   filter(species == "Quercus margaretta") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -5685,12 +6242,17 @@ ggplot()+
 ggsave("../Plots/QUMA6.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUMA6.coords = QUMA6_occ_final[c(3,2)]
+rangeSize(QUMA6.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus marilandica
 
 ```{r}
 QUMA3.occ = gbif %>%
   filter(species == "Quercus marilandica") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5736,12 +6298,18 @@ ggplot()+
 ggsave("../Plots/QUMA3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUMA3.coords = QUMA3_occ_final[c(3,2)]
+rangeSize(QUMA3.coords, crs = "epsg:4267")
+```
+
+
 Subset for Quercus michauxii (gbif) and Quercus prinus
 
 ```{r}
 QUMI.occ = gbif %>%
   filter(species == "Quercus michauxii") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5794,12 +6362,17 @@ ggplot()+
 ggsave("../Plots/QUPR2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUPR2.coords = QUPR2_occ_final[c(3,2)]
+rangeSize(QUPR2.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus minima. Little range map not available.
 
 ```{r}
 QUMI2.occ = gbif %>%
   filter(species == "Quercus minima") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -5855,12 +6428,18 @@ ggplot()+
 ggsave("../Plots/QUMI2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUMI2.coords = QUMI2_occ_final[c(3,2)]
+rangeSize(QUMI2.coords, crs = "epsg:4267")
+```
+
+
 Subset for Quercus muehlenbergii
 
 ```{r}
 QUMU.occ = gbif %>%
   filter(species == "Quercus muehlenbergii") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5906,12 +6485,17 @@ ggplot()+
 ggsave("../Plots/QUMU.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUMU.coords = QUMU_occ_final[c(3,2)]
+rangeSize(QUMU.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus nigra
 
 ```{r}
 QUNI.occ = gbif %>%
   filter(species == "Quercus nigra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -5957,12 +6541,17 @@ ggplot()+
 ggsave("../Plots/QUNI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUNI.coords = QUNI_occ_final[c(3,2)]
+rangeSize(QUNI.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus pagoda. Little range map available not available.
 
 ```{r}
 QUPA5.occ = gbif %>%
   filter(species == "Quercus pagoda") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -6018,12 +6607,17 @@ ggplot()+
 ggsave("../Plots/QUPA5.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUPA5.coords = QUPA5_occ_final[c(3,2)]
+rangeSize(QUPA5.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus palustris
 
 ```{r}
 QUPA2.occ = gbif %>%
   filter(species == "Quercus palustris") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6069,12 +6663,17 @@ ggplot()+
 ggsave("../Plots/QUPA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUPA2.coords = QUPA2_occ_final[c(3,2)]
+rangeSize(QUPA2.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus phellos
 
 ```{r}
 QUPH.occ = gbif %>%
   filter(species == "Quercus phellos") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6120,12 +6719,17 @@ ggplot()+
 ggsave("../Plots/QUPH.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUPH.coords = QUPH_occ_final[c(3,2)]
+rangeSize(QUPH.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus rubra
 
 ```{r}
 QURU.occ = gbif %>%
   filter(species == "Quercus rubra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6171,12 +6775,17 @@ ggplot()+
 ggsave("../Plots/QURU.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QURU.coords = QURU_occ_final[c(3,2)]
+rangeSize(QURU.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus shumardii
 
 ```{r}
 QUSH.occ = gbif %>%
   filter(species == "Quercus shumardii") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6222,12 +6831,17 @@ ggplot()+
 ggsave("../Plots/QUSH.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUSH.coords = QUSH_occ_final[c(3,2)]
+rangeSize(QUSH.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus sinuata. Little range map not available.
 
 ```{r}
 QUSIS.occ = gbif %>%
   filter(species == "Quercus sinuata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -6282,12 +6896,17 @@ ggplot()+
 ggsave("../Plots/QUSIS.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUSIS.coords = QUSIS_occ_final[c(3,2)]
+rangeSize(QUSIS.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus stellata
 
 ```{r}
 QUST.occ = gbif %>%
   filter(species == "Quercus stellata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6333,12 +6952,17 @@ ggplot()+
 ggsave("../Plots/QUST.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUST.coords = QUST_occ_final[c(3,2)]
+rangeSize(QUST.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus texana. Little range map not available.
 
 ```{r}
 QUTE.occ = gbif %>%
   filter(species == "Quercus texana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -6393,12 +7017,17 @@ ggplot()+
 ggsave("../Plots/QUTE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUTE.coords = QUTE_occ_final[c(3,2)]
+rangeSize(QUTE.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus velutina
 
 ```{r}
 QUVE.occ = gbif %>%
   filter(species == "Quercus velutina") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6444,12 +7073,17 @@ ggplot()+
 ggsave("../Plots/QUVE.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUVE.coords = QUVE_occ_final[c(3,2)]
+rangeSize(QUVE.coords, crs = "epsg:4267")
+```
+
 Subset for Quercus virginiana
 
 ```{r}
 QUVI.occ = gbif %>%
   filter(species == "Quercus virginiana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6495,12 +7129,17 @@ ggplot()+
 ggsave("../Plots/QUVI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+QUVI.coords = QUVI_occ_final[c(3,2)]
+rangeSize(QUVI.coords, crs = "epsg:4267")
+```
+
 Subset for Robinia pseudoacacia
 
 ```{r}
 ROPS.occ = gbif %>%
   filter(species == "Robinia pseudoacacia") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6546,12 +7185,17 @@ ggplot()+
 ggsave("../Plots/ROPS.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ROPS.coords = ROPS_occ_final[c(3,2)]
+rangeSize(ROPS.coords, crs = "epsg:4267")
+```
+
 Subset for Salix caroliniana
 
 ```{r}
 CACA5.occ = gbif %>%
   filter(species == "Salix caroliniana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6597,12 +7241,17 @@ ggplot()+
 ggsave("../Plots/CACA5.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+CACA5.coords = CACA5_occ_final[c(3,2)]
+rangeSize(CACA5.coords, crs = "epsg:4267")
+```
+
 Subset for Salix nigra
 
 ```{r}
 SANI.occ = gbif %>%
   filter(species == "Salix nigra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6648,12 +7297,17 @@ ggplot()+
 ggsave("../Plots/SANI.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+SANI.coords = SANI_occ_final[c(3,2)]
+rangeSize(SANI.coords, crs = "epsg:4267")
+```
+
 Subset for Sassafras albidum
 
 ```{r}
 SAAL5.occ = gbif %>%
   filter(species == "Sassafras albidum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6699,12 +7353,17 @@ ggplot()+
 ggsave("../Plots/SAAL5.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+SAAL5.coords = SAAL5_occ_final[c(3,2)]
+rangeSize(SAAL5.coords, crs = "epsg:4267")
+```
+
 Subset for Sorbus americana
 
 ```{r}
 SOAM3.occ = gbif %>%
   filter(species == "Sorbus americana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6750,12 +7409,17 @@ ggplot()+
 ggsave("../Plots/SOAM3.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+SOAM3.coords = SOAM3_occ_final[c(3,2)]
+rangeSize(SOAM3.coords, crs = "epsg:4267")
+```
+
 Subset for Taxodium distichum (gbif) and Taxodium ascendens
 
 ```{r}
 TADI2.occ = gbif %>%
   filter(species == "Taxodium distichum") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6801,12 +7465,17 @@ ggplot()+
 ggsave("../Plots/TADI2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+TADI2.coords = TADI2_occ_final[c(3,2)]
+rangeSize(TADI2.coords, crs = "epsg:4267")
+```
+
 Subset for Thuja occidentalis
 
 ```{r}
 THOC2.occ = gbif %>%
   filter(species == "Thuja occidentalis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6852,12 +7521,17 @@ ggplot()+
 ggsave("../Plots/THOC2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+THOC2.coords = THOC2_occ_final[c(3,2)]
+rangeSize(THOC2.coords, crs = "epsg:4267")
+```
+
 Subset for Tilia americana
 
 ```{r}
 TIAM.occ = gbif %>%
   filter(species == "Tilia americana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -6903,12 +7577,17 @@ ggplot()+
 ggsave("../Plots/TIAM.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+TIAM.coords = TIAM_occ_final[c(3,2)]
+rangeSize(TIAM.coords, crs = "epsg:4267")
+```
+
 Subset for Triadica sebifera. Little No range map available.
 
 ```{r}
 TRSE6.occ = gbif %>%
   filter(species == "Triadica sebifera") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Get range map from BIEN
@@ -6963,13 +7642,17 @@ ggplot()+
 ggsave("../Plots/TRSE6.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+TRSE6.coords = TRSE6_occ_final[c(3,2)]
+rangeSize(TRSE6.coords, crs = "epsg:4267")
+```
 
 Subset for Tsuga canadensis
 
 ```{r}
 TSCA.occ = gbif %>%
   filter(species == "Tsuga canadensis") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -7020,7 +7703,7 @@ Subset for Tsuga caroliniana
 ```{r}
 TSCA2.occ = gbif %>%
   filter(species == "Tsuga caroliniana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -7066,12 +7749,18 @@ ggplot()+
 ggsave("../Plots/TSCA2.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+TSCA2.coords = TSCA2_occ_final[c(3,2)]
+rangeSize(TSCA2.coords, crs = "epsg:4267")
+```
+
+
 Subset for Ulmus alata
 
 ```{r}
 ULAL.occ = gbif %>%
   filter(species == "Ulmus alata") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -7117,12 +7806,17 @@ ggplot()+
 ggsave("../Plots/ULAL.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ULAL.coords = ULAL_occ_final[c(3,2)]
+rangeSize(ULAL.coords, crs = "epsg:4267")
+```
+
 Subset for Ulmus americana
 
 ```{r}
 ULAM.occ = gbif %>%
   filter(species == "Ulmus americana") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -7168,12 +7862,17 @@ ggplot()+
 ggsave("../Plots/ULAM.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ULAM.coords = ULAM_occ_final[c(3,2)]
+rangeSize(ULAM.coords, crs = "epsg:4267")
+```
+
 Subset for Ulmus crassifolia
 
 ```{r}
 ULCR.occ = gbif %>%
   filter(species == "Ulmus crassifolia") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -7219,12 +7918,17 @@ ggplot()+
 ggsave("../Plots/ULCR.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ULCR.coords = ULCR_occ_final[c(3,2)]
+rangeSize(ULCR.coords, crs = "epsg:4267")
+```
+
 Subset for Ulmus rubra
 
 ```{r}
 ULRU.occ = gbif %>%
   filter(species == "Ulmus rubra") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -7270,12 +7974,17 @@ ggplot()+
 ggsave("../Plots/ULRU.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ULRU.coords = ULRU_occ_final[c(3,2)]
+rangeSize(ULRU.coords, crs = "epsg:4267")
+```
+
 Subset for Ulmus thomasii
 
 ```{r}
 ULTH.occ = gbif %>%
   filter(species == "Ulmus thomasii") %>%
-  select(species,decimalLatitude,decimalLongitude)
+  dplyr::select(species,decimalLatitude,decimalLongitude)
 ```
 
 Read in range map
@@ -7321,6 +8030,11 @@ ggplot()+
 ggsave("../Plots/ULTH.range.pdf", width = 12, height = 8)
 ```
 
+```{r}
+ULTH.coords = ULTH_occ_final[c(3,2)]
+rangeSize(ULTH.coords, crs = "epsg:4267")
+```
+
 Merge all the final, filtered occurrence data
 
 ```{r}
@@ -7328,6 +8042,6 @@ gbif.range.filtered = rbind(ABBA_occ_final,ABFR_occ_final,ACBA3_occ_final,ACLE_o
 ```
 
 ```{r}
-write.csv(gbif.range.filtered, file = "../Formatted.Data/final.gbif.data.csv")
+#write.csv(gbif.range.filtered, file = "../Formatted.Data/final.gbif.data.csv")
 ```
 
