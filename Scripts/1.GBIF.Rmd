@@ -1,0 +1,375 @@
+---
+title: "GBIF"
+output: html_document
+date: "2024-11-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Install packages
+
+```{r}
+#install.packages("rgbif")
+library(rgbif)
+library(tidyverse)
+```
+
+### Read in the species list
+
+```{r}
+species = read.csv("../Raw.Data/species.csv")
+```
+
+Getting taxon key/usage key for each species
+
+```{r}
+taxon.key=name_backbone_checklist(species$Scientific.Name)
+head(taxon.key)
+```
+
+Issues found: 
+
+* Taxodium ascendens and Taxodium distichum are synonyms, may be issue if have distinct microenvironments
+* Fraxinus texensis is a synonym for Fraxinus albicans, Fraxinus albicans is not in the data set
+* Quercus prinus and Quercus michauxii are synonyms, may be issue if have distinct microenvironments
+
+```{r}
+# match the names 
+gbif_taxon_keys <- species$Scientific.Name %>% 
+name_backbone_checklist() %>% # match to backbone 
+filter(!matchType == "NONE") %>% # get matched names
+pull(usageKey) 
+```
+
+### Download the data
+
+```{r}
+occ_download(pred_in("taxonKey", gbif_taxon_keys),
+             pred("hasGeospatialIssue", FALSE), # removes coordinates that are (0,0)
+             pred("hasCoordinate", TRUE), # keeps only records with coordinates
+             pred("occurrenceStatus","PRESENT"), # removes absent record
+             pred("country", "US"), # country 
+             pred_or(pred_lt("coordinateUncertaintyInMeters",10000),
+                     pred_isnull("coordinateUncertaintyInMeters")), # coordinate Uncertainty is less than 10000 m or left blank
+                  format = "SIMPLE_CSV") # return tsv file of occurrences
+```
+
+Citation Info:  
+  Please always cite the download DOI when using this data.
+  https://www.gbif.org/citation-guidelines
+  DOI: 10.15468/dl.c24fgd
+  Citation:
+  GBIF Occurrence Download https://doi.org/10.15468/dl.c24fgd Accessed from R via rgbif (https://github.com/ropensci/rgbif) on 2024-12-01
+
+Check status
+
+```{r}
+occ_download_wait('0010272-241126133413365')
+```
+
+Download data
+
+```{r}
+d = occ_download_get('0010272-241126133413365', path = "/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Raw.Data") %>%
+  occ_download_import()
+```
+
+```{r}
+head(d)
+```
+
+141 species, suppose to be 143. 
+
+* Taxodium ascendens and Taxodium distichum are grouped as one species Taxondium distichum
+* Fraxinus albicans instead of Fraxinus texensis
+* Quercus michauxii and Quercus prinus are grouped as one species Quercus michauxii
+
+```{r}
+sort(unique(d$species))
+```
+
+```{r}
+table(d$taxonRank)
+```
+
+### Filtering
+
+Get rid of all taxonRanks excepts SPECIES and Quercus sinuata var. sinuata
+
+```{r}
+d.2 = d %>%
+  filter(scientificName == "Quercus sinuata var. sinuata" | taxonRank == "SPECIES")
+```
+
+```{r}
+sort(unique(d.2$species))
+```
+
+```{r}
+table(d.2$taxonRank)
+```
+
+Following this for cleaning the data: https://ptarroso.github.io/ENMTutorial/chapter-1---the-presence-data-housekeeping.html. Some of this may be repetitive with settings for GBIF download but want to make sure the data is cleaned.
+
+```{r}
+install.packages("CoordinateCleaner")
+library(CoordinateCleaner)
+```
+
+Remove rows with missing coordinates. All rows have coordinates
+
+```{r}
+
+table(is.na(d.2$decimalLatitude + d.2$decimalLongitude))
+```
+
+Remove all basis of record categories except human observations and preserved specimens. Checked to make sure that removing all other categories doesn't decrease sample size for any particular species.
+
+```{r}
+table(d.2$basisOfRecord)
+```
+
+Distribution of records per species. Minimum is Aesculus flava with 17. Maximum is Quercus palustris with 133802.
+
+```{r}
+sort(table(d.2$species))
+```
+
+```{r}
+mean(table(d.2$species))
+median(table(d.2$species))
+```
+
+
+Looking at records in each of the other categories
+
+```{r}
+fossil = d.2 %>%
+  filter(basisOfRecord == "FOSSIL_SPECIMEN")
+living = d.2 %>%
+  filter(basisOfRecord == "LIVING_SPECIMEN")
+machine = d.2 %>%
+  filter(basisOfRecord == "MACHINE_OBSERVATION")
+citation = d.2 %>%
+  filter(basisOfRecord == "MATERIAL_CITATION")
+sample = d.2 %>%
+  filter(basisOfRecord == "MATERIAL_SAMPLE")
+occurrence = d.2 %>%
+  filter(basisOfRecord == "OCCURRENCE")
+```
+
+4987 records removed
+
+```{r}
+d.3 = d.2 %>%
+  filter(basisOfRecord %in% c("HUMAN_OBSERVATION","PRESERVED_SPECIMEN"))
+```
+
+```{r}
+mean(table(d.3$species))
+median(table(d.3$species))
+```
+
+
+```{r}
+sort(table(d.3$species)) # no low abundance species had significant decline after filtering
+```
+
+Remove records with longitude < -113.5. Chosen because it is the western boundary of the level I ecoregion: Great Plains. Used this map of Montana to determine longitude: https://gaftp.epa.gov/epadatacommons/ORD/Ecoregions/mt/mt_front_1.pdf
+
+```{r}
+d.4 = d.3 %>%
+  filter(decimalLongitude > -113.5)
+```
+
+```{r}
+plot(d.4$decimalLongitude, d.4$decimalLatitude, asp=1, cex=0.3)
+```
+
+Remove vows that fail cleaning tests.
+
+* "centroids" if the coordinate is exactly at the centroid of a country than it also indicates lack of precision
+* "equal" if longitude and latitude are equal is often an error
+* "gbif" tests if the coordinate refers to the GBIF headquarters
+* "institutions" some coordinates might be attributes to the institution providing rather than to the observation location
+* "zeros" if the coordinates are set to zero (intersection of equation with prime meridian)
+* "seas" tests if coordinates fall into the ocean
+
+111251 records removed
+
+```{r}
+tests <- c("centroids", "equal", "gbif", "institutions", "zeros", "seas")
+
+flags_d.4 <- clean_coordinates(x = d.4, lon = "decimalLongitude", lat = "decimalLatitude",
+                                species = "species", countries = "countryCode",
+                                country_refcol = "iso_a2", tests = tests)
+```
+
+Looking into which data points failed
+
+```{r}
+failed = flags_d.4 %>%
+  filter(.summary == "FALSE")
+```
+
+Only keep the records that passed all the tests
+
+```{r}
+d.5 = d.4[flags_d.4$.summary,]
+```
+
+Already removed coordinates with uncertainty >=10000m
+
+```{r}
+range(d.5$coordinateUncertaintyInMeters, na.rm = TRUE)
+```
+
+Look at the year range of the observations
+
+```{r}
+range(d.5$year, na.rm=TRUE)
+```
+
+Remove records older than 1900. Removes 15662 observations that range from 1527 to 1899.
+
+```{r}
+d.6 = d.5 %>%
+  filter(year >=1900)
+```
+
+Removing duplicated coordinates. 155988 removed, 1609365 final number
+
+```{r}
+d.7 = d.6 %>%
+  group_by(species) %>%
+  distinct(decimalLatitude,decimalLongitude, .keep_all = TRUE)
+```
+
+Check Map
+
+```{r}
+plot(d.7$decimalLongitude, d.7$decimalLatitude, asp=1, cex=0.3)
+```
+
+```{r}
+library(maps)
+```
+
+```{r}
+us_states <- map_data("state")
+
+map = ggplot() +
+  geom_polygon(data = us_states, aes(x = long, y = lat, group = group), fill = "white") +
+  geom_point(data = d.7,
+             aes(x = decimalLongitude, y = decimalLatitude), alpha = 0.5)
+map
+```
+
+Investigating samples that seem to be in the great lakes
+
+```{r}
+lake.sub = d.7 %>%
+  filter(decimalLatitude > 39 & decimalLatitude < 45 & decimalLongitude < -79 & decimalLongitude > -86)
+```
+
+```{r}
+write.csv(d.7, file="../Formatted.Data/gbif.filtered.csv")
+```
+
+### Plotting
+
+Plotting the distribution of records per species
+
+```{r}
+freq.df = as.data.frame(table(d.7$species))
+head(freq.df)
+```
+
+```{r}
+range(freq.df$Freq)
+mean(freq.df$Freq)
+median(freq.df$Freq)
+quantile(freq.df$Freq)
+```
+
+Values after removing Aesculus flava
+
+```{r}
+freq.df.2 = freq.df %>%
+  filter(Var1 != "Aesculus flava")
+```
+
+```{r}
+range(freq.df.2$Freq)
+mean(freq.df.2$Freq)
+median(freq.df.2$Freq)
+quantile(freq.df.2$Freq)
+```
+
+```{r}
+ggplot(freq.df, aes(Freq))+
+  geom_freqpoly()+
+  theme_classic(base_size = 20)
+```
+
+
+### Level 1 ecoregion map
+
+```{r}
+#install.packages(c("sp", "raster"))
+library(sp)
+library(raster)
+```
+
+Had to compile gdal in terminal: https://github.com/r-spatial/sf
+
+```{r}
+#install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
+```
+
+```{r}
+library(sf)
+```
+
+```{r}
+#install.packages("tmap")
+library(tmap)
+```
+
+https://www.epa.gov/eco-research/ecoregions-north-america
+
+```{r}
+ecoregions <- st_read("../Raw.Data/na_cec_eco_l1/")
+```
+
+```{r}
+head(ecoregions)
+```
+
+```{r}
+tm_shape(ecoregions) +
+  tm_borders() +  
+  tm_fill(col = "NA_L1NAME", palette = "Set3", title = "Level 1 Ecoregions") +
+  tm_layout(main.title = "Level 1 Ecoregions Map", frame = FALSE)
+```
+
+```{r}
+ecoregions.2 = st_simplify(ecoregions, dTolerance = 75)
+```
+
+Use this to speed up plotting, sg_hb <- st_simplify(sg_hb, dTolerance = 75)
+
+```{r}
+tm_shape(ecoregions.2) +
+  tm_borders() +  
+  tm_fill(col = "NA_L1NAME", palette = "Set3", title = "Level 1 Ecoregions") +
+  tm_layout(main.title = "Level 1 Ecoregions Map", frame = FALSE)
+```
+
+
+https://cran.r-project.org/web/packages/rmapshaper/vignettes/rmapshaper.html
+
+
+
