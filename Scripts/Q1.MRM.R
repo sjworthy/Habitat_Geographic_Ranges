@@ -1,11 +1,14 @@
 # Multiple Regression on Distance Matrices
+# relationship between microclimate and geogrpahic distance
+
+# https://github.com/csdambros/BioGeoAmazonia
 
 library(tidyverse)
 library(FD)
 library(geosphere)
 library(ecodist)
 
-species.list = list.files("./Results/Species.Climate/", pattern = "*.csv", full.names = TRUE)
+species.list = list.files("./Species.Climate/", pattern = "*.csv", full.names = TRUE)
 
 results <- data.frame(
   species = character(),
@@ -71,10 +74,7 @@ for(species_file in species.list){
   results <- rbind(results, species_results)
 }
 
-
-
-  
-
+write.csv(results, file = "./Results/Q1.MRM.results.csv")
 
 
 
