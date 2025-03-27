@@ -74,12 +74,54 @@ for(species_file in species.list){
   results <- rbind(results, species_results)
 }
 
-write.csv(results, file = "./Results/Q1.MRM.results.csv")
+# write.csv(results, file = "./Results/Q1.MRM.results.csv")
+
+#### Summarizing the Results ####
+
+dat = read.csv("./Results/Q1.MRM.results.csv")
+
+range(dat$R2)
+# 0.00000239 0.79067390
+range(dat$Slope)
+# 4.48e-10 9.52e-07
+
+ggplot(dat, aes(Slope))+
+  geom_density()
+
+# how to plot from Chatgpt
+dat.2 = dat %>%
+  select(Intercept,Slope) %>%
+  mutate(Line.id = 1:107)
+
+# Set up x-axis values for plotting
+x_vals <- seq(0, 0.5, length.out = 100)
+
+# Create a function to get the y-values for each line
+get_line_y <- function(Intercept, Slope, x_vals) {
+  Intercept + Slope * x_vals
+}
+
+# Generate the data for all lines
+lines_df <- do.call(rbind, lapply(1:107, function(i) {
+  data.frame(
+    Line.id = i,
+    x = x_vals,
+    y = get_line_y(dat.2$Intercept[i], dat.2$Slope[i], x_vals)
+  )
+}))
+
+# Plot all the lines using ggplot2
+ggplot(lines_df, aes(x = x, y = y, group = Line.id, color = factor(Line.id))) +
+  geom_line() +
+  labs(x = "Geographic Distance", y = "Microclimate Distance") +
+  theme_classic() +
+  theme(legend.position = "none")  # Optional: hides the legend if you don't need it
 
 
+range(dat$Intercept)
+# 0.02150594 0.31811891
 
-
-
-
-
+range(dat$Slope.p.value)
+# 0.001 0.953
+# 4 species non-significant p > 0.05
 

@@ -1,0 +1,28 @@
+#!/bin/sh
+#SBATCH --array=1-9
+#SBATCH --nodes=1
+#SBATCH --mem=180000 # 180gb
+#SBATCH --time=168:00:00 # run time in hh:mm:ss
+#SBATCH --job-name=micro_array
+#SBATCH --error=/work/serussolab/samworthy/job.%A_%a.err
+#SBATCH --output=/work/serussolab/samworthy/job.%A_%a.out
+
+# With conda environments, it is best practice to purge currently loaded modules
+# to prevent any version or environment conflicts
+
+module purge
+module load anaconda
+
+conda activate /work/serussolab/samworthy/myconda2
+
+list=list=(/work/serussolab/samworthy/final.HCC.code_1.R \
+      /work/serussolab/samworthy/final.HCC.code_2.R \
+      /work/serussolab/samworthy/final.HCC.code_3.R \
+      /work/serussolab/samworthy/final.HCC.code_5.R \
+      /work/serussolab/samworthy/final.HCC.code_6.R \
+      /work/serussolab/samworthy/final.HCC.code_7.R \
+      /work/serussolab/samworthy/final.HCC.code_8.R \
+      /work/serussolab/samworthy/final.HCC.code_9.R \
+      /work/serussolab/samworthy/final.HCC.code_10.R)
+
+Rscript ${list[$SLURM_ARRAY_TASK_ID]}
