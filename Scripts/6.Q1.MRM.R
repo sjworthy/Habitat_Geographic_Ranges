@@ -90,7 +90,7 @@ ggplot(dat, aes(Slope))+
 
 # how to plot from Chatgpt
 dat.2 = dat %>%
-  select(Intercept,Slope) %>%
+  dplyr::select(Intercept,Slope) %>%
   mutate(Line.id = 1:107)
 
 # Set up x-axis values for plotting
@@ -125,3 +125,71 @@ range(dat$Slope.p.value)
 # 0.001 0.953
 # 4 species non-significant p > 0.05
 
+#### Looking at Generalists versus Specialists ####
+
+dat = read.csv("./Results/Q1.MRM.results.csv")
+
+range(dat$R2)
+# 0.00000239 0.79067390
+range(dat$Slope)
+# 4.48e-10 9.52e-07
+range(dat$Intercept)
+# 0.02150594 0.31811891
+
+quantile(dat$R2)
+#0%        25%        50%        75%       100% 
+#0.00000239 0.10298696 0.24938713 0.41764822 0.79067390 
+quantile(dat$Slope)
+#0%       25%       50%       75%      100% 
+#4.480e-10 8.925e-08 1.340e-07 2.290e-07 9.520e-07 
+quantile(dat$Intercept)
+#         0%        25%        50%        75%       100% 
+#0.02150594 0.08141044 0.10206210 0.13081068 0.31811891 
+
+# Classify true generalists as < 25% R2 and > 75% Intercept
+true.gen = dat %>%
+  filter(R2 < 0.10298696) %>%
+  filter(Intercept > 0.13081068)
+# 15 species
+
+# Classify true specialists as R2 > 75% and Intercept < 25%
+true.special = dat %>%
+  filter(R2 > 0.41764822) %>%
+  filter(Intercept < 0.08141044)
+# 19 species
+
+# Classify combo Intercept > 75 % and R2 > 75%
+combo = dat %>%
+  filter(R2 > 0.41764822) %>%
+  filter(Intercept > 0.13081068)
+# 0 species
+
+# distribution of R2 values and intercept values
+
+ggplot(dat, aes(y = Intercept, x = R2))+
+  geom_point()
+# strong negative relationship, R2 increases as intercept gets lower
+
+# PCA of slope and R2
+
+pc = prcomp(dat[,c(5,7)], scale = TRUE, center = TRUE)
+summary(pc)
+pc$rotation
+
+library(ggbiplot)
+ggbiplot(pc, labels = dat$species, varname.adjust = 1)+
+  theme_classic()
+
+# adding intercept
+pc.all = prcomp(dat[,c(4,5,7)], scale = TRUE, center = TRUE)
+summary(pc.all)
+pc.all$rotation
+
+ggbiplot(pc.all, labels = dat$species, varname.adjust = 1)+
+  theme_classic()
+
+### Heat Map ####
+
+all.dat = read.csv("./Results/climate.data.output.1.csv")
+
+pc.all = prcomp(all.dat[,c()])

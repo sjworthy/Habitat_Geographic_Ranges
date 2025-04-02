@@ -131,6 +131,9 @@ for(species_file in species.list){
   species_results <- data.frame(
     species = species_name,
     n = number.individuals,
+    macro.corr = macro.corr,
+    geo.temp.corr = geo.temp.corr,
+    geo.ppt.corr = geo.ppt.corr,
     Intercept = Intercept,
     Slope = Slope,
     Slope.p.value = Slope.p.value,

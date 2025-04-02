@@ -3,23 +3,23 @@ Pinaceae,Abies,Abies balsamea,ABBA,balsam fir,Abies balsamea (L.) Mill.,BAD,
 Pinaceae,Abies,Abies fraseri,ABFR,Fraser fir,Abies fraseri (Pursh) Poir.,OK,
 Aceraceae,Acer,Acer barbatum,ACBA3,Florida maple,Acer barbatum Michx.,OK,
 Aceraceae,Acer,Acer leucoderme,ACLE,chalk maple,Acer leucoderme Small,OK,
-Aceraceae,Acer,Acer negundo,ACNE3,boxelder,Acer negundo L.,MEDIUM,
+Aceraceae,Acer,Acer negundo,ACNE3,boxelder,Acer negundo L.,MEDIUM,75% in US
 Aceraceae,Acer,Acer nigrum,ACNI5,black maple,Acer nigrum Michx. f.,OK,
-Aceraceae,Acer,Acer pensylvanicum,ACPE,striped maple,Acer pensylvanicum L.,MEDIUM,
-Aceraceae,Acer,Acer rubrum,ACRU,red maple,Acer rubrum L.,MEDIUM,
+Aceraceae,Acer,Acer pensylvanicum,ACPE,striped maple,Acer pensylvanicum L.,MEDIUM,75% in US
+Aceraceae,Acer,Acer rubrum,ACRU,red maple,Acer rubrum L.,MEDIUM,75% in US
 Aceraceae,Acer,Acer saccharinum,ACSA2,silver maple,Acer saccharinum L.,OK,
-Aceraceae,Acer,Acer saccharum,ACSA3,sugar maple,Acer saccharum Marsh.,MEDIUM,
+Aceraceae,Acer,Acer saccharum,ACSA3,sugar maple,Acer saccharum Marsh.,MEDIUM,75% in US
 Aceraceae,Acer,Acer spicatum,ACSP2,mountain maple,Acer spicatum Lam.,BAD,
 Hippocastanaceae,Aesculus,Aesculus flava,AEFL,yellow buckeye,Aesculus flava Aiton,OK,
 Hippocastanaceae,Aesculus,Aesculus glabra,AEGL,Ohio buckeye,Aesculus glabra Willd.,OK,
 Simaroubaceae,Ailanthus,Ailanthus altissima,AIAL,tree-of-heaven,Ailanthus altissima (Mill.) Swingle,OK,
 Annonaceae,Annona,Annona glabra,ANGL4,pond-apple,Annona glabra L.,OK,
 Annonaceae,Asimina,Asimina triloba,ASTR,pawpaw,Asimina triloba (L.) Dunal,OK,
-Betulaceae,Betula,Betula alleghaniensis,BEAL2,yellow birch,Betula alleghaniensis Britton,MEDIUM,
+Betulaceae,Betula,Betula alleghaniensis,BEAL2,yellow birch,Betula alleghaniensis Britton,MEDIUM,60% in US
 Betulaceae,Betula,Betula lenta,BELE,sweet birch,Betula lenta L.,OK,
 Betulaceae,Betula,Betula nigra,BENI,river birch,Betula nigra L.,OK,
 Betulaceae,Betula,Betula papyrifera,BEPA,paper birch,Betula papyrifera Marsh.,BAD,
-Betulaceae,Betula,Betula populifolia,BEPO,gray birch,Betula populifolia Marsh.,MEDIUM,
+Betulaceae,Betula,Betula populifolia,BEPO,gray birch,Betula populifolia Marsh.,MEDIUM,60% in US
 Betulaceae,Carpinus,Carpinus caroliniana,CACA18,American hornbeam,Carpinus caroliniana Walter,OK,
 Juglandaceae,Carya,Carya alba,CAAL27,mockernut hickory,Carya alba (L.) Nutt.,OK,
 Juglandaceae,Carya,Carya aquatica,CAAQ2,water hickory,Carya aquatica (Michx. f.) Nutt.,OK,
@@ -39,7 +39,7 @@ Fagaceae,Fagus,Fagus grandifolia,FAGR,American beech,Fagus grandifolia Ehrh.,OK,
 Oleaceae,Fraxinus,Fraxinus americana,FRAM2,white ash,Fraxinus americana L.,OK,
 Oleaceae,Fraxinus,Fraxinus caroliniana,FRCA3,Carolia ash,Fraxinus caroliniana Mill.,OK,
 Oleaceae,Fraxinus,Fraxinus nigra,FRNI,black ash,Fraxinus nigra Marsh.,BAD,
-Oleaceae,Fraxinus,Fraxinus pennsylvanica,FRPE,green ash,Fraxinus pennsylvanica Marsh.,MEDIUM,
+Oleaceae,Fraxinus,Fraxinus pennsylvanica,FRPE,green ash,Fraxinus pennsylvanica Marsh.,MEDIUM,75% in US
 Oleaceae,Fraxinus,Fraxinus profunda,FRPR,pumpkin ash,Fraxinus profunda (Bush) Bush,OK,
 Oleaceae,Fraxinus,Fraxinus quadrangulata,FRQU,blue ash,Fraxinus quadrangulata Michx.,OK,
 Oleaceae,Fraxinus,Fraxinus texensis,FRTE,Texas ash,Fraxinus texensis (A. Gray) Sarg.,OK,synonym used in data is Fraxinus albicans
@@ -135,10 +135,10 @@ Cupressaceae,Taxodium,Taxodium distichum,TADI2,baldcyress,Taxodium distichum (L.
 Cupressaceae,Thuja,Thuja occidentalis,THOC2,northern white-cedar,Thuja occidentalis L.,BAD,
 Tiliaceae,Tilia,Tilia americana,TIAM,American basswood,Tilia americana L.,OK,
 Euphorbiaceae,Triadica,Triadica sebifera,TRSE6,Chinese tallowtree,Triadica sebifera (L.) Small,OK,
-Pinaceae,Tsuga,Tsuga canadensis,TSCA,eastern hemlock,Tsuga canadensis (L.) Carrière,MEDIUM,
+Pinaceae,Tsuga,Tsuga canadensis,TSCA,eastern hemlock,Tsuga canadensis (L.) Carrière,MEDIUM,65%
 Pinaceae,Tsuga,Tsuga caroliniana,TSCA2,Carolina hemlock,Tsuga caroliniana Engelm.,OK,
 Ulmaceae,Ulmus,Ulmus alata,ULAL,winged elm,Ulmus alata Michx.,OK,
-Ulmaceae,Ulmus,Ulmus americana,ULAM,American elm,Ulmus americana L.,MEDIUM,
+Ulmaceae,Ulmus,Ulmus americana,ULAM,American elm,Ulmus americana L.,MEDIUM,75% in US
 Ulmaceae,Ulmus,Ulmus crassifolia,ULCR,cedar elm,Ulmus crassifolia Nutt.,OK,
 Ulmaceae,Ulmus,Ulmus rubra,ULRU,slippery elm,Ulmus rubra Muhl.,OK,
 Ulmaceae,Ulmus,Ulmus thomasii,ULTH,rock elm,Ulmus thomasii Sarg.,OK,

@@ -3,22 +3,13 @@ library(divvy)
 
 gbif = read.csv("./Formatted.Data/final.gbif.data.csv", row.names = 1)
 gbif.2 = gbif %>%
-  dplyr::filter(species %in% c("Acer nigrum",
+  dplyr::filter(species %in% c("Acer negundo",
                          "Acer rubrum",
                          "Fagus grandifolia",
-                         "Fraxinus nigra",
-                         "Larix laricina",
                          "Liquidambar styraciflua",
-                         "Picea glauca",
-                         "Picea mariana",
-                         "Pinus banksiana",
-                         "Pinus resinosa",
-                         "Populus balsamifera",
-                         "Populus deltoides",
                          "Quercus palustris",
                          "Quercus prinus",
-                         "Taxodium ascendens",
-                         "Thuja occidentalis"))
+                         "Taxodium ascendens"))
 
 # count and sort by number of occurrences
 gbif.sorted = gbif.2 %>%
