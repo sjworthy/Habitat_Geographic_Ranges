@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+Raw.Data/0010272-241126133413365.zip
+Raw.Data/USGS_13_n26w081_20231221.tif
+Raw.Data/USGS_13_n36w093_20241002.tif
+Raw.Data/USGS_13_n43w101_20220726.tif
+Results/unused/microclim_elevation_tile1.tif
