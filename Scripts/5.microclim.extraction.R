@@ -5,7 +5,7 @@ library(topoclimate.pred)
 
 # Read in gbif file
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-gbif = read.csv("./Formatted.Data/final.gbif.data.csv", row.names = 1)
+gbif = read.csv("./Formatted.Data/good.gbif.data.csv", row.names = 1)
 
 # subset gbif to just lat/long columns for extraction
 

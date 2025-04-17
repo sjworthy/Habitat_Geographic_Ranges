@@ -34,7 +34,7 @@ for(species_file in species.list){
   
   # creating microclim data, scaled
   microclim.dat = species %>%
-    select(high_temp_C,low_temp_C,moisture_mm) %>%
+    dplyr::select(high_temp_C,low_temp_C,moisture_mm) %>%
     scale()
   
   # calculate gower distance for scaled microclimate data
@@ -193,3 +193,8 @@ ggbiplot(pc.all, labels = dat$species, varname.adjust = 1)+
 all.dat = read.csv("./Results/climate.data.output.1.csv")
 
 pc.all = prcomp(all.dat[,c()])
+
+
+##### Scaling
+
+
