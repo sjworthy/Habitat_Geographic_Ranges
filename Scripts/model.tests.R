@@ -1300,3 +1300,617 @@ C.tex.topo = ggplot(C.tex.df, aes(y = C.tex.topo.vec, x = C.tex.geo.vec)) +
 C.tex.topo
 
 ggsave(C.tex.topo, file = "./Results/test.results/Plots/C.tex.elevation.pdf", height = 5, width = 5)
+
+#### Bootstrapping Microclimate distance ~ Geographic Distance ####
+
+# creating spatial matrix
+Q.cocc.spat.dat = as.matrix(Q.cocc.all[,c(3,4)])
+A.leu.spat.dat = as.matrix(A.leu.all[,c(3,4)])
+F.car.spat.dat = as.matrix(F.car.all[,c(3,4)])
+C.tex.spat.dat = as.matrix(C.tex.all[,c(3,4)])
+
+# creating microclimate data
+Q.cocc.microclim.dat = Q.cocc.all %>%
+  dplyr::select(high_temp_C,low_temp_C,moisture_mm)
+A.leu.microclim.dat = A.leu.all %>%
+  dplyr::select(high_temp_C,low_temp_C,moisture_mm)
+F.car.microclim.dat = F.car.all %>%
+  dplyr::select(high_temp_C,low_temp_C,moisture_mm)
+C.tex.microclim.dat = C.tex.all %>%
+  dplyr::select(high_temp_C,low_temp_C,moisture_mm)
+
+# calculate gower distance for scaled microclimate data
+Q.cocc.microclim.dist = gowdis(as.matrix(Q.cocc.microclim.dat))
+A.leu.microclim.dist = gowdis(as.matrix(A.leu.microclim.dat))
+F.car.microclim.dist = gowdis(as.matrix(F.car.microclim.dat))
+C.tex.microclim.dist = gowdis(as.matrix(C.tex.microclim.dat))
+
+# calculate Haversine distance for spatial data
+Q.cocc.geo.dist = distm(Q.cocc.spat.dat, fun = distHaversine)
+Q.cocc.geo.dist.2 = as.dist(Q.cocc.geo.dist) # convert to dist object
+Q.cocc.geo.dist.3 = Q.cocc.geo.dist.2/1000 # convert to km
+A.leu.geo.dist = distm(A.leu.spat.dat, fun = distHaversine)
+A.leu.geo.dist.2 = as.dist(A.leu.geo.dist) # convert to dist object
+A.leu.geo.dist.3 = A.leu.geo.dist.2/1000 # convert to km
+F.car.geo.dist = distm(F.car.spat.dat, fun = distHaversine)
+F.car.geo.dist.2 = as.dist(F.car.geo.dist) # convert to dist object
+F.car.geo.dist.3 = F.car.geo.dist.2/1000 # convert to km
+C.tex.geo.dist = distm(C.tex.spat.dat, fun = distHaversine)
+C.tex.geo.dist.2 = as.dist(C.tex.geo.dist) # convert to dist object
+C.tex.geo.dist.3 = C.tex.geo.dist.2/1000 # convert to km
+
+# Function to perform bootstrapping and calculate standard effect size
+bootstrap_mrm <- function(microclim_dist, geo_dist, n_bootstrap = 999) {
+  
+  # Convert geo_dist from class 'dist' to a matrix if needed
+  geo_dist_matrix <- as.matrix(geo_dist)
+  
+  # Get the number of rows (occurrences) from the dist object
+  n <- nrow(geo_dist_matrix)  # nrow will work after conversion to matrix
+  
+  # Initialize vector to store intercept and slope values
+  slopes <- numeric(n_bootstrap)
+  intercepts <- numeric(n_bootstrap)
+  
+  # Bootstrap loop
+  for (i in 1:n_bootstrap) {
+    
+    # Sample with replacement from the geo distance matrix
+    sampled_indices <- sample(1:n, n, replace = TRUE)
+    
+    # Create the bootstrapped geo distance matrix
+    boot_geo_dist_matrix <- geo_dist_matrix[sampled_indices, sampled_indices]
+    
+    # Convert the bootstrapped matrix back to a 'dist' object
+    boot_geo_dist <- as.dist(boot_geo_dist_matrix)
+
+    # Run the MRM model with the bootstrapped geo distance matrix
+    model <- MRM(microclim_dist ~ boot_geo_dist)
+    
+    # Extract the intercept and slope values
+    intercept_value <- model$coef[1,1]
+    slope_value <- model$coef[2,1]
+    
+    intercepts[i] <- intercept_value
+    slopes[i] <- slope_value
+    
+  }
+  
+  # combine intercept and slope vectors into a dataframe
+  null_output = as.data.frame(intercepts)
+  null_output$slopes = slopes
+  
+  return(null_output)
+}
+
+### Q.cocc 
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(Q.cocc.microclim.dist, Q.cocc.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.1927249, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "Null Distribution of Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/Q.cocc.null.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.000007711331, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "Null Distribution of Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/Q.cocc.null.slope.pdf", width = 5, height = 5)
+
+clim.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+clim.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+clim.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+clim.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.1927249 - clim.intercept.null.means) / clim.intercept.nulls.sds
+ses.slope <- (0.000007711331 - clim.slope.null.means) / clim.slope.nulls.sds
+
+rank.intercept = rank(c(0.1927249,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.142
+
+rank.slope= rank(c(0.000007711331,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 0.86
+
+### A.leu
+
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(A.leu.microclim.dist, A.leu.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.1341791297, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "A. leu Null Distribution of Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/A.leu.null.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.0001561188, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "A. leu Null Distribution of Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/A.leu.null.slope.pdf", width = 5, height = 5)
+
+clim.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+clim.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+clim.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+clim.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.1341791297 - clim.intercept.null.means) / clim.intercept.nulls.sds
+ses.slope <- (0.0001561188 - clim.slope.null.means) / clim.slope.nulls.sds
+
+rank.intercept = rank(c(0.1341791297,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.001
+
+rank.slope= rank(c(0.0001561188,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 1
+
+## F.car
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(F.car.microclim.dist, F.car.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.0926204409 , color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "F.car Null Distribution of Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/F.car.null.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.0001909017, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "F. car Null Distribution of Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/F.car.null.slope.pdf", width = 5, height = 5)
+
+clim.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+clim.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+clim.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+clim.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.0926204409 - clim.intercept.null.means) / clim.intercept.nulls.sds
+ses.slope <- (0.0001909017 - clim.slope.null.means) / clim.slope.nulls.sds
+
+rank.intercept = rank(c(0.0926204409,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.001
+
+rank.slope= rank(c(0.0001909017,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 1
+
+## C.tex
+
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(C.tex.microclim.dist, C.tex.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.0502335274 , color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "C.tex Null Distribution of Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/C.tex.null.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.0004084846, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "F. car Null Distribution of Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/C.tex.null.slope.pdf", width = 5, height = 5)
+
+clim.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+clim.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+clim.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+clim.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.0502335274 - clim.intercept.null.means) / clim.intercept.nulls.sds
+ses.slope <- (0.0004084846 - clim.slope.null.means) / clim.slope.nulls.sds
+
+rank.intercept = rank(c(0.0502335274,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.001
+
+rank.slope= rank(c(0.0004084846,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 1
+
+#### Bootstrapping Topo distance ~ Geographic Distance ####
+
+# creating spatial matrix
+Q.cocc.spat.dat = as.matrix(Q.cocc.all[,c(3,4)])
+A.leu.spat.dat = as.matrix(A.leu.all[,c(3,4)])
+F.car.spat.dat = as.matrix(F.car.all[,c(3,4)])
+C.tex.spat.dat = as.matrix(C.tex.all[,c(3,4)])
+
+# creating topographic data
+Q.cocc.topo.dat = Q.cocc.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+A.leu.topo.dat = A.leu.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+F.car.topo.dat = F.car.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+C.tex.topo.dat = C.tex.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+
+# calculate gower distance for scaled topoate data
+Q.cocc.topo.dist = gowdis(as.matrix(Q.cocc.topo.dat))
+A.leu.topo.dist = gowdis(as.matrix(A.leu.topo.dat))
+F.car.topo.dist = gowdis(as.matrix(F.car.topo.dat))
+C.tex.topo.dist = gowdis(as.matrix(C.tex.topo.dat))
+
+# calculate Haversine distance for spatial data
+Q.cocc.geo.dist = distm(Q.cocc.spat.dat, fun = distHaversine)
+Q.cocc.geo.dist.2 = as.dist(Q.cocc.geo.dist) # convert to dist object
+Q.cocc.geo.dist.3 = Q.cocc.geo.dist.2/1000 # convert to km
+A.leu.geo.dist = distm(A.leu.spat.dat, fun = distHaversine)
+A.leu.geo.dist.2 = as.dist(A.leu.geo.dist) # convert to dist object
+A.leu.geo.dist.3 = A.leu.geo.dist.2/1000 # convert to km
+F.car.geo.dist = distm(F.car.spat.dat, fun = distHaversine)
+F.car.geo.dist.2 = as.dist(F.car.geo.dist) # convert to dist object
+F.car.geo.dist.3 = F.car.geo.dist.2/1000 # convert to km
+C.tex.geo.dist = distm(C.tex.spat.dat, fun = distHaversine)
+C.tex.geo.dist.2 = as.dist(C.tex.geo.dist) # convert to dist object
+C.tex.geo.dist.3 = C.tex.geo.dist.2/1000 # convert to km
+
+### Q.cocc 
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(Q.cocc.topo.dist, Q.cocc.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.1605788312, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "Null Distribution of Topo Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/Q.cocc.topo.null.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = -0.0000418118, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "Null Distribution of Topo Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/Q.cocc.topo.null.slope.pdf", width = 5, height = 5)
+
+topo.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+topo.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+topo.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+topo.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.1605788312 - topo.intercept.null.means) / topo.intercept.nulls.sds
+ses.slope <- (-0.0000418118 - topo.slope.null.means) / topo.slope.nulls.sds
+
+rank.intercept = rank(c(0.1605788312,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.142
+
+rank.slope= rank(c(-0.0000418118,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 0.86
+
+### A.leu
+
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(A.leu.topo.dist, A.leu.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.1359138, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "A. leu Null Distribution of Topo Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/A.leu.null.topo.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.00001993009, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "A. leu Null Distribution of Topo Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/A.leu.null.topo.slope.pdf", width = 5, height = 5)
+
+topo.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+topo.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+topo.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+topo.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.1359138 - topo.intercept.null.means) / topo.intercept.nulls.sds
+ses.slope <- (0.00001993009 - topo.slope.null.means) / topo.slope.nulls.sds
+
+rank.intercept = rank(c(0.1359138,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.001
+
+rank.slope= rank(c(0.00001993009,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 1
+
+## F.car
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(F.car.topo.dist, F.car.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.06911964 , color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "F.car Null Distribution of Topo Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/F.car.null.topo.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.00001189631, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "F. car Null Distribution of Topo Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/F.car.null.topo.slope.pdf", width = 5, height = 5)
+
+topo.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+topo.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+topo.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+topo.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.06911964 - topo.intercept.null.means) / topo.intercept.nulls.sds
+ses.slope <- (0.00001189631 - topo.slope.null.means) / topo.slope.nulls.sds
+
+rank.intercept = rank(c(0.06911964,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.001
+
+rank.slope= rank(c(0.00001189631,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 1
+
+## C.tex
+
+# Run the bootstrap procedure
+bootstrapped_effect_sizes <- bootstrap_mrm(C.tex.topo.dist, C.tex.geo.dist.3, n_bootstrap = 999)
+
+null.intercept.plot = ggplot(bootstrapped_effect_sizes, aes(x = intercepts)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.09998326 , color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "C.tex Null Distribution of Topo Intercept with Observed Value",
+    x = "Intercept Null Values",
+    y = "Density") +
+  theme_minimal()
+null.intercept.plot
+
+ggsave(null.intercept.plot, file = "./Results/test.results/Plots/C.tex.null.topo.intercept.pdf", width = 5, height = 5)
+
+null.slope.plot = ggplot(bootstrapped_effect_sizes, aes(x = slopes)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "skyblue", color = "black") +
+  geom_density(color = "blue", linewidth = 1) +
+  geom_vline(xintercept = 0.00003588177, color = "red", linetype = "dashed", size = 1) +
+  labs(
+    title = "F. car Null Distribution of Topo Slope with Observed Value",
+    x = "Slope Null Values",
+    y = "Density") +
+  theme_minimal()
+null.slope.plot
+
+ggsave(null.slope.plot, file = "./Results/test.results/Plots/C.tex.null.topo.slope.pdf", width = 5, height = 5)
+
+topo.intercept.null.means <- mean(bootstrapped_effect_sizes$intercepts)
+topo.intercept.nulls.sds <- sd(bootstrapped_effect_sizes$intercepts)
+topo.slope.null.means <- mean(bootstrapped_effect_sizes$slopes)
+topo.slope.nulls.sds <- sd(bootstrapped_effect_sizes$slopes)
+
+ses.intercet <- (0.09998326 - topo.intercept.null.means) / topo.intercept.nulls.sds
+ses.slope <- (0.00003588177 - topo.slope.null.means) / topo.slope.nulls.sds
+
+rank.intercept = rank(c(0.09998326,bootstrapped_effect_sizes$intercepts))[1]
+p.val.intercept = rank.intercept/1000 # 0.001
+
+rank.slope= rank(c(0.00003588177,bootstrapped_effect_sizes$slopes))[1]
+p.val.slope = rank.slope/1000 # 1
+
+#### Density Plots ####
+
+library(gghalves)
+
+# combine species' data
+
+Q.cocc.all = left_join(Q.cocc,Q.cocc.elev)
+A.leu.all = left_join(A.leu,A.leu.elev)
+F.car.all = left_join(F.car,F.car.elev)
+C.tex.all = left_join(C.tex,C.text.elev)
+
+all.dat = rbind(Q.cocc.all,A.leu.all,F.car.all,C.tex.all)
+
+## elevation plot
+elevation.plot = ggplot(all.dat, aes(x = species, y = elevation), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Elevation (m)",
+       x = " ", fill = " ") +
+  theme_classic()
+elevation.plot
+
+ggsave(elevation.plot, file = "./Results/test.results/Plots/elevation.pdf", height = 5, width = 5)
+
+## high temp plot
+high.temp.plot = ggplot(all.dat, aes(x = species, y = high_temp_C), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "High Temp (C)",
+       x = " ", fill = " ") +
+  theme_classic()
+high.temp.plot
+
+ggsave(high.temp.plot, file = "./Results/test.results/Plots/high_temp.pdf", height = 5, width = 5)
+
+## low temp plot
+low.temp.plot = ggplot(all.dat, aes(x = species, y = low_temp_C), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Low Temp (C)",
+       x = " ", fill = " ") +
+  theme_classic()
+low.temp.plot
+
+ggsave(low.temp.plot, file = "./Results/test.results/Plots/low_temp.pdf", height = 5, width = 5)
+
+## microclimate distance plot
+
+Q.cocc.df = as.data.frame(as.vector(Q.cocc.microclim.dist))
+colnames(Q.cocc.df)[1] = "Microclimate.Distance"
+Q.cocc.df$species = "Quercus coccinea"
+
+A.leu.df = as.data.frame(as.vector(A.leu.microclim.dist))
+colnames(A.leu.df)[1] = "Microclimate.Distance"
+A.leu.df$species = "Acer leucoderme"
+
+F.car.df = as.data.frame(as.vector(F.car.microclim.dist))
+colnames(F.car.df)[1] = "Microclimate.Distance"
+F.car.df$species = "Fraxinus caroliniana"
+
+C.tex.df = as.data.frame(as.vector(C.tex.microclim.dist))
+colnames(C.tex.df)[1] = "Microclimate.Distance"
+C.tex.df$species = "Carya texana"
+
+microclim.df = rbind(Q.cocc.df,A.leu.df,F.car.df,C.tex.df)
+
+microclim.dist.plot = ggplot(microclim.df, aes(x = species, y = Microclimate.Distance), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Microclimate Distance",
+       x = " ", fill = " ") +
+  theme_classic()
+microclim.dist.plot
+
+ggsave(microclim.dist.plot, file = "./Results/test.results/Plots/microclim.dist.density.pdf", height = 5, width = 5)
+
+## topographic distance plot
+
+# creating topographic data
+Q.cocc.topo.dat = Q.cocc.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+A.leu.topo.dat = A.leu.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+F.car.topo.dat = F.car.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+C.tex.topo.dat = C.tex.all %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
+
+# calculate gower distance for scaled topoate data
+Q.cocc.topo.dist = gowdis(as.matrix(Q.cocc.topo.dat))
+A.leu.topo.dist = gowdis(as.matrix(A.leu.topo.dat))
+F.car.topo.dist = gowdis(as.matrix(F.car.topo.dat))
+C.tex.topo.dist = gowdis(as.matrix(C.tex.topo.dat))
+
+Q.cocc.df = as.data.frame(as.vector(Q.cocc.topo.dist))
+colnames(Q.cocc.df)[1] = "Topo.Distance"
+Q.cocc.df$species = "Quercus coccinea"
+
+A.leu.df = as.data.frame(as.vector(A.leu.topo.dist))
+colnames(A.leu.df)[1] = "Topo.Distance"
+A.leu.df$species = "Acer leucoderme"
+
+F.car.df = as.data.frame(as.vector(F.car.topo.dist))
+colnames(F.car.df)[1] = "Topo.Distance"
+F.car.df$species = "Fraxinus caroliniana"
+
+C.tex.df = as.data.frame(as.vector(C.tex.topo.dist))
+colnames(C.tex.df)[1] = "Topo.Distance"
+C.tex.df$species = "Carya texana"
+
+topo.df = rbind(Q.cocc.df,A.leu.df,F.car.df,C.tex.df)
+
+topo.dist.plot = ggplot(topo.df, aes(x = species, y = Topo.Distance), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Topographic Distance",
+       x = " ", fill = " ") +
+  theme_classic()
+topo.dist.plot
+
+ggsave(topo.dist.plot, file = "./Results/test.results/Plots/topo.dist.density.pdf", height = 5, width = 5)
+
