@@ -4,6 +4,7 @@ library(tidyverse)
 library(FD)
 library(geosphere)
 library(ecodist)
+library(gghalves)
 
 # species 1: Quercus coccinea, R2 = 0.000289395, n = 641
 # species 2: Acer leucoderme, R2 = 0.23, n = 265
@@ -1779,8 +1780,6 @@ p.val.slope = rank.slope/1000 # 1
 
 #### Density Plots ####
 
-library(gghalves)
-
 # combine species' data
 
 Q.cocc.all = left_join(Q.cocc,Q.cocc.elev)
@@ -1913,4 +1912,128 @@ topo.dist.plot = ggplot(topo.df, aes(x = species, y = Topo.Distance), fill = "da
 topo.dist.plot
 
 ggsave(topo.dist.plot, file = "./Results/test.results/Plots/topo.dist.density.pdf", height = 5, width = 5)
+
+## microclimate dist plot by geographic dist
+
+Q.cocc.df = as.data.frame(as.vector(Q.cocc.microclim.dist))
+colnames(Q.cocc.df)[1] = "Microclimate.Distance"
+Q.cocc.df$species = "Quercus coccinea"
+Q.cocc.df$Geographic.Distance = as.vector(Q.cocc.geo.dist.3)
+
+# Create quantile bins (5 bins) and convert to factor
+Q.cocc.df$Geographic.Distance.Quantile <- cut(
+  Q.cocc.df$Geographic.Distance,
+  breaks = quantile(Q.cocc.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE),
+  include.lowest = TRUE,
+  labels = FALSE
+)
+
+breaks = quantile(Q.cocc.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE)
+#        0%       20%       40%       60%       80%      100% 
+# 0.0000  222.6753  371.6079  515.2171  710.5724 1424.8978 
+
+Q.cocc.plot = ggplot(Q.cocc.df, aes(x = as.factor(Geographic.Distance.Quantile), y = Microclimate.Distance), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Microclimate Distance",
+       x = "Geographic Distance Quantile", fill = " ") +
+  theme_classic()
+Q.cocc.plot
+
+ggsave(Q.cocc.plot, file = "./Results/test.results/Plots/Q.cocc.bins.pdf", height = 5, width = 5)
+
+A.leu.df = as.data.frame(as.vector(A.leu.microclim.dist))
+colnames(A.leu.df)[1] = "Microclimate.Distance"
+A.leu.df$species = "Acer leucoderme"
+A.leu.df$Geographic.Distance = as.vector(A.leu.geo.dist.3)
+
+# Create quantile bins (5 bins) and convert to factor
+A.leu.df$Geographic.Distance.Quantile <- cut(
+  A.leu.df$Geographic.Distance,
+  breaks = quantile(A.leu.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE),
+  include.lowest = TRUE,
+  labels = FALSE
+)
+
+breaks = quantile(A.leu.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE)
+#        0%       20%       40%       60%       80%      100% 
+# 0.0000  191.6128  365.9663  562.1573  800.9971 1542.0604  
+
+A.leu.plot = ggplot(A.leu.df, aes(x = as.factor(Geographic.Distance.Quantile), y = Microclimate.Distance), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Microclimate Distance",
+       x = "Geographic Distance Quantile", fill = " ") +
+  theme_classic()
+A.leu.plot
+
+ggsave(A.leu.plot, file = "./Results/test.results/Plots/A.leu.bins.pdf", height = 5, width = 5)
+
+F.car.df = as.data.frame(as.vector(F.car.microclim.dist))
+colnames(F.car.df)[1] = "Microclimate.Distance"
+F.car.df$species = "Fraxinus caroliniana"
+F.car.df$Geographic.Distance = as.vector(F.car.geo.dist.3)
+
+# Create quantile bins (5 bins) and convert to factor
+F.car.df$Geographic.Distance.Quantile <- cut(
+  F.car.df$Geographic.Distance,
+  breaks = quantile(F.car.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE),
+  include.lowest = TRUE,
+  labels = FALSE
+)
+
+breaks = quantile(F.car.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE)
+#        0%       20%       40%       60%       80%      100% 
+# 0.0000  228.7815  434.5618  688.4255  942.7673 1948.1028
+
+F.car.plot = ggplot(F.car.df, aes(x = as.factor(Geographic.Distance.Quantile), y = Microclimate.Distance), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Microclimate Distance",
+       x = "Geographic Distance Quantile", fill = " ") +
+  theme_classic()
+F.car.plot
+
+ggsave(F.car.plot, file = "./Results/test.results/Plots/F.car.bins.pdf", height = 5, width = 5)
+
+
+C.tex.df = as.data.frame(as.vector(C.tex.microclim.dist))
+colnames(C.tex.df)[1] = "Microclimate.Distance"
+C.tex.df$species = "Carya texana"
+C.tex.df$Geographic.Distance = as.vector(C.tex.geo.dist.3)
+
+# Create quantile bins (5 bins) and convert to factor
+C.tex.df$Geographic.Distance.Quantile <- cut(
+  C.tex.df$Geographic.Distance,
+  breaks = quantile(C.tex.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE),
+  include.lowest = TRUE,
+  labels = FALSE
+)
+
+breaks = quantile(C.tex.df$Geographic.Distance, probs = seq(0, 1, by = 0.2), na.rm = TRUE)
+#        0%       20%       40%       60%       80%      100% 
+# 0.0000  213.9236  354.7697  513.3723  745.1326 1374.4654
+
+C.tex.plot = ggplot(C.tex.df, aes(x = as.factor(Geographic.Distance.Quantile), y = Microclimate.Distance), fill = "darkgray") +
+  geom_half_point(side = "l", size = 0.1, color = "darkgray",
+                  position = position_nudge(x=-.05), alpha = 0.3) +
+  geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
+  geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
+                   scale = "width") +
+  labs(y = "Microclimate Distance",
+       x = "Geographic Distance Quantile", fill = " ") +
+  theme_classic()
+C.tex.plot
+
+ggsave(C.tex.plot, file = "./Results/test.results/Plots/C.text.bins.pdf", height = 5, width = 5)
+
 
