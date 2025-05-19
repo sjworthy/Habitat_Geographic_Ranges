@@ -52,3 +52,8 @@ Raw.Data/USGS_13_n26w081_20231221.tif
 Raw.Data/USGS_13_n36w093_20241002.tif
 Raw.Data/USGS_13_n43w101_20220726.tif
 Results/unused/microclim_elevation_tile1.tif
+Formatted.Data/gbif.data.soils.0.100cm.csv
+Formatted.Data/gbif.filtered.csv
+Formatted.Data/good.gbif.data.csv
+Formatted.Data/microclim.output.6.csv
+Results/climate.data.output.1.csv
