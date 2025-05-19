@@ -1,0 +1,14 @@
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --mem=180000 # 180gb
+#SBATCH --time=168:00:00 # run time in hh:mm:ss
+#SBATCH --job-name=soil.MRM
+#SBATCH --error=/work/serussolab/samworthy/soil.MRM.%J.err
+#SBATCH --output=/work/serussolab/samworthy/soil.MRM.%J.out
+
+module purge
+module load anaconda
+
+conda activate /work/serussolab/samworthy/myconda2
+
+Rscript 8.Soil.MRM.R

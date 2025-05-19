@@ -148,13 +148,13 @@ for(species in names(species_list_2)) {
 
 #### Trying to get microclim data for missing occurrences ####
 
-setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
+setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 # Load the DEM
-micro_DEM <- raster(raster_files[532], crs = "+proj=longlat +datum=NAD83 +no_defs")
+micro_DEM <- raster(raster_files[486], crs = "+proj=longlat +datum=NAD83 +no_defs")
 micro_DEM
 
-ext = extent(-82.99, -82.96, 42.41, 42.65)
+ext = extent(-82.87, -82.71, 41.49, 41.67)
 et <- crop(micro_DEM, ext)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Scripts/topo_data")
@@ -205,7 +205,7 @@ extracted_data.2 = extracted_data %>%
   distinct(across(1:3), .keep_all = TRUE)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.21.csv")
+write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.23.csv")
 
 setwd("/Volumes/My Passport for Mac")
 
