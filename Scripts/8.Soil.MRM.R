@@ -9,6 +9,7 @@ library(ecodist)
 
 # read in soil data
 soil.data = read.csv("gbif.data.soils.0.100cm.csv")
+soil.data = read.csv("./Formatted.Data/gbif.data.soils.0.100cm.csv")
 
 # remove rows with NAs
 soil.data.2 = soil.data %>%

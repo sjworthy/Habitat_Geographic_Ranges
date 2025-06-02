@@ -112,14 +112,27 @@ combined.df.2 = combined_df %>%
 
 #### Comparing combined_df with full data ####
 
-# combined = 1247810
-# full = 1336865
-# 89055 missing
+gbif = read.csv("./Formatted.Data/gbif.final.csv", row.names = 1)
+
+# combined = 1294649
+# full = 1254426
+# none missing now that data filtered for soil
 
 temp = as.data.frame(table(sort(gbif$species)))
 temp$microclim = table(sort(combined.df.2$species))
+temp$diff = temp$Freq-temp$microclim
 
 write.csv(temp, file = "species.compare.csv")
+
+microclim.slim = left_join(gbif,combined.df.2)
+temp$microclim.slim = table(sort(microclim.slim$species))
+temp$diff.2 = temp$Freq - temp$microclim.slim
+
+microclim.missing = microclim.slim %>%
+  filter(if_any(everything(), is.na))
+  
+write.csv(microclim.missing, file = "microclim.missing.csv")
+
 
 ### Split by species ####
 
@@ -151,10 +164,10 @@ for(species in names(species_list_2)) {
 raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
 setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 # Load the DEM
-micro_DEM <- raster(raster_files[486], crs = "+proj=longlat +datum=NAD83 +no_defs")
+micro_DEM <- raster(raster_files[4], crs = "+proj=longlat +datum=NAD83 +no_defs")
 micro_DEM
 
-ext = extent(-82.87, -82.71, 41.49, 41.67)
+ext = extent(-80.24, -80.14, 26.30, 26.40)
 et <- crop(micro_DEM, ext)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Scripts/topo_data")
@@ -205,7 +218,7 @@ extracted_data.2 = extracted_data %>%
   distinct(across(1:3), .keep_all = TRUE)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.23.csv")
+write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.33.csv")
 
 setwd("/Volumes/My Passport for Mac")
 

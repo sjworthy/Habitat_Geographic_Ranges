@@ -3,6 +3,7 @@
 library(tidyverse)
 library(raster)
 library(sf)
+library(data.table)
 
 # extracting elevation from original DEMs
 
@@ -102,3 +103,25 @@ for(species in names(all_list)) {
 # Acer saccharum	-73.073796	45.015647
 # Carya cordiformis	-73.073308	45.015681
 # Carya cordiformis	-73.072726	45.015722
+
+### Get all elevation data back together ####
+
+# Read in and combine data across all the data frames
+
+file_list <- list.files(
+  path = "Formatted.Data/elev",
+  pattern = "^all_data_.*\\.csv$",
+  full.names = TRUE
+)
+
+# Read them all into a list of data frames
+list_of_dfs <- lapply(file_list, read.csv)
+
+combined_df <- rbindlist(list_of_dfs, use.names = TRUE, fill = TRUE)
+
+table(is.na(combined_df$elevation)) # 3 are NA
+
+elev.final = combined_df %>%
+  drop_na()
+
+#write.csv(elev.final, file = "./Formatted.Data/elev.final.csv")
