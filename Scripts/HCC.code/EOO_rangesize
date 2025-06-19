@@ -1,0 +1,14 @@
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --mem=180000 # 180gb
+#SBATCH --time=168:00:00 # run time in hh:mm:ss
+#SBATCH --job-name=EOO.range.size
+#SBATCH --error=/work/serussolab/samworthy/EOO.range.size.%J.err
+#SBATCH --output=/work/serussolab/samworthy/EOO.range.size.%J.out
+
+module purge
+module load anaconda
+
+conda activate /work/serussolab/samworthy/rangeConda
+
+Rscript EOO.range.size.R

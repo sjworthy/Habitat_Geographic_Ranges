@@ -22,7 +22,7 @@ setwd("/Volumes/Backup Plus/microclimate_DEMs")
 # micro clim DEMs are automatically read in as WGS84. Going to convert to NAD 83 since this is what they should be.
 # did a test if it matters and get the same extracted values with WGS84 and NAD83 crs.
 #example.dem = brick("./microclim_USGS_13_n30w100_20211103_tile2.tif", crs = "+proj=longlat +datum=NAD83 +no_defs")
-example.dem = raster("./USGS_13_n26w081_20231221_tile7.tif")
+example.dem = raster("./USGS_13_n26w081_20231221.tif")
 
 points_nad83 <- st_transform(points_sf, crs(example.dem))
 
@@ -108,13 +108,14 @@ combined_df <- rbindlist(list_of_dfs, use.names = TRUE, fill = TRUE)
 combined.df.2 = combined_df %>%
   distinct(across(2:4), .keep_all = TRUE)
 
-# write.csv(combined_df, file = "./Results/climate.data.output.1.csv")
+#write.csv(combined.df.2, file = "./Formatted.Data/climate.combined.df.6.17.csv")
+test = read.csv("./Formatted.Data/climate.combined.df.6.17.csv")
 
 #### Comparing combined_df with full data ####
 
 gbif = read.csv("./Formatted.Data/gbif.final.csv", row.names = 1)
 
-# combined = 1294649
+# combined = 1302446
 # full = 1254426
 # none missing now that data filtered for soil
 
@@ -130,6 +131,9 @@ temp$diff.2 = temp$Freq - temp$microclim.slim
 
 microclim.missing = microclim.slim %>%
   filter(if_any(everything(), is.na))
+
+test = as.data.frame(table(microclim.missing$species))
+# 15 species currently complete.
   
 write.csv(microclim.missing, file = "microclim.missing.csv")
 
@@ -162,12 +166,13 @@ for(species in names(species_list_2)) {
 #### Trying to get microclim data for missing occurrences ####
 
 raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
+
 setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 # Load the DEM
-micro_DEM <- raster(raster_files[4], crs = "+proj=longlat +datum=NAD83 +no_defs")
+micro_DEM <- raster(raster_files[59], crs = "+proj=longlat +datum=NAD83 +no_defs")
 micro_DEM
 
-ext = extent(-80.24, -80.14, 26.30, 26.40)
+ext = extent(-93.84, -93.79, 30.66, 30.67)
 et <- crop(micro_DEM, ext)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Scripts/topo_data")
@@ -218,7 +223,7 @@ extracted_data.2 = extracted_data %>%
   distinct(across(1:3), .keep_all = TRUE)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.33.csv")
+write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.38.csv")
 
 setwd("/Volumes/My Passport for Mac")
 

@@ -1,11 +1,14 @@
 #!/bin/sh
 #SBATCH --nodes=1
-#SBATCH --mem=60000 # 60gb
+#SBATCH --mem=350000 #
 #SBATCH --time=168:00:00 # run time in hh:mm:ss
 #SBATCH --job-name=range.size
 #SBATCH --error=/work/serussolab/samworthy/range.size.%J.err
 #SBATCH --output=/work/serussolab/samworthy/range.size.%J.out
 
-module load R
+module purge
+module load anaconda
+
+conda activate /work/serussolab/samworthy/myconda2
 
 Rscript Range.Size.R
