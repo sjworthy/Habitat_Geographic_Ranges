@@ -1,0 +1,14 @@
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --mem=180000 # 180gb
+#SBATCH --time=168:00:00 # run time in hh:mm:ss
+#SBATCH --job-name=species.null
+#SBATCH --error=/work/serussolab/samworthy/species.null.%J.err
+#SBATCH --output=/work/serussolab/samworthy/species.null.%J.out
+
+module purge
+module load anaconda
+
+conda activate /work/serussolab/samworthy/myconda2
+
+Rscript Species.Null.Models.R

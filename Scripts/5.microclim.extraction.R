@@ -169,10 +169,10 @@ raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
 
 setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 # Load the DEM
-micro_DEM <- raster(raster_files[59], crs = "+proj=longlat +datum=NAD83 +no_defs")
+micro_DEM <- raster(raster_files[305], crs = "+proj=longlat +datum=NAD83 +no_defs")
 micro_DEM
 
-ext = extent(-93.84, -93.79, 30.66, 30.67)
+ext = extent(-77.455, -77.445, 37.66, 37.67)
 et <- crop(micro_DEM, ext)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Scripts/topo_data")
@@ -223,7 +223,7 @@ extracted_data.2 = extracted_data %>%
   distinct(across(1:3), .keep_all = TRUE)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.38.csv")
+write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.3.csv")
 
 setwd("/Volumes/My Passport for Mac")
 

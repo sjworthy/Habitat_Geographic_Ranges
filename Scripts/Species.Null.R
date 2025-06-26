@@ -1939,23 +1939,23 @@ PRSE2.range = st_read("../USTreeAtlas/shp/prunsero/")
 
 # The projection is geographic with latitude and longitude. The datum is NAD27 which is EPSG:4267. 
 # The ellipsoid is Clarke 1866, and the transformation parameters.
-st_crs(PRSEE2.range)  <- 4267 
+st_crs(PRSE2.range)  <- 4267 
 
 # clip the species range based on US map
-PRSEE2_clipped = st_intersection(PRSEE2.range, states.map)
+PRSE2_clipped = st_intersection(PRSE2.range, states.map)
 
 # Add the species name back to the map info
-PRSEE2_clipped$species = "Prunus serotina"
+PRSE2_clipped$species = "Prunus serotina"
 all.data$species = "Prunus serotina"
 
 # clip all points outside of range with 50000 m buffer
-PRSEE2_flag = cc_iucn(x = all.data, range = PRSEE2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+PRSE2_flag = cc_iucn(x = all.data, range = PRSE2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
                       value = "flagged", buffer = 50000)
 # remove the points
-PRSEE2_occ_final = all.data[PRSEE2_flag, ]
+PRSE2_occ_final = all.data[PRSE2_flag, ]
 
 # export the values
-write.csv(PRSEE2_occ_final, file = "./Formatted.Data/Species.Nulls/Prunus.serotina.null.csv")
+write.csv(PRSE2_occ_final, file = "./Formatted.Data/Species.Nulls/Prunus.serotina.null.csv")
 
 #### Quercus alba ####
 # read in the range map of the first species
@@ -2317,7 +2317,7 @@ QUMI_QUPR2_clipped$species = "Quercus michauxii"
 all.data$species = "Quercus michauxii"
 
 # clip all points outside of range with 50000 m buffer
-QUMI_QUPR2_flag = cc_iucn(x = QUMI.occ, range = QUMI_QUPR2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
+QUMI_QUPR2_flag = cc_iucn(x = all.data, range = QUMI_QUPR2_clipped, lon = "decimalLongitude", lat = "decimalLatitude", 
                           value = "flagged", buffer = 50000)
 # remove the points
 QUMI_QUPR2_occ_final = all.data[QUMI_QUPR2_flag, ]
