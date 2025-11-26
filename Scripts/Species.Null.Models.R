@@ -8,6 +8,9 @@ library(ecodist)
 # each species data
 species_files <- list.files("./Species.Nulls/", pattern = "*.csv", full.names = TRUE)
 
+species_files <- list.files("./Formatted.Data/Species.Nulls/", pattern = "*.csv", full.names = TRUE)
+
+
 for(i in 1:length(species_files)){
 # read in the species data
 sp = read.csv(species_files[i])
@@ -53,7 +56,14 @@ df_plot <- data.frame(
 
 write.csv(df_plot, file = paste0("./Species.Null.Results/MRM_Soil_species_null_data_", sp.name, ".csv"))
 
-plot_obj = ggplot(df_plot, aes(x = GeoDist, y = SoilDist)) +
+set.seed(3)
+if(nrow(df_plot) > 1e6){
+  df_plot_2 <- df_plot[sample(nrow(df_plot), 1e6), ]
+} else {
+  df_plot_2 <- df_plot
+}
+
+plot_obj = ggplot(df_plot_2, aes(x = GeoDist, y = SoilDist)) +
   geom_point(shape = 21, fill = "grey", color = "black") +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
   ggtitle(paste("MRM Soil Species Null", sp.name)) +

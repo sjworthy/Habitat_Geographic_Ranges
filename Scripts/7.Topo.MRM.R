@@ -1,384 +1,368 @@
 # Multiple Regression on Distance Matrices
-# Relationship between topography and macroclimate
-
-# https://github.com/csdambros/BioGeoAmazonia
+# relationship between topographic variables and geographic distance
+# code written to run on UNL HCC SWAN
 
 library(tidyverse)
 library(FD)
 library(geosphere)
 library(ecodist)
 
-species.list = list.files("./Species.Climate/", pattern = "*.csv", full.names = TRUE)
+#### Topographic Model ####
 
-results <- data.frame(
-  species = character(),
-  n = numeric(),
-  macro.corr = numeric(),
-  geo.temp.corr = numeric(),
-  geo.ppt.corr = numeric(),
-  Intercept = numeric(),
-  Slope = numeric(),
-  Slope.p.value = numeric(),
-  R2 = numeric(),
-  F.value = numeric(),
-  F.test.p.value = numeric(),
-  Intercept.temp = numeric(),
-  Slope.temp = numeric(),
-  Slope.p.value.temp = numeric(),
-  R2.temp = numeric(),
-  F.value.temp = numeric(),
-  F.test.p.value.temp = numeric(),
-  Intercept.ppt = numeric(),
-  Slope.ppt = numeric(),
-  Slope.p.value.ppt = numeric(),
-  R2.ppt = numeric(),
-  F.value.ppt = numeric(),
-  F.test.p.value.ppt = numeric(),
-  Intercept.geo = numeric(),
-  Slope.geo = numeric(),
-  Slope.p.value.geo = numeric(),
-  R2.geo = numeric(),
-  F.value.geo = numeric(),
-  F.test.p.value.geo = numeric(),
-  stringsAsFactors = FALSE
-)
+# read in topographic data
+topo.data = read.csv("gbif.final.all.csv", row.names = 1)
 
-for(species_file in species.list){
+# split into species
+species.list = split(topo.data, topo.data$species)
+species.list = species.list[c(1,2,3,20,23,25,34,36,38,40,50,52,54,57,59,66,
+                              69,70,75,78,88,91,93,94,104,105,106,
+                              109,117)]
+
+for(species.name in names(species.list)){
   
-  # Read in the species data
-  species = read.csv(species_file)
+  species.data <- species.list[[species.name]]
   
-  number.individuals = nrow(species)
+  # randomly sample 45000 points b/c that gives ~ 1 billion data points (max is 2.1, but have issues > 50,000)
+  if (nrow(species.data) > 45000) {
+    set.seed(13)
+    species.data <- species.data[sample(nrow(species.data), 45000), ]
+  }
   
   # creating spatial matrix
-  macroclim.dat = species %>%
-    select(macro_bio1_mean_annual_temp_C,macro_bio12_total_annual_precip_mm,) %>%
-    scale()
+  spat.dat = as.matrix(species.data[,c("decimalLongitude","decimalLatitude")])
   
-  macro.temp = macroclim.dat[,1]
-  macro.ppt = macroclim.dat[,2]
-  
-  macro.corr = cor(macro.temp,macro.ppt)
-  
-  # creating microclim data, scaled
-  topo.dat = species %>%
-    select(slope,aspect,mTPI) %>%
-    scale()
+  # creating soil data
+  topo.dat = species.data %>%
+    dplyr::select(northness,eastness,mTPI,slope,elevation)
   
   # calculate gower distance for scaled microclimate data
-  topo.dist = gowdis(as.matrix(topo.dat))
-  
-  # calculate gower distance for macroclimate data
-  macroclim.dist = gowdis(as.matrix(macroclim.dat))
-  macro.temp.dist = gowdis(as.matrix(macro.temp))
-  macro.ppt.dist = gowdis(as.matrix(macro.ppt))
-  
+  topo.dist = gowdis(topo.dat)
+
   # calculate Haversine distance for spatial data
   geo.dist = distm(spat.dat, fun = distHaversine)
   geo.dist.2 = as.dist(geo.dist) # convert to dist object
-  
-  geo.temp.corr = cor(geo.dist.2,macro.temp.dist)
-  geo.ppt.corr = cor(geo.dist.2,macro.ppt.dist)
+  geo.dist.3 = geo.dist.2/10000 # convert from m to hectometer
   
   # Perform MRM
-  MRM.mod = MRM(topo.dist ~ macroclim.dist)
-  
-  # Extract from model
-  Intercept = MRM.mod$coef[1,1]
-  Slope = MRM.mod$coef[2,1]
-  Slope.p.value = MRM.mod$coef[2,2]
-  R2 = MRM.mod$r.squared[1]
-  F.value = MRM.mod$F.test[1]
-  F.test.p.value = MRM.mod$F.test[2]
-  
-  # Perform MRM with temp alone
-  MRM.mod.temp = MRM(topo.dist ~ macro.temp.dist)
-  
-  # Extract from model
-  Intercept.temp = MRM.mod.temp$coef[1,1]
-  Slope.temp = MRM.mod.temp$coef[2,1]
-  Slope.p.value.temp = MRM.mod.temp$coef[2,2]
-  R2.temp = MRM.mod.temp$r.squared[1]
-  F.value.temp = MRM.mod.temp$F.test[1]
-  F.test.p.value.temp = MRM.mod.temp$F.test[2]
-  
-  # Perform MRM with ppt alone
-  MRM.mod.ppt = MRM(topo.dist ~ macro.ppt.dist)
-  
-  # Extract from model
-  Intercept.ppt = MRM.mod.ppt$coef[1,1]
-  Slope.ppt = MRM.mod.ppt$coef[2,1]
-  Slope.p.value.ppt = MRM.mod.ppt$coef[2,2]
-  R2.ppt = MRM.mod.ppt$r.squared[1]
-  F.value.ppt = MRM.mod.ppt$F.test[1]
-  F.test.p.value.ppt = MRM.mod.ppt$F.test[2]
-  
-  # Perform MRM with geo dist
-  MRM.mod.geo = MRM(topo.dist ~ geo.dist.2)
-  
-  # Extract from model
-  Intercept.geo = MRM.mod.geo$coef[1,1]
-  Slope.geo = MRM.mod.geo$coef[2,1]
-  Slope.p.value.geo = MRM.mod.geo$coef[2,2]
-  R2.geo = MRM.mod.geo$r.squared[1]
-  F.value.geo = MRM.mod.geo$F.test[1]
-  F.test.p.value.geo = MRM.mod.geo$F.test[2]
+  MRM.topo = MRM(topo.dist ~ geo.dist.3)
   
   # Create a row with all the results for the current species
-  species_name <- gsub("^clim_data_|\\.csv$", "", basename(species_file)) %>%
-    gsub(" ", "_", .)  # Extract species name from file name
+  clean_species_name = unique(species.data$species)
   
-  species_results <- data.frame(
-    species = species_name,
-    n = number.individuals,
-    macro.corr = macro.corr,
-    geo.temp.corr = geo.temp.corr,
-    geo.ppt.corr = geo.ppt.corr,
+  # save the model
+  saveRDS(MRM.topo, file = paste0("./Topo/MRM_topo_model_", clean_species_name, ".RDS"))
+  
+  # Plot for each species
+  df_plot <- data.frame(
+    GeoDist = as.vector(geo.dist.3),
+    TopoDist = as.vector(topo.dist)
+  )
+  
+  write.csv(df_plot, file = paste0("./Topo/MRM_Topo_data_", clean_species_name, ".csv"))
+  
+  plot_obj = ggplot(df_plot, aes(x = GeoDist, y = TopoDist)) +
+    geom_point(shape = 21, fill = "grey", color = "black") +
+    geom_smooth(method = "lm", se = FALSE, color = "blue") +
+    ggtitle(paste("MRM Topo Plot", clean_species_name)) +
+    xlab("Geographic Distance (hectometer)") +
+    ylab("Topographic Distance") +
+    ylim(0,1)+
+    theme( axis.text.x = element_text(face = "bold",colour = "black", size = 12), 
+           axis.text.y = element_text(face = "bold", size = 11, colour = "black"), 
+           axis.title= element_text(face = "bold", size = 14, colour = "black"), 
+           panel.background = element_blank(), 
+           panel.border = element_rect(fill = NA, colour = "black"))
+  
+  # Save the plot
+  ggsave(filename = paste0("./Topo/MRM_Topo_plot_", clean_species_name, ".png"),
+         plot = plot_obj,
+         width = 5, height = 5)
+
+}
+
+#### Getting results from models ####
+
+topo.results <- data.frame(
+  species = character(),
+  Intercept = numeric(),
+  Intercept.p.value = numeric(),
+  Slope = numeric(),
+  Slope.p.value = numeric(),
+  R2 = numeric(),
+  R2.p.value = numeric(),
+  F.value = numeric(),
+  F.test.p.value = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# List all .RDS files in your directory
+setwd("/Volumes/My Passport for Mac")
+rds_files <- list.files(path = "./topo", pattern = "\\.RDS$", full.names = TRUE)
+
+for(i in rds_files) {
+  
+  MRM.topo = readRDS(i)
+  
+  # Extract from model
+  Intercept = MRM.topo$coef[1,1]
+  Intercept.p.value = MRM.topo$coef[1,2]
+  Slope = MRM.topo$coef[2,1]
+  Slope.p.value = MRM.topo$coef[2,2]
+  R2 = MRM.topo$r.squared[1]
+  R2.p.value = MRM.topo$r.squared[2]
+  F.value = MRM.topo$F.test[[1]]
+  F.test.p.value = MRM.topo$F.test[[2]]
+  
+  # Create a row with all the results for the current species
+  clean_species_name <- sub("^.*/MRM_topo_model_(.*)\\.RDS$", "\\1", i)
+  
+  species.results <- data.frame(
+    species = clean_species_name,
     Intercept = Intercept,
+    Intercept.p.value = Intercept.p.value,
     Slope = Slope,
     Slope.p.value = Slope.p.value,
     R2 = R2,
+    R2.p.value = R2.p.value,
     F.value = F.value,
     F.test.p.value = F.test.p.value,
-    Intercept.temp = Intercept.temp,
-    Slope.temp = Slope.temp,
-    Slope.p.value.temp = Slope.p.value.temp,
-    R2.temp = R2.temp,
-    F.value.temp = F.value.temp,
-    F.test.p.value.temp = F.test.p.value.temp,
-    Intercept.ppt = Intercept.ppt,
-    Slope.ppt = Slope.ppt,
-    Slope.p.value.ppt = Slope.p.value.ppt,
-    R2.ppt = R2.ppt,
-    F.value.ppt = F.value.ppt,
-    F.test.p.value.ppt = F.test.p.value.ppt,
-    Intercept.geo = Intercept.geo,
-    Slope.geo = Slope.geo,
-    Slope.p.value.geo = Slope.p.value.geo,
-    R2.geo = R2.geo,
-    F.value.geo = F.value.geo,
-    F.test.p.value.geo = F.test.p.value.geo,
     stringsAsFactors = FALSE)
   
   # Add the results for this species to the results data frame
-  results <- rbind(results, species_results)
+  topo.results <- rbind(topo.results, species.results)
+  
 }
 
-# write.csv(results, file = "./Results/Q3.MRM.results.csv")
+setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
+write.csv(topo.results, file = "./Results/topo.MRM.results.csv")
 
-#### Summarizing the Results ####
+#### Parsing Results ####
 
-dat = read.csv("./Results/Q3.MRM.results.csv")
+range(topo.results$Intercept)
+# 0.008332238 0.202622090
+range(topo.results$Slope)
+# -0.0001677807  0.0033826190
+range(topo.results$R2)
+# 9.058681e-07 4.378792e-01
 
-##### considering MAT and MAP as macroclimate variables #####
-range(dat$R2)
-# 4.693801e-06 5.014648e-02
-range(dat$Slope)
-# -0.1722752  0.1657351
+ggplot(topo.results, aes(x = Intercept))+
+  geom_density()+
+  geom_vline(xintercept = 0.09715561) +
+  theme_classic()
 
-range(dat$Intercept)
-# 0.1225016 0.4593709
+ggplot(topo.results, aes(x = Slope))+
+  geom_density()+
+  geom_vline(xintercept = -8.065893e-05) +
+  theme_classic()
 
-ggplot(dat, aes(Slope))+
-  geom_density()
+ggplot(topo.results, aes(x = R2))+
+  geom_density()+
+  geom_vline(xintercept = 0.003881603) +
+  theme_classic()
 
-# how to plot from Chatgpt
-dat.2 = dat %>%
-  select(Intercept,Slope) %>%
-  mutate(Line.id = 1:107)
+#### Testing if soil values are significantly different from global null ####
 
-# Set up x-axis values for plotting
-x_vals <- seq(0, 0.5, length.out = 100)
+# read in 999 nulls
 
-# Create a function to get the y-values for each line
-get_line_y <- function(Intercept, Slope, x_vals) {
-  Intercept + Slope * x_vals
+nulls = read.csv("./Results/Topo.Global.Null/global.topo.null.999.results.csv", row.names = 1)
+
+intercept.null.means <- mean(nulls$intercepts)
+intercept.nulls.sds <- sd(nulls$intercepts)
+slope.null.means <- mean(nulls$slopes)
+slope.nulls.sds <- sd(nulls$slopes)
+R2.null.means <- mean(nulls$R2)
+R2.nulls.sds <- sd(nulls$R2)
+
+# read in the observed values
+
+obs = read.csv("./Results/topo.MRM.results.csv", row.names = 1)
+
+for(i in 1:nrow(obs)){
+  obs.intercept = obs[i,2]
+  obs.slope = obs[i,4]
+  obs.R2 = obs[i,6]
+  
+  ses.intercet <- (obs.intercept - intercept.null.means) / intercept.nulls.sds
+  obs[i,10] = ses.intercet
+  ses.slope <- (obs.slope - slope.null.means) / slope.nulls.sds
+  obs[i,11] = ses.slope
+  ses.R2 <- (obs.R2 - R2.null.means) / R2.nulls.sds
+  obs[i,12] = ses.R2
+  
+  rank.intercept = rank(c(obs.intercept,nulls$intercepts))[1]
+  obs[i,13] = rank.intercept
+  rank.slope = rank(c(obs.slope,nulls$slopes))[1]
+  obs[i,14] = rank.slope
+  rank.R2 = rank(c(obs.R2,nulls$R2))[1]
+  obs[i,15] = rank.R2
+  
+  p.val.intercept = rank.intercept/1000
+  obs[i,16] = p.val.intercept
+  p.val.slope = rank.slope/1000
+  obs[i,17] = p.val.slope
+  p.val.R2 = rank.R2/1000
+  obs[i,18] = p.val.R2
 }
 
-# Generate the data for all lines
-lines_df <- do.call(rbind, lapply(1:107, function(i) {
-  data.frame(
-    Line.id = i,
-    x = x_vals,
-    y = get_line_y(dat.2$Intercept[i], dat.2$Slope[i], x_vals)
-  )
-}))
+colnames(obs)[10:18] = c("SES.intercept","SES.slope","SES.R2",
+                         "Rank.intercept","Rank.slope","Rank.R2",
+                         "P.val.intercept","P.val.slope","P.val.R2")
 
-# Plot all the lines using ggplot2
-ggplot(lines_df, aes(x = x, y = y, group = Line.id, color = factor(Line.id))) +
-  geom_line() +
-  labs(x = "Macroclimate Distance", y = "Topographic Distance") +
+write.csv(obs, file = "./Results/topo.global.null.compare.results.csv")
+
+#### Putting species into Categories: one tailed: USED THIS ####
+
+obs = read.csv("./Results/topo.global.null.compare.results.csv", row.names = 1)
+
+# Shifter, low intercept, high slope
+shifting = obs %>%
+  filter(P.val.intercept < 0.05 & P.val.slope > 0.95)
+# Strong Shifter, low intercept, high slope, high R2
+strong.shifting = shifting %>%
+  filter(P.val.intercept < 0.05 & P.val.slope > 0.95 & P.val.R2 > 0.95)
+# Specialist, low intercept, low slope
+specialist = obs %>%
+  filter(P.val.intercept < 0.05 & P.val.slope < 0.05)
+# Strong Specialist, low intercept, low slope, high R2
+strong.specialist = specialist %>%
+  filter(P.val.intercept < 0.05 & P.val.slope < 0.05 & P.val.R2 > 0.95)
+# Overdisperser, high intercept, low slope
+overdisperser = obs %>%
+  filter(P.val.intercept > 0.95 & P.val.slope < 0.05)
+# Strong Overdisperser, high intercept, low slope, low R2
+strong.overdisperser = overdisperser %>%
+  filter(P.val.intercept > 0.95 & P.val.slope < 0.05 & P.val.R2 < 0.05)
+# Overdispersed shifters, high intercept, high slope
+overdisperse.shifter = obs %>%
+  filter(P.val.intercept > 0.95 & P.val.slope > 0.95)
+# Strong Overdispersed shifters, high intercept, high slope, high R2
+strong.overdisperse.shifter = overdisperse.shifter %>%
+  filter(P.val.intercept > 0.95 & P.val.slope > 0.95 & P.val.R2 > 0.95)
+
+# get remaining species
+remain.sp = obs %>%
+  filter(!species %in% c(shifting$species, specialist$species, overdisperser$species, 
+                         overdisperse.shifter$species))
+# 28 species left
+
+# Uncategorized: either slope or intercept is significant, but not both
+No.Cat = remain.sp %>%
+  filter(P.val.intercept < 0.05 | P.val.intercept > 0.95 |
+           P.val.slope < 0.05 | P.val.slope > 0.95)
+
+# True generalists: non-significant, intercept, slope, R2
+true.generalists = remain.sp %>%
+  filter(P.val.intercept >= 0.05 & P.val.intercept <= 0.95 &
+           P.val.slope >= 0.05 & P.val.slope <= 0.95 &
+           P.val.R2 >= 0.05 & P.val.R2 <= 0.95)
+# R2.generalist: non-significant intercpet, slope but significant R2
+R2.generalists = remain.sp %>%
+  filter((P.val.intercept >= 0.05 & P.val.intercept <= 0.95) &
+           (P.val.slope >= 0.05 & P.val.slope <= 0.95) &
+           (P.val.R2 < 0.05 | P.val.R2 > 0.95))
+
+# Add categories to soil dataframe
+obs$Category = dplyr::case_when(
+  obs$species %in% specialist$species ~ "specialists",
+  obs$species %in% shifting$species ~ "shifting",
+  obs$species %in% overdisperser$species ~ "overdisperser",
+  obs$species %in% overdisperse.shifter$species ~ "overdisper.shifter",
+  obs$species %in% c(true.generalists$species,R2.generalists$species,No.Cat$species) ~ "generalists",
+  TRUE ~ NA_character_
+)
+
+# Add significance for strength to dataframe
+obs$significant = dplyr::case_when(
+  obs$species %in% c(strong.shifting$species,strong.overdisperser$species,
+                     strong.specialist$species, strong.overdisperse.shifter$species) ~ "significant",
+  TRUE ~ "non-significant"
+)
+
+
+write.csv(obs, "./Results/topo.global.null.compare.results.csv")
+
+### NMDS of slopes, intercepts, R2 from MRM soil models for ESA ####
+
+# read in soil data with categories
+topo = read.csv("./Results/topo.global.null.compare.results.csv", row.names = 1)
+
+topo[123,c(2,4,6)] = c(0.09715561,-8.065893e-05,0.003881603)
+topo[123,1] = "Null"
+topo[123,19] = "Null"
+topo[123,20] = "significant"
+
+# data for NMDS
+topo.2 = topo[,c(2,4,6)]
+
+# some values are negative so transform to all positive
+# Shift all values to be positive by adding the absolute minimum
+topo.trans <- topo.2 + abs(min(topo.2))
+
+topo.nmds = metaMDS(topo.trans, distance = "bray")
+topo.nmds
+# stress = 0.05708112, this is good
+
+# plotting
+nmds_scores <- as.data.frame(scores(topo.nmds)$sites)
+nmds_scores$Category <- topo$Category
+nmds_scores$shape = topo$significant
+
+# colors
+# shifter = "#5495CF",
+# specialist = "#DB4743",
+# generalist = "#F5AF4D",
+# overdisperser = "#548F01",
+# overdisperser shifter ="#B46DB3"
+# Null = "black"
+
+# Plot with shape mapped to combined variable  
+topo.nmds = ggplot(nmds_scores, aes(x = NMDS1, y = NMDS2)) +
+  geom_point(aes(color = Category, fill = Category, shape = shape),
+             size = 3, stroke = 1.2) +
+  scale_shape_manual(values = c("significant" = 16, "non-significant" = 1),
+                     name = "Strong",
+                     labels = c("significant" = "Significant", "non-significant" = "Non-significant")) +
+  scale_fill_manual(values = c(
+    "shifting" = "#5495CF",
+    "specialists" = "#DB4743",
+    "generalists" = "#F5AF4D",
+    "overdisperser" = "#548F01",
+    "overdisper.shifter" = "#B46DB3",
+    "Null" = "black"),
+    name = "Category",
+    labels = c(
+      "shifting" = "Shifter",
+      "specialists" = "Specialist",
+      "generalists" = "Generalist",
+      "overdisperser" = "Overdisperser",
+      "overdisper.shifter" = "Overdispersed Shifter",
+      "Null" = "Null"
+    )) +
+  scale_color_manual(values = c(
+    "shifting" = "#5495CF",
+    "specialists" = "#DB4743",
+    "generalists" = "#F5AF4D",
+    "overdisperser" = "#548F01",
+    "overdisper.shifter" = "#B46DB3",
+    "Null" = "black"),
+    name = "Category",
+    labels = c(
+      "shifting" = "Shifter",
+      "specialists" = "Specialist",
+      "generalists" = "Generalist",
+      "overdisperser" = "Overdisperser",
+      "overdisper.shifter" = "Overdispersed Shifter",
+      "Null" = "Null"
+    )) +
   theme_classic() +
-  theme(legend.position = "none")  # Optional: hides the legend if you don't need it
+  stat_ellipse(aes(color = Category), linewidth = 1)
+  #theme(legend.position = "none")
 
-range(dat$Slope.p.value)
-# 0.001 0.978
+topo.nmds
 
-dat %>%
-  filter(Slope.p.value > 0.05) %>%
-  tally()
-# 33 species non-significant p > 0.05
-
-# number of species with positive slope
-dat %>%
-  filter(Slope > 0) %>%
-  tally()
-# 88 species 
-
-# number of species with positive and significant slope
-dat %>%
-  filter(Slope > 0) %>%
-  filter(Slope.p.value < 0.05) %>%
-  tally()
-# 67 species 
+ggsave("./Plots/ESA.plots/topo.MNDS.ellipses.legend.png", width = 5, height = 5)
 
 
-##### considering MAT ONLY as macroclimate variables #####
-range(dat$R2.temp)
-# 1.911568e-06 4.012910e-02
-range(dat$Slope.temp)
-# -0.08082809  0.09245877
 
-range(dat$Intercept.temp)
-# 0.1250809 0.4999203
-
-ggplot(dat, aes(Slope.temp))+
-  geom_density()
-
-# how to plot from Chatgpt
-dat.2 = dat %>%
-  select(Intercept.temp,Slope.temp) %>%
-  mutate(Line.id = 1:107)
-
-# Set up x-axis values for plotting
-x_vals <- seq(0, 0.5, length.out = 100)
-
-# Create a function to get the y-values for each line
-get_line_y <- function(Intercept, Slope, x_vals) {
-  Intercept + Slope * x_vals
-}
-
-# Generate the data for all lines
-lines_df <- do.call(rbind, lapply(1:107, function(i) {
-  data.frame(
-    Line.id = i,
-    x = x_vals,
-    y = get_line_y(dat.2$Intercept.temp[i], dat.2$Slope.temp[i], x_vals)
-  )
-}))
-
-# Plot all the lines using ggplot2
-ggplot(lines_df, aes(x = x, y = y, group = Line.id, color = factor(Line.id))) +
-  geom_line() +
-  labs(x = "Temperature Distance", y = "Topographic Distance") +
-  theme_classic() +
-  theme(legend.position = "none")  # Optional: hides the legend if you don't need it
-
-range(dat$Slope.p.value.temp)
-# 0.001 0.955
-
-dat %>%
-  filter(Slope.p.value.temp > 0.05) %>%
-  tally()
-# 36 species non-significant p > 0.05
-
-##### considering MAP ONLY as macroclimate variables #####
-range(dat$R2.ppt)
-# 5.176774e-08 6.843002e-02
-range(dat$Slope.ppt)
-# -0.1024382  0.2221649
-
-range(dat$Intercept.ppt)
-# 0.1267673 0.4468580
-
-ggplot(dat, aes(Slope.ppt))+
-  geom_density()
-
-# how to plot from Chatgpt
-dat.2 = dat %>%
-  select(Intercept.ppt,Slope.ppt) %>%
-  mutate(Line.id = 1:107)
-
-# Set up x-axis values for plotting
-x_vals <- seq(0, 0.5, length.out = 100)
-
-# Create a function to get the y-values for each line
-get_line_y <- function(Intercept, Slope, x_vals) {
-  Intercept + Slope * x_vals
-}
-
-# Generate the data for all lines
-lines_df <- do.call(rbind, lapply(1:107, function(i) {
-  data.frame(
-    Line.id = i,
-    x = x_vals,
-    y = get_line_y(dat.2$Intercept.ppt[i], dat.2$Slope.ppt[i], x_vals)
-  )
-}))
-
-# Plot all the lines using ggplot2
-ggplot(lines_df, aes(x = x, y = y, group = Line.id, color = factor(Line.id))) +
-  geom_line() +
-  labs(x = "Precipitation Distance", y = "Topographic Distance") +
-  theme_classic() +
-  theme(legend.position = "none")  # Optional: hides the legend if you don't need it
-
-range(dat$Slope.p.value.ppt)
-# 0.001 0.973
-
-dat %>%
-  filter(Slope.p.value.ppt > 0.05) %>%
-  tally()
-# 38 species non-significant p > 0.05
-
-
-##### considering GEO ONLY as macroclimate variables #####
-range(dat$R2.geo)
-# 1.947437e-08 1.979446e-01
-range(dat$Slope.geo)
-# -5.699940e-07  2.564288e-07
-
-range(dat$Intercept.geo)
-# 0.1231646 0.6654824
-
-ggplot(dat, aes(Slope.geo))+
-  geom_density()
-
-# how to plot from Chatgpt
-dat.2 = dat %>%
-  select(Intercept.geo,Slope.geo) %>%
-  mutate(Line.id = 1:107)
-
-# Set up x-axis values for plotting
-x_vals <- seq(0, 0.7, length.out = 100)
-
-# Create a function to get the y-values for each line
-get_line_y <- function(Intercept, Slope, x_vals) {
-  Intercept + Slope * x_vals
-}
-
-# Generate the data for all lines
-lines_df <- do.call(rbind, lapply(1:107, function(i) {
-  data.frame(
-    Line.id = i,
-    x = x_vals,
-    y = get_line_y(dat.2$Intercept.geo[i], dat.2$Slope.geo[i], x_vals)
-  )
-}))
-
-# Plot all the lines using ggplot2
-ggplot(lines_df, aes(x = x, y = y, group = Line.id, color = factor(Line.id))) +
-  geom_line() +
-  labs(x = "Geographic Distance", y = "Topographic Distance") +
-  theme_classic() +
-  theme(legend.position = "none")  # Optional: hides the legend if you don't need it
-
-range(dat$Slope.p.value.geo)
-# 0.001 0.990
-
-dat %>%
-  filter(Slope.p.value.geo > 0.05) %>%
-  tally()
-# 37 species non-significant p > 0.05
 
 

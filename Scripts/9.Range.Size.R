@@ -4,23 +4,17 @@ library(tidyverse)
 
 gbif = read.csv("./Formatted.Data/gbif.final.csv", row.names = 1)
 
-gbif.2 = gbif %>%
-  dplyr::filter(species %in% c("Acer rubrum",
-                               "Fagus grandifolia",
-                               "Liquidambar styraciflua",
-                               "Quercus palustris"))
+# count and sort by number of occurrences
+gbif.sorted = gbif %>%
+  count(species) %>%                 
+  arrange(n) 
 
-test = gbif %>%
-  filter(species == "Carya texana")
-
-coords = test[,c(3,2)]
-
-gbif.3 <- gbif.2 %>%
+gbif.2 <- gbif %>%
   mutate(name = factor(species, levels = gbif.sorted$species)) %>%
   arrange(species)
 
 # make the species list
-species_list <- split(gbif.3, gbif.3$name)
+species_list <- split(gbif.2, gbif.2$name)
 
 for(species in names(species_list)) {
 

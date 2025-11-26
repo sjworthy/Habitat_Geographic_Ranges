@@ -17,7 +17,7 @@ gbif.lat.long = gbif %>%
 # Convert to sf object
 points_sf <- sf::st_as_sf(gbif.lat.long, coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
 
-setwd("/Volumes/Backup Plus/microclimate_DEMs")
+setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 
 # micro clim DEMs are automatically read in as WGS84. Going to convert to NAD 83 since this is what they should be.
 # did a test if it matters and get the same extracted values with WGS84 and NAD83 crs.
@@ -105,38 +105,45 @@ list_of_dfs <- lapply(file_list, read.csv)
 
 combined_df <- rbindlist(list_of_dfs, use.names = TRUE, fill = TRUE)
 
-combined.df.2 = combined_df %>%
+last.merge = read.csv("./Formatted.Data/climate.combined.df.7.16.csv", row.names = 1)
+
+bind = rbind(last.merge,combined_df)
+
+combined.df.2 = bind %>%
   distinct(across(2:4), .keep_all = TRUE)
 
-#write.csv(combined.df.2, file = "./Formatted.Data/climate.combined.df.6.17.csv")
-test = read.csv("./Formatted.Data/climate.combined.df.6.17.csv")
+#write.csv(combined.df.2, file = "./Formatted.Data/climate.combined.df.7.16.csv")
 
 #### Comparing combined_df with full data ####
 
 gbif = read.csv("./Formatted.Data/gbif.final.csv", row.names = 1)
 
-# combined = 1302446
+# combined = 1333215
 # full = 1254426
-# none missing now that data filtered for soil
 
 temp = as.data.frame(table(sort(gbif$species)))
 temp$microclim = table(sort(combined.df.2$species))
 temp$diff = temp$Freq-temp$microclim
 
-write.csv(temp, file = "species.compare.csv")
+# write.csv(temp, file = "species.compare.csv")
 
 microclim.slim = left_join(gbif,combined.df.2)
+write.csv(microclim.slim, file = "./Formatted.Data/gbif.final.all.csv")
+
 temp$microclim.slim = table(sort(microclim.slim$species))
 temp$diff.2 = temp$Freq - temp$microclim.slim
 
 microclim.missing = microclim.slim %>%
   filter(if_any(everything(), is.na))
+# 2837
 
 test = as.data.frame(table(microclim.missing$species))
-# 15 species currently complete.
-  
-write.csv(microclim.missing, file = "microclim.missing.csv")
+# 78 species not complete, 44 species complete
 
+test.2 = temp %>%
+  filter(!Var1 %in% test$Var1)
+
+write.csv(microclim.missing, file = "microclim.missing.csv")
 
 ### Split by species ####
 
@@ -165,14 +172,14 @@ for(species in names(species_list_2)) {
 
 #### Trying to get microclim data for missing occurrences ####
 
-raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
+#raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
 
 setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 # Load the DEM
-micro_DEM <- raster(raster_files[305], crs = "+proj=longlat +datum=NAD83 +no_defs")
+micro_DEM <- raster(raster_files[426], crs = "+proj=longlat +datum=NAD83 +no_defs")
 micro_DEM
 
-ext = extent(-77.455, -77.445, 37.66, 37.67)
+ext = extent(-87.32, -87.30, 45.61, 45.62)
 et <- crop(micro_DEM, ext)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Scripts/topo_data")
@@ -223,7 +230,7 @@ extracted_data.2 = extracted_data %>%
   distinct(across(1:3), .keep_all = TRUE)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.3.csv")
+write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.6.csv")
 
 setwd("/Volumes/My Passport for Mac")
 

@@ -2,6 +2,7 @@
 # EOO: Extent of Occurrence
 # https://gdauby.github.io/ConR/index.html
 # https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.11230
+# data is is square kilometers
 
 #install.packages("devtools")
 #devtools::install_github("gdauby/ConR")

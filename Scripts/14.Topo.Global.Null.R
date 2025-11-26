@@ -1,6 +1,6 @@
 # Code to generate the global null
 # Randomly sample 5 points from each species
-# Calculate geographic distance and soil distance
+# Calculate geographic distance and topographic distance
 # Repeat 999 times
 # Run MRM
 # plot distributions of intercept, slope, R2
@@ -13,11 +13,10 @@ library(tidyverse)
 library(FD)
 library(geosphere)
 library(ecodist)
-library(gghalves)
 
 # read in complete dataset
 
-all.data = read.csv("./Formatted.Data/gbif.final.csv", row.names = 1)
+all.data = read.csv("./Formatted.Data/gbif.final.all.csv", row.names = 1)
 
 # Initialize vector to store intercept and slope values
 slopes <- numeric()
@@ -41,14 +40,14 @@ geo.dist.3 = geo.dist.2/10000 # convert to hectometer or 1/10th km
 # 0.5 hectometers = 5000 meters and 5 km
   
 # creating soil data
-soil.dat = sampled_indices %>%
-  dplyr::select(ph_d0_100,clay_d0_100,sand_d0_100,silt_d0_100,db_d0_100,ec_d0_100,texture_d0_100)
+topo.dat = sampled_indices %>%
+  dplyr::select(northness,eastness,mTPI,slope,elevation)
   
 # calculate gower distance for scaled microclimate data
-soil.dist = gowdis(as.data.frame(soil.dat))
+topo.dist = gowdis(as.data.frame(topo.dat))
 
 # Run the MRM model with the bootstrapped matrices
-  model <- MRM(soil.dist ~ geo.dist.3)
+  model <- MRM(topo.dist ~ geo.dist.3)
 
 # Extract the intercept and slope values
   intercept_value <- model$coef[1,1]
@@ -63,15 +62,15 @@ soil.dist = gowdis(as.data.frame(soil.dat))
  if (i %% 100 == 0) {
   df_plot <- data.frame(
     GeoDist = as.vector(geo.dist.3),
-    SoilDist = as.vector(soil.dist))
+    TopoDist = as.vector(topo.dist))
     
-  plot_obj = ggplot(df_plot, aes(x = GeoDist, y = SoilDist)) +
+  plot_obj = ggplot(df_plot, aes(x = GeoDist, y = TopoDist)) +
     geom_point(shape = 21, fill = "grey", color = "black") +
     geom_smooth(method = "lm", se = FALSE, color = "blue") +
     ylim(0,1)+
     ggtitle(paste("Iteration", i)) +
-    xlab("Geographic Distance (km)") + # should be hectometer
-    ylab("Soil Distance") +
+    xlab("Geographic Distance (hectometer)") +
+    ylab("Topographic Distance") +
     theme(axis.text.x = element_text(face = "bold",colour = "black", size = 12), 
           axis.text.y = element_text(face = "bold", size = 11, colour = "black"), 
           axis.title= element_text(face = "bold", size = 14, colour = "black"), 
@@ -80,11 +79,11 @@ soil.dist = gowdis(as.data.frame(soil.dat))
 plot_obj
     
 # Save the plot
-ggsave(filename = paste0("./Results/Soil.Global.Null/Soil_Global_Null_plot_", i, ".png"),
+ggsave(filename = paste0("./Results/Topo.Global.Null/Topo_Global_Null_plot_", i, ".png"),
        plot = plot_obj,
        width = 5, height = 5)
 
-write.csv(df_plot, file = paste("./Results/Soil.Global.Null/soil.global.dist_", i, ".csv"))
+write.csv(df_plot, file = paste("./Results/Topo.Global.Null/topo.global.dist_", i, ".csv"))
  }
 }
 
@@ -94,11 +93,11 @@ null_output$slopes = slopes
 null_output$R2 = R2
 
 mean(null_output$intercepts)
-# 0.2418721
+# 0.09715561
 mean(null_output$slopes)
-# 0.0004634458
+# -8.065893e-05
 mean(null_output$R2)
-# 0.05967644
+# 0.003881603
 
 ggplot(null_output, aes(intercepts))+
   geom_density()
@@ -107,66 +106,45 @@ ggplot(null_output, aes(slopes))+
 ggplot(null_output, aes(R2))+
   geom_density()
 
-write.csv(null_output, file = "./Results/Soil.Global.Null/global.null.999.results.csv")
+write.csv(null_output, file = "./Results/Topo.Global.Null/global.topo.null.999.results.csv")
 
 
 #### Geographic Distance Bins ####
 
-# read in data for first plot
-# just picked 500 because it has the largest range
-dat = read.csv("./Results/Soil.Global.Null/soil.global.dist_ 500 .csv", row.names = 1)
-
-range(dat$GeoDist)
-# 0.002836702 to 346.7406
+range(df_plot$GeoDist)
+# 0 to 3538.93
 
 # Create quantile bins (5 bins) and convert to factor
-dat$Geographic.Distance.Quantile <- cut(
-  dat$GeoDist,
-  breaks = quantile(dat$GeoDist, probs = seq(0, 1, by = 0.2), na.rm = TRUE),
+df_plot$Geographic.Distance.Quantile <- cut(
+  df_plot$GeoDist,
+  breaks = quantile(df_plot$GeoDist, probs = seq(0, 1, by = 0.2), na.rm = TRUE),
   include.lowest = TRUE,
   labels = FALSE
 )
 
-breaks = quantile(dat$GeoDist, probs = seq(0, 1, by = 0.2), na.rm = TRUE)
-#       0%       20%       40%       60%       80%      100% 
-# 0.002836702  52.84461  89.90785  124.9091  163.797 346.7406
+breaks = quantile(df_plot$GeoDist, probs = seq(0, 1, by = 0.2), na.rm = TRUE)
+#        0%       20%       40%       60%       80%      100% 
+# 0  524.6038  908.4138  1273.9590  1646.7984 3538.9299
 
-Global.Null.Quant.Plot = ggplot(dat, aes(x = as.factor(Geographic.Distance.Quantile), y = SoilDist), fill = "darkgray") +
+Global.Null.Quant.Plot = ggplot(df_plot, aes(x = as.factor(Geographic.Distance.Quantile), y = SoilDist), fill = "darkgray") +
   geom_half_point(side = "l", size = 0.1, color = "darkgray",
                   position = position_nudge(x=-.05), alpha = 0.3) +
   geom_half_boxplot(fill = NA, position = position_nudge(x=-.05)) +
   geom_half_violin(aes(fill = "darkgray"), side = "r", fill = "darkgray",
                    scale = "width") +
-  scale_x_discrete(labels = c("1" = "0–53",
-                              "2" = "54–90",
-                              "3" = "91–124",
-                              "4" = "125–163",
-                              "5" = "164–346")) +
-  labs(y = "Soil Distance",
-       x = "Geographic Distance Quantile (hm)", fill = " ") +
+  scale_x_discrete(labels = c("1" = "0–524",
+                              "2" = "525–908",
+                              "3" = "909–1273",
+                              "4" = "1274–1646",
+                              "5" = "1647–3538")) +
+  labs(y = "Topographic Distance",
+       x = "Geographic Distance Quantile", fill = " ") +
   theme_classic()
 Global.Null.Quant.Plot
 
-ggsave(Global.Null.Quant.Plot, file = "./Plots/Soil.Global.Null.Quantile.png", height = 5, width = 5)
+ggsave(Global.Null.Quant.Plot, file = "./Plots/Topo.Global.Null.Quantile.pdf", height = 5, width = 5)
 
 
-# Plot the data regular as well
-
-plot_obj = ggplot(dat, aes(x = GeoDist, y = SoilDist)) +
-  geom_point(shape = 21, fill = "grey", color = "black") +
-  geom_smooth(method = "lm", se = FALSE, color = "blue") +
-  ylim(0,1)+
-  xlab("Geographic Distance (hm)") + # should be hectometer
-  ylab("Soil Distance") +
-  theme(axis.text.x = element_text(face = "bold",colour = "black", size = 12), 
-        axis.text.y = element_text(face = "bold", size = 11, colour = "black"), 
-        axis.title= element_text(face = "bold", size = 14, colour = "black"), 
-        panel.background = element_blank(), 
-        panel.border = element_rect(fill = NA, colour = "black"))
-plot_obj
-
-# Save the plot
-ggsave(plot_obj, file = "./Plots/Soil.Global.Null.png", height = 5, width = 5)
 
 
 

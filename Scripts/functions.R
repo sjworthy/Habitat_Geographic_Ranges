@@ -42,7 +42,9 @@ northeast <- function(terr){
   projection(aspect_layer) <- projection(elev)
   northness <- sin(slope_layer) * cos(aspect_layer)
   eastness <- sin(slope_layer) * sin(aspect_layer)
-      ne
+  ne <- stack(northness, eastness)
+  ne <- setNames(ne, c("northness", "eastness"))
+  ne
 }
 
 #' Windward exposure

@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --nodes=1
-#SBATCH --mem=180000 # 180gb
+#SBATCH --mem=300000 # 180gb
 #SBATCH --time=168:00:00 # run time in hh:mm:ss
 #SBATCH --job-name=topo.MRM
 #SBATCH --error=/work/serussolab/samworthy/topo.MRM.%J.err
@@ -14,4 +14,4 @@ module load anaconda
 
 conda activate /work/serussolab/samworthy/myconda2
 
-Rscript Q3.MRM.R
+Rscript 7.Topo.MRM.R

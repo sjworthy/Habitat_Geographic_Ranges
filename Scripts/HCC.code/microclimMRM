@@ -1,10 +1,10 @@
 #!/bin/sh
 #SBATCH --nodes=1
-#SBATCH --mem=180000 # 180gb
+#SBATCH --mem=300000 # 180gb
 #SBATCH --time=168:00:00 # run time in hh:mm:ss
-#SBATCH --job-name=clim.MRM
-#SBATCH --error=/work/serussolab/samworthy/range.size.%J.err
-#SBATCH --output=/work/serussolab/samworthy/range.size.%J.out
+#SBATCH --job-name=microclim.MRM
+#SBATCH --error=/work/serussolab/samworthy/microclim.MRM.%J.err
+#SBATCH --output=/work/serussolab/samworthy/microclim.MRM.%J.out
 
 # With conda environments, it is best practice to purge currently loaded modules
 # to prevent any version or environment conflicts
@@ -14,4 +14,4 @@ module load anaconda
 
 conda activate /work/serussolab/samworthy/myconda2
 
-Rscript Q1.MRM.R
+Rscript 6.Microclim.MRM.R
