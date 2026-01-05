@@ -11,21 +11,22 @@ library(vegan)
 
 #### Soil MRM ####
 # read in soil data
-# soil.data = read.csv("gbif.final.csv", row.names = 1)
-soil.data = read.csv("./Formatted.Data/gbif.final.csv", row.names = 1)
+soil.data = read.csv("All.Final.Data.csv", row.names = 1)
 
 # split into species
 species.list = split(soil.data, soil.data$species)
-species.list = species.list[c(7,8,48,100)]
 
 for(species.name in names(species.list)){
   
   species.data <- species.list[[species.name]]
   
-  # randomly sample 45000 points b/c that gives ~ 1 billion data points (max is 2.1, but have issues > 50,000)
-  if (nrow(species.data) > 45000) {
+  # randomly sample 48000 points (max vector length is 2.1, but have issues > 50,000)
+  # this mean only Liquidambar styraciflua (n = 51647), Acer rubrum (n = 70995), 
+  # and Quercus palustric (n = 90009) are randomly sampled
+  
+  if (nrow(species.data) > 48000) {
     set.seed(13)
-    species.data <- species.data[sample(nrow(species.data), 45000), ]
+    species.data <- species.data[sample(nrow(species.data), 48000), ]
   }
   
   # creating spatial matrix
@@ -58,6 +59,7 @@ for(species.name in names(species.list)){
     SoilDist = as.vector(soil.dist)
   )
   
+  # save the data for later plotting
   write.csv(df_plot, file = paste0("./Soil/MRM_Soil_data_", clean_species_name, ".csv"))
   
     plot_obj = ggplot(df_plot, aes(x = GeoDist, y = SoilDist)) +

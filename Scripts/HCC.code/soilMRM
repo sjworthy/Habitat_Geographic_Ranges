@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --nodes=1
-#SBATCH --mem=180000 # 180gb
+#SBATCH --mem= 300000 # 180gb
 #SBATCH --time=168:00:00 # run time in hh:mm:ss
 #SBATCH --job-name=soil.MRM
 #SBATCH --error=/work/serussolab/samworthy/soil.MRM.%J.err

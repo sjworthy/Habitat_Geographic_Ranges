@@ -1,5 +1,5 @@
 # Multiple Regression on Distance Matrices
-# relationship between microclimate and geogrpahic distance
+# relationship between microclimate and geographic distance
 # code written to run on UNL HCC SWAN
 
 library(tidyverse)
@@ -9,8 +9,7 @@ library(ecodist)
 
 #### Microclim MRM ####
 # read in data
-microclim.data = read.csv("gbif.final.all.csv", row.names = 1)
-microclim.data = read.csv("./Formatted.Data/gbif.final.all.csv", row.names = 1)
+microclim.data = read.csv("All.Final.Data.csv", row.names = 1)
 
 # split into species
 species.list = split(microclim.data, microclim.data$species)
@@ -32,26 +31,33 @@ for(species.name in names(species.list)){
   
   species.data <- species.list[[species.name]]
   
-  # randomly sample 45000 points b/c that gives ~ 1 billion data points (max is 2.1, but have issues > 50,000)
-  if (nrow(species.data) > 45000) {
+  # randomly sample 48000 points (max vector length is 2.1, but have issues > 50,000)
+  # this mean only Liquidambar styraciflua (n = 51647), Acer rubrum (n = 70995), 
+  # and Quercus palustric (n = 90009) are randomly sampled
+  
+  if (nrow(species.data) > 48000) {
     set.seed(13)
-    species.data <- species.data[sample(nrow(species.data), 45000), ]
+    species.data <- species.data[sample(nrow(species.data), 48000), ]
   }
   
   # creating spatial matrix
   spat.dat = as.matrix(species.data[,c("decimalLongitude","decimalLatitude")])
   
-  # creating soil data
+  # creating microclimate data:
+  # summer daytime maximum temperature (high_temp_C), 
+  # winter nighttime minimum temperature (low_temp_C)
+  # annual precipitation (moisture)
+  
   microclimat.dat = species.data %>%
     dplyr::select(high_temp_C,low_temp_C,moisture_mm)
   
-  # calculate gower distance for scaled microclimate data
+  # calculate gower distance for microclimate data
   microclim.dist = gowdis(microclimat.dat)
   
   # calculate Haversine distance for spatial data
   geo.dist = distm(spat.dat, fun = distHaversine)
   geo.dist.2 = as.dist(geo.dist) # convert to dist object
-  geo.dist.3 = geo.dist.2/10000 # convert from m to hectometer
+  geo.dist.3 = geo.dist.2/10000 # convert from m to hectometer, helps with small values of slope and intercept
   
   # Perform MRM
   MRM.microclim = MRM(microclim.dist ~ geo.dist.3)
@@ -68,6 +74,7 @@ for(species.name in names(species.list)){
     MicroClimDist = as.vector(microclim.dist)
   )
   
+  # save the data for later plotting
   write.csv(df_plot, file = paste0("./Microclim/MRM_microclim_data_", clean_species_name, ".csv"))
   
   plot_obj = ggplot(df_plot, aes(x = GeoDist, y = MicroClimDist)) +

@@ -38,14 +38,12 @@ Load R package
 install.packages("splines2")
 ```
 
-
 ```{r}
 library(tidyverse)
 library(conflicted)
 library(raster)
 #library(splines2)
 ```
-
 
 ```{r}
 source("functions.R")
@@ -56,12 +54,12 @@ conflicts_prefer(dplyr::select(),
                  dplyr::filter())
 ```
 
-
-
 ```{r}
 library(topoclimate.pred)
 
 ```
+
+Working on downscaling Niobrara plot to see how well this works.
 
 Lat/Long are Easting and Northing. They are in NE State Plane Coordinates. Need to convert these to same NAD83 crs, same as DEM. Convert the corners of the plot first.
 

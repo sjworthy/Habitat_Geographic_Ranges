@@ -10,7 +10,7 @@ library(ecodist)
 #### Topographic Model ####
 
 # read in topographic data
-topo.data = read.csv("gbif.final.all.csv", row.names = 1)
+topo.data = read.csv("All.Final.Data.csv", row.names = 1)
 
 # split into species
 species.list = split(topo.data, topo.data$species)
@@ -22,20 +22,23 @@ for(species.name in names(species.list)){
   
   species.data <- species.list[[species.name]]
   
-  # randomly sample 45000 points b/c that gives ~ 1 billion data points (max is 2.1, but have issues > 50,000)
-  if (nrow(species.data) > 45000) {
+  # randomly sample 48000 points (max vector length is 2.1, but have issues > 50,000)
+  # this mean only Liquidambar styraciflua (n = 51647), Acer rubrum (n = 70995), 
+  # and Quercus palustric (n = 90009) are randomly sampled
+  
+  if (nrow(species.data) > 48000) {
     set.seed(13)
-    species.data <- species.data[sample(nrow(species.data), 45000), ]
+    species.data <- species.data[sample(nrow(species.data), 48000), ]
   }
   
   # creating spatial matrix
   spat.dat = as.matrix(species.data[,c("decimalLongitude","decimalLatitude")])
   
-  # creating soil data
+  # creating topographic data
   topo.dat = species.data %>%
     dplyr::select(northness,eastness,mTPI,slope,elevation)
   
-  # calculate gower distance for scaled microclimate data
+  # calculate gower distance for topographic data
   topo.dist = gowdis(topo.dat)
 
   # calculate Haversine distance for spatial data
@@ -58,6 +61,7 @@ for(species.name in names(species.list)){
     TopoDist = as.vector(topo.dist)
   )
   
+  # save the data for later plotting
   write.csv(df_plot, file = paste0("./Topo/MRM_Topo_data_", clean_species_name, ".csv"))
   
   plot_obj = ggplot(df_plot, aes(x = GeoDist, y = TopoDist)) +

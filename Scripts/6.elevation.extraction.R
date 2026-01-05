@@ -20,6 +20,7 @@ gbif.test = unique(gbif.lat.long)
 
 # Convert to sf object
 points_sf <- sf::st_as_sf(gbif.lat.long, coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
+
 # Transform to NAD83
 points_nad83 <- st_transform(points_sf, crs = 4269)
 

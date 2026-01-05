@@ -63,7 +63,6 @@ counts$difference = counts$gbif - counts$soil
 # write.csv(counts, "./Raw.Data/missing.soil.csv")
 
 # filter gbif data for occurrence points with soil
-
 soil.final = soil.final %>%
   rename(decimalLatitude = latitude, decimalLongitude = longitude)
 
@@ -79,3 +78,13 @@ gbif.elev = inner_join(gbif.soil,elev.final)
 # 1254426, lose 3 individuals without elevation
 
 # write.csv(gbif.elev, file = "Formatted.Data/gbif.final.csv")
+
+#### Filter out final 45 data points without microclimate data ####
+
+final.data.01.05.26 = read.csv("./Formatted.Data/final.data.01.05.26.csv", row.names = 1)
+colSums(is.na(final.data.01.05.26))
+
+all.final.data = na.omit(final.data.01.05.26)
+colSums(is.na(all.final.data))
+
+#write.csv(all.final.data, file = "./Formatted.Data/All.Final.Data.csv")

@@ -1,4 +1,5 @@
 ## Script to split the DEMs in to 6 parts
+# They are too large as a whole for downscaling
 
 library(topoclimate.pred)
 library(SpaDES)

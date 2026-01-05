@@ -10,7 +10,6 @@ setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
 gbif = read.csv("./Formatted.Data/good.gbif.data.csv", row.names = 1)
 
 # subset gbif to just lat/long columns for extraction
-
 gbif.lat.long = gbif %>%
   dplyr::select(species,decimalLongitude,decimalLatitude)
 
@@ -20,16 +19,17 @@ points_sf <- sf::st_as_sf(gbif.lat.long, coords = c("decimalLongitude", "decimal
 setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 
 # micro clim DEMs are automatically read in as WGS84. Going to convert to NAD 83 since this is what they should be.
-# did a test if it matters and get the same extracted values with WGS84 and NAD83 crs.
+# did a test to see if it matters and get the same extracted values with WGS84 and NAD83 crs.
 #example.dem = brick("./microclim_USGS_13_n30w100_20211103_tile2.tif", crs = "+proj=longlat +datum=NAD83 +no_defs")
 example.dem = raster("./USGS_13_n26w081_20231221.tif")
 
+# transform gbif points based on crs of DEM
 points_nad83 <- st_transform(points_sf, crs(example.dem))
 
+# coerce into spatial dataframe
 gbif_sp <- as(points_nad83, "Spatial")
 
 # Read in list of microclim DEMs
-
 raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
 
 # Prepare an empty list to store results
@@ -67,8 +67,9 @@ for(raster_file in raster_files){
 extracted_data <- do.call(rbind, extracted_values)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
+
 # had to run the loop a few times because vector memory exhaust after ~1500 rasters
-write.csv(extracted_data, file = "./Formatted.Data/microclim.output.10.csv")
+# write.csv(extracted_data, file = "./Formatted.Data/microclim.output.10.csv")
 
 # use when need to read each item in the list out separately
 for (i in seq_along(extracted_vals.2)) {
@@ -76,7 +77,7 @@ for (i in seq_along(extracted_vals.2)) {
   write.csv(extracted_vals.2[[i]], file = filename, row.names = FALSE)
 }
 
-# reading back in and combinding
+# reading back in and combining
 
 # List all the CSV files you just saved
 file_list <- list.files(
@@ -92,7 +93,10 @@ list_of_dfs <- lapply(file_list, read.csv)
 combined_df <- rbindlist(list_of_dfs, use.names = TRUE, fill = TRUE)
 #write.csv(combined_df, file = "./Formatted.Data/microclim.output.6.csv")
 
+# all intermediate files, "microclim.output.i.csv", are deleted after being combined.
+
 #### Reading back in all outputs and merging together ####
+# This is done after trying to find missing data points using code in the section below
 
 file_list <- list.files(
   path = "Formatted.Data",
@@ -103,49 +107,43 @@ file_list <- list.files(
 # Read them all into a list of data frames
 list_of_dfs <- lapply(file_list, read.csv)
 
+# combine the lists
 combined_df <- rbindlist(list_of_dfs, use.names = TRUE, fill = TRUE)
 
-last.merge = read.csv("./Formatted.Data/climate.combined.df.7.16.csv", row.names = 1)
+# read in the last time all data was merged
+last.merge = read.csv("./Formatted.Data/climate.combined.df.01.02.csv", row.names = 1)
 
 bind = rbind(last.merge,combined_df)
+
+# getting distinct occurrences based on species name, decimalLat and decimalLong
+# duplicates from downscaling same raster multiple times trying to find missing points
 
 combined.df.2 = bind %>%
   distinct(across(2:4), .keep_all = TRUE)
 
-#write.csv(combined.df.2, file = "./Formatted.Data/climate.combined.df.7.16.csv")
+#write.csv(combined.df.2, file = "./Formatted.Data/climate.combined.df.01.05.csv")
 
 #### Comparing combined_df with full data ####
 
 gbif = read.csv("./Formatted.Data/gbif.final.csv", row.names = 1)
 
-# combined = 1333215
+# combined = 1336207
 # full = 1254426
 
-temp = as.data.frame(table(sort(gbif$species)))
-temp$microclim = table(sort(combined.df.2$species))
-temp$diff = temp$Freq-temp$microclim
-
-# write.csv(temp, file = "species.compare.csv")
-
+# merging full dataset with newly combined data
 microclim.slim = left_join(gbif,combined.df.2)
-write.csv(microclim.slim, file = "./Formatted.Data/gbif.final.all.csv")
 
-temp$microclim.slim = table(sort(microclim.slim$species))
-temp$diff.2 = temp$Freq - temp$microclim.slim
-
+# see what points we don't have microclim data for
 microclim.missing = microclim.slim %>%
   filter(if_any(everything(), is.na))
-# 2837
+# 45
+# These 45 have decimalLatitude outside the range of the macroclimate data used for downscaling
+# from topoclimate.pred function. They will be eliminated from all data sets.
 
-test = as.data.frame(table(microclim.missing$species))
-# 78 species not complete, 44 species complete
+#write.csv(microclim.missing, file = "./Formatted.Data/microclim.missing.points.csv")
+#write.csv(microclim.slim, file = "./Formatted.Data/final.data.01.05.26.csv")
 
-test.2 = temp %>%
-  filter(!Var1 %in% test$Var1)
-
-write.csv(microclim.missing, file = "microclim.missing.csv")
-
-### Split by species ####
+### May be UNUSED code Split by species ####
 
 species_list <- split(combined.df.2, combined.df.2$species)
 
@@ -172,14 +170,14 @@ for(species in names(species_list_2)) {
 
 #### Trying to get microclim data for missing occurrences ####
 
-#raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
+raster_files <- list.files(".", pattern = "*.tif", full.names = TRUE)
 
 setwd("/Volumes/My Passport for Mac/entire.DEMs/")
 # Load the DEM
-micro_DEM <- raster(raster_files[426], crs = "+proj=longlat +datum=NAD83 +no_defs")
+micro_DEM <- raster(raster_files[329], crs = "+proj=longlat +datum=NAD83 +no_defs")
 micro_DEM
 
-ext = extent(-87.32, -87.30, 45.61, 45.62)
+ext = extent(-83.34, -83.33, 42.46, 42.47)
 et <- crop(micro_DEM, ext)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Scripts/topo_data")
@@ -230,23 +228,9 @@ extracted_data.2 = extracted_data %>%
   distinct(across(1:3), .keep_all = TRUE)
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.6.csv")
+#write.csv(extracted_data.2, file = "./Formatted.Data/microclim.output.28.csv")
 
-setwd("/Volumes/My Passport for Mac")
-
-output.name = basename(micro_DEM@file@name)
-
-# Define output file name based on raster file name
-output_file <- paste0("microclim_8_", output.name)
-
-# Write out the data for this raster
-writeRaster(topo, filename = output_file, options="INTERLEAVE=BAND", overwrite=TRUE)
-
-
-
-
-
-### Plotting ####
+### May be UNUSED code Plotting ####
 
 clim.dat = read.csv("./Results/climate.data.output.1.csv")
 
