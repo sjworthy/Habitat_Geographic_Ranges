@@ -36,7 +36,7 @@ for(species.name in names(species.list)){
   soil.dat = species.data %>%
     dplyr::select(ph_d0_100,clay_d0_100,sand_d0_100,silt_d0_100,db_d0_100,ec_d0_100,texture_d0_100)
 
-  # calculate gower distance for scaled microclimate data
+  # calculate gower distance for scaled soil data
   soil.dist = gowdis(soil.dat)
 
   # calculate Haversine distance for spatial data

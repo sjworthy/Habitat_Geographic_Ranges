@@ -1,13 +1,13 @@
-# Code to generate the global null
-# Randomly sample 5 points from each species
+# Code to generate the global null for microclimate
+# Randomly sample 40 points from each species
 # Calculate geographic distance and microclimate distance
 # Repeat 999 times
 # Run MRM
 # plot distributions of intercept, slope, R2
 # plot MRM every 100th interaction
-# This null model breaks species-specific relationship between geographic and microclimate, 
-# breaks biogeographic realms/distributions (i.e. southern distribution versus northern distribution), 
-# makes the assumption of global dispersal, no ecological constraint except that a tree can grow here.
+
+# 40 samples per species was chosen so that the global species would have 4,880 individuals,
+# a similar value to the median number of individuals per species in the data (n = 4710).
 
 library(tidyverse)
 library(FD)
@@ -16,7 +16,7 @@ library(ecodist)
 
 # read in complete dataset
 
-all.data = read.csv("./Formatted.Data/gbif.final.all.csv", row.names = 1)
+all.data = read.csv("./Formatted.Data/All.Final.Data.csv", row.names = 1)
 
 # Initialize vector to store intercept and slope values
 slopes <- numeric()
@@ -24,10 +24,10 @@ intercepts <- numeric()
 R2 <- numeric()
 
 for(i in 1:999){
-  # Sample 5 individuals from each species
+  # Sample 40 individuals from each species
   sampled_indices <- all.data %>%
     group_by(species) %>%
-    slice_sample(n = 5) %>%
+    slice_sample(n = 40) %>%
     ungroup()
   
   # creating spatial matrix
@@ -44,7 +44,7 @@ for(i in 1:999){
     dplyr::select(high_temp_C,low_temp_C,moisture_mm)
   
   # calculate gower distance for scaled microclimate data
-  microclim.dist = gowdis(as.data.frame(microclim.dat))
+  microclim.dist = gowdis(microclim.dat)
   
   # Run the MRM model with the bootstrapped matrices
   model <- MRM(microclim.dist ~ geo.dist.3)

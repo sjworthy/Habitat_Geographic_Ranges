@@ -1,13 +1,13 @@
-# Code to generate the global null
-# Randomly sample 5 points from each species
+# Code to generate the global null for topography
+# Randomly sample 40 points from each species
 # Calculate geographic distance and topographic distance
 # Repeat 999 times
 # Run MRM
 # plot distributions of intercept, slope, R2
 # plot MRM every 100th interaction
-# This null model breaks species-specific relationship between geographic and microclimate, 
-# breaks biogeographic realms/distributions (i.e. southern distribution versus northern distribution), 
-# makes the assumption of global dispersal, no ecological constraint except that a tree can grow here.
+
+# 40 samples per species was chosen so that the global species would have 4,880 individuals,
+# a similar value to the median number of individuals per species in the data (n = 4710).
 
 library(tidyverse)
 library(FD)
@@ -16,7 +16,7 @@ library(ecodist)
 
 # read in complete dataset
 
-all.data = read.csv("./Formatted.Data/gbif.final.all.csv", row.names = 1)
+all.data = read.csv("./Formatted.Data/All.Final.Data.csv", row.names = 1)
 
 # Initialize vector to store intercept and slope values
 slopes <- numeric()
@@ -24,10 +24,10 @@ intercepts <- numeric()
 R2 <- numeric()
 
 for(i in 1:999){
-# Sample 5 individuals from each species
+# Sample 40 individuals from each species
 sampled_indices <- all.data %>%
   group_by(species) %>%
-  slice_sample(n = 5) %>%
+  slice_sample(n = 40) %>%
   ungroup()
   
 # creating spatial matrix
@@ -39,12 +39,12 @@ geo.dist.2 = as.dist(geo.dist) # convert to dist object
 geo.dist.3 = geo.dist.2/10000 # convert to hectometer or 1/10th km
 # 0.5 hectometers = 5000 meters and 5 km
   
-# creating soil data
+# creating topography data
 topo.dat = sampled_indices %>%
   dplyr::select(northness,eastness,mTPI,slope,elevation)
   
-# calculate gower distance for scaled microclimate data
-topo.dist = gowdis(as.data.frame(topo.dat))
+# calculate gower distance for scaled topography data
+topo.dist = gowdis(topo.dat)
 
 # Run the MRM model with the bootstrapped matrices
   model <- MRM(topo.dist ~ geo.dist.3)
