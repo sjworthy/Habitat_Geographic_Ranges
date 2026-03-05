@@ -1,0 +1,14 @@
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --mem=180000 # 180gb
+#SBATCH --time=168:00:00 # run time in hh:mm:ss
+#SBATCH --job-name=global.microclim.null
+#SBATCH --error=/work/serussolab/samworthy/global.microclim.null.%J.err
+#SBATCH --output=/work/serussolab/samworthy/global.microclim.null.%J.out
+
+module purge
+module load anaconda
+
+conda activate myconda2
+
+Rscript 12.Microclim.Global.Null.Final.R

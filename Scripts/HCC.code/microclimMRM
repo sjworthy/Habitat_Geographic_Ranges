@@ -12,6 +12,6 @@
 module purge
 module load anaconda
 
-conda activate /work/serussolab/samworthy/myconda2
+conda activate myconda2
 
 Rscript 6.Microclim.MRM.R

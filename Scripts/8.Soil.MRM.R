@@ -98,8 +98,8 @@ soil.results <- data.frame(
 )
 
 # List all .RDS files in your directory
-setwd("/Volumes/My Passport for Mac")
-rds_files <- list.files(path = "./soil", pattern = "\\.RDS$", full.names = TRUE)
+setwd("./Results/Models/Soil.models/")
+rds_files <- list.files(path = ".", pattern = "\\.RDS$", full.names = TRUE)
 
 for(i in rds_files) {
   
@@ -136,7 +136,7 @@ soil.results <- rbind(soil.results, species.results)
 }
 
 setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
-# write.csv(soil.results, file = "./Results/soil.MRM.results.csv")
+#write.csv(soil.results, file = "./Results/soil.MRM.results.csv")
 
 #### Parsing Results ####
 

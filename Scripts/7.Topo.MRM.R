@@ -100,8 +100,8 @@ topo.results <- data.frame(
 )
 
 # List all .RDS files in your directory
-setwd("/Volumes/My Passport for Mac")
-rds_files <- list.files(path = "./topo", pattern = "\\.RDS$", full.names = TRUE)
+setwd("./Results/Models/Topo.models/")
+rds_files <- list.files(path = ".", pattern = "\\.RDS$", full.names = TRUE)
 
 for(i in rds_files) {
   
