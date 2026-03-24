@@ -135,7 +135,6 @@ rangeSize(ABBA.coords, crs = "epsg:4267")
 ```
 
 
-
 ### Repeat basics of steps above for all other species ####
 
 Subset for Abies fraseri

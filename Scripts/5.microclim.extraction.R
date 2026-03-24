@@ -139,6 +139,12 @@ microclim.missing = microclim.slim %>%
 # 45
 # These 45 have decimalLatitude outside the range of the macroclimate data used for downscaling
 # from topoclimate.pred function. They will be eliminated from all data sets.
+#extent(clim)
+#class      : Extent 
+#xmin       : -155.0001 
+#xmax       : -52.50014 
+#ymin       : 24.99986 
+#ymax       : 69.99986 
 
 #write.csv(microclim.missing, file = "./Formatted.Data/microclim.missing.points.csv")
 #write.csv(microclim.slim, file = "./Formatted.Data/final.data.01.05.26.csv")

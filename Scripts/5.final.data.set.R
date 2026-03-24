@@ -1,6 +1,7 @@
 # Removing occurrence points for a variety of reasons
 
 library(tidyverse)
+library(rgbif)
 
 #### Removing occurrence points for species that have more distribution in Canada than US ####
 
@@ -88,3 +89,30 @@ all.final.data = na.omit(final.data.01.05.26)
 colSums(is.na(all.final.data))
 
 #write.csv(all.final.data, file = "./Formatted.Data/All.Final.Data.csv")
+
+#### Summary Stats ####
+
+# trying to get the original gbif columns to match with final data set
+all.final.data = read.csv("./Formatted.Data/All.Final.Data.csv")
+d = occ_download_get('0010272-241126133413365', path = "/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges/Raw.Data") %>%
+  occ_download_import()
+
+# merge the two 
+merge.df = left_join(all.final.data,d, by = join_by("species","decimalLatitude","decimalLongitude"))
+# final data is 1254381 rows
+# merge data is 1373679 rows
+# difference is 119298 rows
+
+write.csv(merge.df, file = "./Formatted.Data/Final.Data.GBIF.csv")
+
+# can't distinguish between the duplicates based on Lat./Long.
+
+# average coordinate uncertainy
+mean(merge.df$coordinateUncertaintyInMeters, na.rm = TRUE)
+
+# mean number of individuals per species
+table(all.final.data$species)
+mean(table(all.final.data$species)) # 10,281.81
+median(table(all.final.data$species)) # 4710
+
+

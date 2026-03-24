@@ -10,22 +10,11 @@ library(ecodist)
 #### Microclim MRM ####
 # read in data
 microclim.data = read.csv("All.Final.Data.csv", row.names = 1)
+#microclim.data = read.csv("./Formatted.Data/All.Final.Data.csv", row.names = 1)
+
 
 # split into species
 species.list = split(microclim.data, microclim.data$species)
-# Round 1: complete
-species.list = species.list[c(1,2,3,20,23,25,34,36,38,40,50,52,54,57,59,66,
-                              69,70,75,78,88,91,93,94,104,105,106,
-                              109,117)]
-# Completed in Round 1:
-# A.fraseri,A.barbatum,A.leucoderme,C.aquatica,
-# C.illinoinensis,C.texana,F.albicans,F.caroliniana,F.profunda,G.aquatica,
-# M.pomifera,M.fraseri,M.macrophylla,N.aquatica,N.ogeche,P.echinata,P.palustris,
-# P.pungens,P.aquatica,P.heterophylla,Q.incana,Q.lyrata,Q.margaretta,
-# Q.marilandica,Q.sinuata,Q.stellata,Q.texana,R.pseudoacacia,T.caroliniana
-
-# Completed in Round 2: 
-# A.glabra,B.nigra,C.alba,Q.imbricaria,
 
 for(species.name in names(species.list)){
   
@@ -158,15 +147,15 @@ write.csv(microclim.results, file = "./Results/microclim.MRM.results.csv")
 microclim.results = read.csv("./Results/microclim.MRM.results.csv")
 
 range(microclim.results$Intercept)
-# 0.01791455 0.16815540
+# 0.01594465 0.16815540
 range(microclim.results$Slope)
-# 0.0006949658 0.0101925208
+# 0.0006953444 0.0101925208
 range(microclim.results$R2)
-# 0.0255713 0.8708292
+# 0.0255713 0.8631044
 
 intercept.plot = ggplot(microclim.results, aes(x = Intercept))+
   geom_density()+
-  geom_vline(xintercept = 0.07125867, size = 1.5) +
+  geom_vline(xintercept = 0.08361417, linewidth = 1.5) + # this is the global intercept
   theme_classic(base_size = 20) +
   ylab("Density")
 intercept.plot
@@ -175,7 +164,7 @@ ggsave("./Plots/ESA.plots/ODS.intercept.png", height = 5, width = 5)
 
 slope.plot = ggplot(microclim.results, aes(x = Slope))+
   geom_density()+
-  geom_vline(xintercept = 0.001053699, size = 1.5) +
+  geom_vline(xintercept = 0.001727047, linewidth = 1.5) + # this is the global slope
   theme_classic(base_size = 20) +
   ylab("Density")
 
@@ -185,209 +174,8 @@ ggsave("./Plots/ESA.plots/ODS.slope.png", height = 5, width = 5)
 
 ggplot(microclim.results, aes(x = R2))+
   geom_density()+
-  geom_vline(xintercept = 0.3762577, size = 1.5) +
+  geom_vline(xintercept = 0.3914622, size = 1.5) + # this is the global R2
   theme_classic(base_size = 20) +
   ylab("Density")+
   xlab("R-squared")
-
-#### Testing if soil values are significantly different from global null ####
-
-# read in 999 nulls
-
-nulls = read.csv("./Results/Microclim.Global.Null/global.microclim.null.999.results.csv", row.names = 1)
-
-intercept.null.means <- mean(nulls$intercepts)
-intercept.nulls.sds <- sd(nulls$intercepts)
-slope.null.means <- mean(nulls$slopes)
-slope.nulls.sds <- sd(nulls$slopes)
-R2.null.means <- mean(nulls$R2)
-R2.nulls.sds <- sd(nulls$R2)
-
-# read in the observed values
-
-obs = read.csv("./Results/microclim.MRM.results.csv", row.names = 1)
-
-for(i in 1:nrow(obs)){
-  obs.intercept = obs[i,2]
-  obs.slope = obs[i,4]
-  obs.R2 = obs[i,6]
-  
-  ses.intercet <- (obs.intercept - intercept.null.means) / intercept.nulls.sds
-  obs[i,10] = ses.intercet
-  ses.slope <- (obs.slope - slope.null.means) / slope.nulls.sds
-  obs[i,11] = ses.slope
-  ses.R2 <- (obs.R2 - R2.null.means) / R2.nulls.sds
-  obs[i,12] = ses.R2
-  
-  rank.intercept = rank(c(obs.intercept,nulls$intercepts))[1]
-  obs[i,13] = rank.intercept
-  rank.slope = rank(c(obs.slope,nulls$slopes))[1]
-  obs[i,14] = rank.slope
-  rank.R2 = rank(c(obs.R2,nulls$R2))[1]
-  obs[i,15] = rank.R2
-  
-  p.val.intercept = rank.intercept/1000
-  obs[i,16] = p.val.intercept
-  p.val.slope = rank.slope/1000
-  obs[i,17] = p.val.slope
-  p.val.R2 = rank.R2/1000
-  obs[i,18] = p.val.R2
-}
-
-colnames(obs)[10:18] = c("SES.intercept","SES.slope","SES.R2",
-                         "Rank.intercept","Rank.slope","Rank.R2",
-                         "P.val.intercept","P.val.slope","P.val.R2")
-
-write.csv(obs, file = "./Results/microclim.global.null.compare.results.csv")
-
-#### Putting species into Categories: one tailed: USED THIS ####
-
-obs = read.csv("./Results/microclim.global.null.compare.results.csv", row.names = 1)
-
-# Shifter, low intercept, high slope
-shifting = obs %>%
-  filter(P.val.intercept < 0.05 & P.val.slope > 0.95)
-# Strong Shifter, low intercept, high slope, high R2
-strong.shifting = shifting %>%
-  filter(P.val.intercept < 0.05 & P.val.slope > 0.95 & P.val.R2 > 0.95)
-# Specialist, low intercept, low slope
-specialist = obs %>%
-  filter(P.val.intercept < 0.05 & P.val.slope < 0.05)
-# Strong Specialist, low intercept, low slope, high R2
-strong.specialist = specialist %>%
-  filter(P.val.intercept < 0.05 & P.val.slope < 0.05 & P.val.R2 > 0.95)
-# Overdisperser, high intercept, low slope
-overdisperser = obs %>%
-  filter(P.val.intercept > 0.95 & P.val.slope < 0.05)
-# Strong Overdisperser, high intercept, low slope, low R2
-strong.overdisperser = overdisperser %>%
-  filter(P.val.intercept > 0.95 & P.val.slope < 0.05 & P.val.R2 < 0.05)
-# Overdispersed shifters, high intercept, high slope
-overdisperse.shifter = obs %>%
-  filter(P.val.intercept > 0.95 & P.val.slope > 0.95)
-# Strong Overdispersed shifters, high intercept, high slope, high R2
-strong.overdisperse.shifter = overdisperse.shifter %>%
-  filter(P.val.intercept > 0.95 & P.val.slope > 0.95 & P.val.R2 > 0.95)
-
-# get remaining species
-remain.sp = obs %>%
-  filter(!species %in% c(shifting$species, specialist$species, overdisperser$species, 
-                         overdisperse.shifter$species))
-# 35 species left
-
-# Uncategorized: either slope or intercept is significant, but not both
-No.Cat = remain.sp %>%
-  filter(P.val.intercept < 0.05 | P.val.intercept > 0.95 |
-           P.val.slope < 0.05 | P.val.slope > 0.95)
-
-# True generalists: non-significant, intercept, slope, R2
-true.generalists = remain.sp %>%
-  filter(P.val.intercept >= 0.05 & P.val.intercept <= 0.95 &
-           P.val.slope >= 0.05 & P.val.slope <= 0.95 &
-           P.val.R2 >= 0.05 & P.val.R2 <= 0.95)
-# R2.generalist: non-significant intercpet, slope but significant R2
-R2.generalists = remain.sp %>%
-  filter((P.val.intercept >= 0.05 & P.val.intercept <= 0.95) &
-           (P.val.slope >= 0.05 & P.val.slope <= 0.95) &
-           (P.val.R2 < 0.05 | P.val.R2 > 0.95))
-
-# Add categories to soil dataframe
-obs$Category = dplyr::case_when(
-  obs$species %in% specialist$species ~ "specialists",
-  obs$species %in% shifting$species ~ "shifting",
-  obs$species %in% overdisperser$species ~ "overdisperser",
-  obs$species %in% overdisperse.shifter$species ~ "overdisper.shifter",
-  obs$species %in% c(true.generalists$species,R2.generalists$species,No.Cat$species) ~ "generalists",
-  TRUE ~ NA_character_
-)
-
-# Add significance for strength to dataframe
-obs$significant = dplyr::case_when(
-  obs$species %in% c(strong.shifting$species,strong.overdisperser$species,
-                     strong.specialist$species, strong.overdisperse.shifter$species) ~ "significant",
-  TRUE ~ "non-significant"
-)
-
-
-write.csv(obs, "./Results/microclim.global.null.compare.results.csv")
-
-### NMDS of slopes, intercepts, R2 from MRM soil models for ESA ####
-
-# read in soil data with categories
-microclim = read.csv("./Results/microclim.global.null.compare.results.csv", row.names = 1)
-
-microclim[123,c(2,4,6)] = c(0.07125867,0.001053699,0.3762577)
-microclim[123,1] = "Null"
-microclim[123,19] = "Null"
-microclim[123,20] = "significant"
-
-# data for NMDS
-microclim.2 = microclim[,c(2,4,6)]
-
-microclim.nmds = metaMDS(microclim.2, distance = "bray")
-microclim.nmds
-# stress = 0.03192277, this is good
-
-# plotting
-nmds_scores <- as.data.frame(scores(microclim.nmds)$sites)
-nmds_scores$Category <- microclim$Category
-nmds_scores$shape = microclim$significant
-
-# colors
-# shifter = "#5495CF",
-# specialist = "#DB4743",
-# generalist = "#F5AF4D",
-# overdisperser = "#548F01",
-# overdisperser shifter ="#B46DB3"
-# Null = "black"
-
-# Plot with shape mapped to combined variable  
-microclim.nmds = ggplot(nmds_scores, aes(x = NMDS1, y = NMDS2)) +
-  geom_point(aes(color = Category, fill = Category, shape = shape),
-             size = 3, stroke = 1.2) +
-  scale_shape_manual(values = c("significant" = 16, "non-significant" = 1),
-                     name = "Strength",
-                     labels = c("significant" = "Significant", "non-significant" = "Non-significant")) +
-  scale_fill_manual(values = c(
-    "shifting" = "#5495CF",
-    "specialists" = "#DB4743",
-    "generalists" = "#F5AF4D",
-    "overdisperser" = "#548F01",
-    "overdisper.shifter" = "#B46DB3",
-    "Null" = "black"),
-    name = "Category",
-    labels = c(
-      "shifting" = "Shifter",
-      "specialists" = "Specialist",
-      "generalists" = "Generalist",
-      "overdisperser" = "Overdisperser",
-      "overdisper.shifter" = "Overdispersed Shifter",
-      "Null" = "Null"
-    )) +
-  scale_color_manual(values = c(
-    "shifting" = "#5495CF",
-    "specialists" = "#DB4743",
-    "generalists" = "#F5AF4D",
-    "overdisperser" = "#548F01",
-    "overdisper.shifter" = "#B46DB3",
-    "Null" = "black"),
-    name = "Category",
-    labels = c(
-      "shifting" = "Shifter",
-      "specialists" = "Specialist",
-      "generalists" = "Generalist",
-      "overdisperser" = "Overdisperser",
-      "overdisper.shifter" = "Overdispersed Shifter",
-      "Null" = "Null"
-    )) +
-  theme_classic() +
-  stat_ellipse(aes(color = Category), linewidth = 1)
-  #theme(legend.position = "none")
-
-microclim.nmds
-
-ggsave("./Plots/ESA.plots/microclim.MNDS.ellipses.legend.png", width = 5, height = 5)
-
-
-
 

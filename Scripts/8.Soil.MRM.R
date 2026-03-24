@@ -140,6 +140,8 @@ setwd("/Users/samanthaworthy/Documents/GitHub/Habitat_Geographic_Ranges")
 
 #### Parsing Results ####
 
+soil.results = read.csv("./Results/soil.MRM.results.csv")
+
 range(soil.results$Intercept)
 # 0.03188286 0.29324038
 range(soil.results$Slope)
@@ -149,17 +151,17 @@ range(soil.results$R2)
 
 ggplot(soil.results, aes(x = Intercept))+
   geom_density()+
-  geom_vline(xintercept = 0.2418721) +
+  geom_vline(xintercept = 0.1948436) + # global null value
   theme_classic()
 
 ggplot(soil.results, aes(x = Slope))+
   geom_density()+
-  geom_vline(xintercept = 0.0004634458) +
+  geom_vline(xintercept = 0.0009679467) + # global null value
   theme_classic()
 
-ggplot(soil.results, aes(x = R2))+
+ggplot(soil.results, aes(x = R2))+ # global null value
   geom_density()+
-  geom_vline(xintercept = 0.05967644) +
+  geom_vline(xintercept = 0.101624) +
   theme_classic()
 
 #### PCA of slopes, intercepts, R2 from MRM soil models ####
@@ -331,55 +333,6 @@ soil.results[110, c(2,4,6)] = c(0.23, 0.00004, 0.05)
 soil.results[110,1] = "global"
 
 
-#### Testing if soil values are significantly different from global null ####
-
-# read in 999 nulls
-
-nulls = read.csv("./Results/Soil.Global.Null/global.null.999.results.csv", row.names = 1)
-
-intercept.null.means <- mean(nulls$intercepts)
-intercept.nulls.sds <- sd(nulls$intercepts)
-slope.null.means <- mean(nulls$slopes)
-slope.nulls.sds <- sd(nulls$slopes)
-R2.null.means <- mean(nulls$R2)
-R2.nulls.sds <- sd(nulls$R2)
-
-# read in the observed values
-
-obs = read.csv("./Results/soil.MRM.results.csv", row.names = 1)
-
-for(i in 1:nrow(obs)){
-  obs.intercept = obs[i,2]
-  obs.slope = obs[i,4]
-  obs.R2 = obs[i,6]
-  
-  ses.intercet <- (obs.intercept - intercept.null.means) / intercept.nulls.sds
-  obs[i,10] = ses.intercet
-  ses.slope <- (obs.slope - slope.null.means) / slope.nulls.sds
-  obs[i,11] = ses.slope
-  ses.R2 <- (obs.R2 - R2.null.means) / R2.nulls.sds
-  obs[i,12] = ses.R2
-  
-  rank.intercept = rank(c(obs.intercept,nulls$intercepts))[1]
-  obs[i,13] = rank.intercept
-  rank.slope = rank(c(obs.slope,nulls$slopes))[1]
-  obs[i,14] = rank.slope
-  rank.R2 = rank(c(obs.R2,nulls$R2))[1]
-  obs[i,15] = rank.R2
-  
-  p.val.intercept = rank.intercept/1000
-  obs[i,16] = p.val.intercept
-  p.val.slope = rank.slope/1000
-  obs[i,17] = p.val.slope
-  p.val.R2 = rank.R2/1000
-  obs[i,18] = p.val.R2
-}
-
-colnames(obs)[10:18] = c("SES.intercept","SES.slope","SES.R2",
-                         "Rank.intercept","Rank.slope","Rank.R2",
-                         "P.val.intercept","P.val.slope","P.val.R2")
-
-#write.csv(obs, file = "./Results/soil.global.null.compare.results.csv")
 
 #### Putting species into Categories: two tailed ####
 
@@ -447,78 +400,6 @@ obs$Category = dplyr::case_when(
 write.csv(obs, "./Results/soil.global.null.compare.results.csv")
 
 
-#### Putting species into Categories: one tailed: USED THIS ####
-
-obs = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
-
-# Shifter, low intercept, high slope
-shifting = obs %>%
-  filter(P.val.intercept < 0.05 & P.val.slope > 0.95)
-# Strong Shifter, low intercept, high slope, high R2
-strong.shifting = shifting %>%
-  filter(P.val.intercept < 0.05 & P.val.slope > 0.95 & P.val.R2 > 0.95)
-# Specialist, low intercept, low slope
-specialist = obs %>%
-  filter(P.val.intercept < 0.05 & P.val.slope < 0.05)
-# Strong Specialist, low intercept, low slope, high R2
-strong.specialist = specialist %>%
-  filter(P.val.intercept < 0.05 & P.val.slope < 0.05 & P.val.R2 > 0.95)
-# Overdisperser, high intercept, low slope
-overdisperser = obs %>%
-  filter(P.val.intercept > 0.95 & P.val.slope < 0.05)
-# Strong Overdisperser, high intercept, low slope, low R2
-strong.overdisperser = overdisperser %>%
-  filter(P.val.intercept > 0.95 & P.val.slope < 0.05 & P.val.R2 < 0.05)
-# Overdispersed shifters, high intercept, high slope
-overdisperse.shifter = obs %>%
-  filter(P.val.intercept > 0.95 & P.val.slope > 0.95)
-# Strong Overdispersed shifters, high intercept, high slope, high R2
-strong.overdisperse.shifter = overdisperse.shifter %>%
-  filter(P.val.intercept > 0.95 & P.val.slope > 0.95 & P.val.R2 > 0.95)
-
-# get remaining species
-remain.sp = obs %>%
-  filter(!species %in% c(shifting$species, specialist$species, overdisperser$species, 
-                         overdisperse.shifter$species))
-# 36 species left
-
-# Uncategorized: either slope or intercept is significant, but not both
-No.Cat = remain.sp %>%
-  filter(P.val.intercept < 0.05 | P.val.intercept > 0.95 |
-           P.val.slope < 0.05 | P.val.slope > 0.95)
-
-# True generalists: non-significant, intercept, slope, R2
-true.generalists = remain.sp %>%
-  filter(P.val.intercept >= 0.05 & P.val.intercept <= 0.95 &
-           P.val.slope >= 0.05 & P.val.slope <= 0.95 &
-           P.val.R2 >= 0.05 & P.val.R2 <= 0.95)
-# R2.generalist: non-significant intercpet, slope but significant R2
-R2.generalists = remain.sp %>%
-  filter((P.val.intercept >= 0.05 & P.val.intercept <= 0.95) &
-           (P.val.slope >= 0.05 & P.val.slope <= 0.95) &
-           (P.val.R2 < 0.05 | P.val.R2 > 0.95))
-
-# Add categories to soil dataframe
-obs$Category = dplyr::case_when(
-  obs$species %in% specialist$species ~ "specialists",
-  obs$species %in% shifting$species ~ "shifting",
-  obs$species %in% overdisperser$species ~ "overdisperser",
-  obs$species %in% overdisperse.shifter$species ~ "overdisper.shifter",
-  obs$species %in% c(true.generalists$species,R2.generalists$species,No.Cat$species) ~ "generalists",
-  TRUE ~ NA_character_
-)
-
-# Add significance for strength to dataframe
-obs$significant = dplyr::case_when(
-  obs$species %in% c(strong.shifting$species,strong.overdisperser$species,
-                     strong.specialist$species, strong.overdisperse.shifter$species) ~ "significant",
-  TRUE ~ "non-significant"
-)
-
-
-write.csv(obs, "./Results/soil.global.null.compare.results.csv")
-
-
 #### Putting species into Categories: one tailed R2 only ####
 
 obs = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
@@ -570,84 +451,6 @@ R2.generalists = remain.sp %>%
   filter((P.val.intercept >= 0.026 & P.val.intercept <= 0.974) &
            (P.val.slope >= 0.026 & P.val.slope <= 0.974) &
            (P.val.R2 < 0.026 | P.val.R2 > 0.974))
-
-### NMDS of slopes, intercepts, R2 from MRM soil models for ESA ####
-
-# read in soil data with categories
-soil = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
-
-soil[123,c(2,4,6)] = c(0.2418721,0.0004634458,0.05967644)
-soil[123,1] = "Null"
-soil[123,19] = "Null"
-soil[123,20] = "significant"
-
-# data for NMDS
-soil.2 = soil[,c(2,4,6)]
-
-soil.nmds = metaMDS(soil.2, distance = "bray")
-soil.nmds
-# stress = 0.05272845, this is good
-
-# plotting
-nmds_scores <- as.data.frame(scores(soil.nmds)$sites)
-nmds_scores$Category <- soil$Category
-nmds_scores$shape = soil$significant
-
-
-# colors
-# shifter = "#5495CF",
-# specialist = "#DB4743",
-# generalist = "#F5AF4D",
-# overdisperser = "#548F01",
-# overdisperser shifter ="#B46DB3"
-# Null = "black"
-
-# Plot with shape mapped to combined variable  
-soil.nmds = ggplot(nmds_scores, aes(x = NMDS1, y = NMDS2)) +
-  geom_point(aes(color = Category, fill = Category, shape = shape),
-             size = 3, stroke = 1.2) +
-  scale_shape_manual(values = c("significant" = 16, "non-significant" = 1),
-                     name = "Strong",
-                     labels = c("significant" = "Significant", "non-significant" = "Non-significant")) +
-  scale_fill_manual(values = c(
-    "shifting" = "#5495CF",
-    "specialists" = "#DB4743",
-    "generalists" = "#F5AF4D",
-    "overdisperser" = "#548F01",
-    "overdisper.shifter" = "#B46DB3",
-    "Null" = "black"),
-    name = "Category",
-    labels = c(
-      "shifting" = "Shifter",
-      "specialists" = "Specialist",
-      "generalists" = "Generalist",
-      "overdisperser" = "Overdisperser",
-      "overdisper.shifter" = "Overdispersed Shifter",
-      "Null" = "Null"
-    )) +
-  scale_color_manual(values = c(
-    "shifting" = "#5495CF",
-    "specialists" = "#DB4743",
-    "generalists" = "#F5AF4D",
-    "overdisperser" = "#548F01",
-    "overdisper.shifter" = "#B46DB3",
-    "Null" = "black"),
-    name = "Category",
-    labels = c(
-      "shifting" = "Shifter",
-      "specialists" = "Specialist",
-      "generalists" = "Generalist",
-      "overdisperser" = "Overdisperser",
-      "overdisper.shifter" = "Overdispersed Shifter",
-      "Null" = "Null"
-    )) +
-  theme_classic() +
-  stat_ellipse(aes(color = Category), linewidth = 1) 
-  #theme(legend.position = "none")
-
-soil.nmds
-
-ggsave("./Plots/ESA.plots/soil.MNDS.ellipses.legend.png", width = 5, height = 5)
 
 ### PCA for ESA ####
 
@@ -1164,64 +967,6 @@ generalist.plot
 
 ggsave("./Plots/ESA.plots/generalist.null.png", width = 5, height = 5)
 
-# all patterns on one plot
 
-set.seed(123)
-
-# Simulate realistic data
-gen_x_vals <- seq(0, 1000, length.out = 100)
-gen_intercept <- 0.27      
-gen_slope <- 0.00024       
-gen_noise <- rnorm(100, mean = 0, sd = 0.02)
-gen_y_vals <- gen_intercept + gen_slope * gen_x_vals + gen_noise
-gen_df <- data.frame(x = gen_x_vals, y = gen_y_vals)
-
-# Simulate realistic data
-ods_x_vals <- seq(0, 1000, length.out = 100)
-ods_intercept <- 0.75      # High
-ods_slope <- 0.0003        # high slope
-ods_noise <- rnorm(100, mean = 0, sd = 0.02)
-ods_y_vals <- ods_intercept + ods_slope * ods_x_vals + ods_noise
-ods_df <- data.frame(x = ods_x_vals, y = ods_y_vals)
-
-od_x_vals <- seq(0, 1000, length.out = 100)
-od_intercept <- 0.75      # High
-od_slope <- 0.00001        # Lower slope than before
-od_noise <- rnorm(100, mean = 0, sd = 0.02)
-od_y_vals <- od_intercept + od_slope * od_x_vals + od_noise
-od_df <- data.frame(x = od_x_vals, y = od_y_vals)
-
-spec_x_vals <- seq(0, 1000, length.out = 100)
-spec_intercept <- 0.05      # Still low
-spec_slope <- 0.00001        # Lower slope than before
-spec_noise <- rnorm(100, mean = 0, sd = 0.02)
-spec_y_vals <- spec_intercept + spec_slope * spec_x_vals + spec_noise
-spec_df <- data.frame(x = spec_x_vals, y = spec_y_vals)
-
-shift_x_vals <- seq(0, 1000, length.out = 100)
-shift_intercept <- 0.05      # Low intercept
-shift_slope <- 0.0009        # High slope (relative to small y-scale)
-shift_noise <- rnorm(100, mean = 0, sd = 0.02)
-shift_y_vals <- shift_intercept + shift_slope * shift_x_vals + shift_noise
-shift_df <- data.frame(x = shift_x_vals, y = shift_y_vals)
-
-# Plot
-all.plot <- ggplot() +
-  geom_smooth(data = gen_df, aes(x = x, y = y), method = "lm", se = FALSE, color = "#F5AF4D", size = 2) +
-  #geom_smooth(data = ods_df, aes(x = x, y = y), method = "lm", se = FALSE, color = "#B46DB3", size = 2) +
-  geom_smooth(data = od_df, aes(x = x, y = y), method = "lm", se = FALSE, color = "#548F01", size = 2)+ 
-  geom_smooth(data = spec_df, aes(x = x, y = y),method = "lm", se = FALSE, color = "#DB4743", size = 2) +
-  geom_smooth(data = shift_df, aes(x = x, y = y),method = "lm", se = FALSE, color = "#5495CF", size = 2) +
-  scale_x_continuous(limits = c(0, 1000)) +
-  scale_y_continuous(limits = c(0, 1)) +
-  coord_cartesian(xlim = c(0, 1000), ylim = c(0, 1)) +
-  theme_classic(base_size = 15) +
-  labs(
-       x = "Geographic Distance (km)",
-       y = "Microclimate Dissimilarity")
-
-all.plot
-
-ggsave("./Plots/ESA.plots/all.patterns.png", width = 5, height = 5)
 
 

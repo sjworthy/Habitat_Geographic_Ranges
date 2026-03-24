@@ -15,8 +15,7 @@ library(caper)
 library(phangorn)
 library(picante)
 
-
-### Building the Phylogeny ####
+#### Building the Phylogeny ####
 # species list including species, genus, family, species.relative, and genus.relative
 # first column is mandatory and others are optional
 sp.list <- read.csv("./Raw.Data/species.csv")
@@ -38,7 +37,6 @@ taxon.list.2 = taxon.list %>%
 # remove A. flava b/c of low sample size
 # 122 species
 colnames(taxon.list.2)[1] = "Name"
-
 
 # https://github.com/nameMatch/Database/tree/main/Plants_WFO
 load("./Raw.Data/Plants_WFO.rdata") # World Flora Online
@@ -127,9 +125,9 @@ for(i in 1:999){
 }
 
 microclim.obs.real = parsimony(phylo, microclim.obs2, method = "sankoff")
-# 66
+# 48
 microclim.p.value = (rank(c(microclim.obs.real,microclim.null))[1])/1000
-# 0.442
+# 0.0645
 
 # topo
 cat.topo = as.data.frame(topo$Category)
@@ -145,9 +143,9 @@ for(i in 1:999){
 }
 
 topo.obs.real = parsimony(phylo, topo.obs2, method = "sankoff")
-# 39
+# 51
 topo.p.value = (rank(c(topo.obs.real,topo.null))[1])/1000
-# 0.6715
+# 0.1015
 
 # soil
 cat.soil = as.data.frame(soil$Category)
@@ -163,119 +161,97 @@ for(i in 1:999){
 }
 
 soil.obs.real = parsimony(phylo, soil.obs2, method = "sankoff")
-# 56
+# 53
 soil.p.value = (rank(c(soil.obs.real,soil.null))[1])/1000
-# 0.605
+# 0.4635
 
-
-### Plotting Categories on the phylogeny ####
-
-library(ggtree)
-
-phylo <- ggtree::read.tree("./Results/phylo.tre")
-phylo$tip.label = gsub("_", " ", phylo$tip.label)
-
-ggplot(phylo) + geom_tree() + theme_tree()
-
-tree = ggtree(phylo) +
-  geom_tiplab(size=2, align=TRUE, linesize=.5) + 
-  theme_tree()
-tree
-
-# combine the categories from all three variables
-all.cats = as.data.frame(microclim$Category)
-colnames(all.cats)[1] = "microclim.cat"
-all.cats$topo.cat = topo$Category
-all.cats$soil.cat = soil$Category
-all.cats$species = microclim$species
-
-all.cats <- all.cats %>%
-  mutate(species = recode(species, "Quercus margaretta" = "Quercus margarettae"))
-
-row.names(all.cats) = all.cats$species
-all.cats = all.cats[,c(1:3)]
-
-cat.phylo = gheatmap(tree, all.cats, offset=35, width=0.3, 
-         colnames=FALSE, legend_title="Category") +
-  scale_fill_manual(breaks=c("generalists", "overdisper.shifter", "overdisperser",
-                             "shifting", "specialists"), 
-                    values=c("#F5AF4D","#B46DB3","#548F01","#5495CF","#DB4743"),
-                    name="Pattern",
-                    labels = c(
-                      "shifting" = "Shifter",
-                      "specialists" = "Specialist",
-                      "generalists" = "Generalist",
-                      "overdisperser" = "Overdisperser",
-                      "overdisper.shifter" = "Overdispersed Shifter"))
-cat.phylo
-
-ggsave("./Plots/ESA.plots/phylo.png", height = 10, width = 12)
-
-### Heatmap for ESA ####
-
+#### Testing for Phylogenetic Signal combo patterns ####
 # read in the data
-all.cats = read.csv("./Formatted.Data/cat.summary.csv")
+dat = read.csv("./Results/occupancy.patterns.csv")
 
-# Add row ID to preserve order (useful since we’re dropping species names)
-all.cats$RowID <- factor(seq_len(nrow(all.cats)))  # as factor to control plotting order
+# add new species column with _ between genus and species to match phylogeny
+dat = dat %>%
+  mutate(species.2 = str_replace(X, " ", "_"))
 
-# Pivot longer for plotting
-cats.long <- all.cats %>%
-  pivot_longer(cols = c(Microclimate, Topography, Soil),
-               names_to = "CategoryType",
-               values_to = "Category") %>%
-  mutate(Species = NA)  # placeholder to match value.column structure
+# Change Quercus margaretta to Quercus margarettae
+dat <- dat %>%
+  mutate(species.2 = recode(species.2, "Quercus_margaretta" = "Quercus_margarettae"))
 
-# Create the fourth "Species" column as fake heatmap column
-value.column <- data.frame(
-  RowID = all.cats$RowID,
-  CategoryType = "Species",  # this becomes a 4th column
-  Category = NA,
-  Species = all.cats$Species
-)
+# read in the phylo
+phylo = read.tree("./Results/phylo.tre")
 
-# Combine data
-cats.long <- bind_rows(cats.long, value.column)
+# phylogenetic signal as category
+# determined by quantifying the parsimony Sankoff score calculated from the distribution of trait
+# categories on the phylogeny using the phangorn package. The significance of the score determined
+# by randomly shuffling the species on the tips of the phylo 999 times to generate a null
+# distribution that is compared to the observed parsimony score to calculate a P. value.
+# P < 0.05 indicative of closely related species having similar traits.
 
-# order of columns for plotting
-cats.long$CategoryType <- factor(cats.long$CategoryType, levels = c("Microclimate", "Topography", 
-                                                                    "Soil","Species"))
+# make data frames for the groups
+combo.letter = as.data.frame(dat$combo.letter)
+rownames(combo.letter) = dat$species.2
+colnames(combo.letter) = "combo.letter"
 
-# Plot
-heat.plot =ggplot() +
-  # Only plot tiles for the heatmap columns
-  geom_tile(
-    data = subset(cats.long, CategoryType != "Species"),
-    aes(x = CategoryType, y = RowID, fill = Category),
-    color = "white"
-  ) +
-  # Add text for Species values in the last column
-  geom_text(
-    data = subset(cats.long, CategoryType == "Species"),
-    aes(x = CategoryType, y = RowID, label = Species),
-    size = 7
-  ) +
-  scale_fill_manual(
-    breaks = c("generalists", "overdisper.shifter", "overdisperser", "shifting", "specialists"),
-    values = c("#F5AF4D", "#B46DB3", "#548F01", "#5495CF", "#DB4743"),
-    name = "Pattern",
-    na.value = "transparent",
-    labels = c(
-      "shifting" = "Shifter",
-      "specialists" = "Specialist",
-      "generalists" = "Generalist",
-      "overdisperser" = "Overdisperser",
-      "overdisper.shifter" = "Overdispersed Shifter"
-    )) + 
-  scale_x_discrete(position = "top") +
-  theme_minimal() +
-  theme(
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank(),
-    axis.title = element_blank(),
-    panel.grid = element_blank()
-  )
+clim.topo.letter = as.data.frame(dat$clim.topo.letter)
+rownames(clim.topo.letter) = dat$species.2
+colnames(clim.topo.letter) = "clim.topo.letter"
 
-heat.plot
+clim.soil.letter = as.data.frame(dat$micro.soil.letter)
+rownames(clim.soil.letter) = dat$species.2
+colnames(clim.soil.letter) = "clim.soil.letter"
 
-ggsave("./Plots/ESA.plots/heatmap.png", height = 10, width = 12)
+topo.soil.letter = as.data.frame(dat$topo.soil.letter)
+rownames(topo.soil.letter) = dat$species.2
+colnames(topo.soil.letter) = "topo.soil.letter"
+
+combo.null = c(NA)
+for(i in 1:999){
+  rand.tree = tipShuffle(phylo)
+  combo.obs = t(data.frame(combo.letter))
+  combo.obs2 = phyDat(t(combo.obs), type = "USER", levels = attributes(factor(combo.obs))$levels)
+  combo.null[i] = parsimony(rand.tree, combo.obs2, method = "sankoff")
+}
+
+combo.obs.real = parsimony(phylo, combo.obs2, method = "sankoff")
+# 95
+combo.p.value = (rank(c(combo.obs.real,combo.null))[1])/1000
+# 0.1765
+
+clim.topo.null = c(NA)
+for(i in 1:999){
+  rand.tree = tipShuffle(phylo)
+  clim.topo.obs = t(data.frame(clim.topo.letter))
+  clim.topo.obs2 = phyDat(t(clim.topo.obs), type = "USER", levels = attributes(factor(clim.topo.obs))$levels)
+  clim.topo.null[i] = parsimony(rand.tree, clim.topo.obs2, method = "sankoff")
+}
+
+clim.topo.obs.real = parsimony(phylo, clim.topo.obs2, method = "sankoff")
+# 81
+clim.topo.p.value = (rank(c(clim.topo.obs.real,clim.topo.null))[1])/1000
+# 0.1625
+
+clim.soil.null = c(NA)
+for(i in 1:999){
+  rand.tree = tipShuffle(phylo)
+  clim.soil.obs = t(data.frame(clim.soil.letter))
+  clim.soil.obs2 = phyDat(t(clim.soil.obs), type = "USER", levels = attributes(factor(clim.soil.obs))$levels)
+  clim.soil.null[i] = parsimony(rand.tree, clim.soil.obs2, method = "sankoff")
+}
+
+clim.soil.obs.real = parsimony(phylo, clim.soil.obs2, method = "sankoff")
+# 77
+clim.soil.p.value = (rank(c(clim.soil.obs.real,clim.soil.null))[1])/1000
+# 0.189
+
+topo.soil.null = c(NA)
+for(i in 1:999){
+  rand.tree = tipShuffle(phylo)
+  topo.soil.obs = t(data.frame(topo.soil.letter))
+  topo.soil.obs2 = phyDat(t(topo.soil.obs), type = "USER", levels = attributes(factor(topo.soil.obs))$levels)
+  topo.soil.null[i] = parsimony(rand.tree, topo.soil.obs2, method = "sankoff")
+}
+
+topo.soil.obs.real = parsimony(phylo, topo.soil.obs2, method = "sankoff")
+# 78
+topo.soil.p.value = (rank(c(topo.soil.obs.real,topo.soil.null))[1])/1000
+# 0.122
