@@ -155,7 +155,7 @@ range(microclim.results$R2)
 
 intercept.plot = ggplot(microclim.results, aes(x = Intercept))+
   geom_density()+
-  geom_vline(xintercept = 0.08361417, linewidth = 1.5) + # this is the global intercept
+  geom_vline(xintercept = 0.0601699, linewidth = 1.5) + # this is the global intercept
   theme_classic(base_size = 20) +
   ylab("Density")
 intercept.plot
@@ -164,7 +164,7 @@ ggsave("./Plots/ESA.plots/ODS.intercept.png", height = 5, width = 5)
 
 slope.plot = ggplot(microclim.results, aes(x = Slope))+
   geom_density()+
-  geom_vline(xintercept = 0.001727047, linewidth = 1.5) + # this is the global slope
+  geom_vline(xintercept = 0.0009340788, linewidth = 1.5) + # this is the global slope
   theme_classic(base_size = 20) +
   ylab("Density")
 
@@ -174,7 +174,7 @@ ggsave("./Plots/ESA.plots/ODS.slope.png", height = 5, width = 5)
 
 ggplot(microclim.results, aes(x = R2))+
   geom_density()+
-  geom_vline(xintercept = 0.3914622, size = 1.5) + # this is the global R2
+  geom_vline(xintercept = 0.3839845, size = 1.5) + # this is the global R2
   theme_classic(base_size = 20) +
   ylab("Density")+
   xlab("R-squared")

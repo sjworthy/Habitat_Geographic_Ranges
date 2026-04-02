@@ -150,16 +150,16 @@ range(topo.results$R2)
 
 ggplot(topo.results, aes(x = Intercept))+
   geom_density()+
-  geom_vline(xintercept = 0.07670251) + # global null value
+  geom_vline(xintercept = 0.07776802) + # global null value
   theme_classic()
 
 ggplot(topo.results, aes(x = Slope))+
   geom_density()+
-  geom_vline(xintercept = 0.0002537613) + # global null value
+  geom_vline(xintercept = -6.118209e-05) + # global null value
   theme_classic()
 
 ggplot(topo.results, aes(x = R2))+
   geom_density()+
-  geom_vline(xintercept = 0.03900371) + # global null value
+  geom_vline(xintercept = 0.003036681) + # global null value
   theme_classic()
 

@@ -151,17 +151,17 @@ range(soil.results$R2)
 
 ggplot(soil.results, aes(x = Intercept))+
   geom_density()+
-  geom_vline(xintercept = 0.1948436) + # global null value
+  geom_vline(xintercept = 0.2306483) + # global null value
   theme_classic()
 
 ggplot(soil.results, aes(x = Slope))+
   geom_density()+
-  geom_vline(xintercept = 0.0009679467) + # global null value
+  geom_vline(xintercept = 0.0004231967) + # global null value
   theme_classic()
 
 ggplot(soil.results, aes(x = R2))+ # global null value
   geom_density()+
-  geom_vline(xintercept = 0.101624) +
+  geom_vline(xintercept = 0.05483943) +
   theme_classic()
 
 #### PCA of slopes, intercepts, R2 from MRM soil models ####
@@ -217,7 +217,7 @@ soil.pca.plot.labels
 
 # add the global values
 
-soil.results[123,c(2,4,6)] = c(0.2418721,0.0004634458,0.05967644)
+soil.results[123,c(2,4,6)] = c(0.2306483,0.0004231967,0.05483943)
 soil.results[123,1] = "Global"
 soil.results$species.2 = NA
 soil.results[123,10] = "Global"
@@ -702,100 +702,6 @@ cold.temp.macro
 ggsave("./Plots/ESA.plots/Niobrara.macro.cold.temp.png", width = 7, height = 5)
 ggsave("./Plots/ESA.plots/Niobrara.macro.cold.temp.legend.png", width = 7, height = 5)
 
-#### Populus deltoides map ####
-
-sub = all.data %>%
-  filter(decimalLongitude < -100 & decimalLatitude > 42)
-
-all.data = read.csv("./Formatted.Data/gbif.final.all.csv", row.names = 1)
-sp = all.data %>%
-  filter(species %in% ("Populus deltoides"))
-sp = sp %>%
-  filter(!is.na(macro_bio5_max_temp_warm_month_C))
-sp = sp %>%
-  filter(macro_bio5_max_temp_warm_month_C < 37)
-
-points_sf <- sf::st_as_sf(sp, coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
-
-library(maps)
-maps::map(database = "state")
-library(tigris)
-us_states <- states(cb = TRUE)
-continental_states <- us_states %>%
-  filter(!NAME %in% (c("Alaska","American Samoa","Guam","Commonwealth of the Northern Mariana Islands","Hawaii","United States Virgin Islands",
-                       "Puerto Rico")))
-states.map = continental_states %>%
-  st_as_sf %>%
-  st_transform(st_crs(points_sf))
-
-# so both plots have the same scale
-temp_range <- range(c(points_sf$moisture_mm, points_sf$macro_bio12_total_annual_precip_mm), na.rm = TRUE)
-
-dis.plot = ggplot()+
-  geom_sf(data = states.map, fill = "white")+
-  geom_sf(data = points_sf, aes(color = macro_bio5_max_temp_warm_month_C), size = 2) +
-  scale_color_viridis(name = "High Temperature (°C)", option = "C") +
-  coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +
-  theme_classic()
-dis.plot
-
-ggsave("./Plots/ESA.plots/P.deltoides.hightemp.png", width = 5, height = 3)
-
-p2 = ggplot()+
-  geom_sf(data = states.map, fill = "white")+
-  geom_sf(data = points_sf, aes(color = macro_bio12_total_annual_precip_mm), size = 2) +
-  scale_color_viridis(name = "Macro", option = "C", limits = temp_range) +
-  coord_sf(xlim = c(-125, -66), ylim = c(24, 50), expand = FALSE) +
-  theme_classic() +
-  ggtitle("Temperature at 10m Scale")
-
-library(cowplot)
-plot_grid(p1,p2)
-  
-soil = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
-
-ggplot(sp, aes(high_temp_C)) +
-  geom_density()
-
-# Asimina triloba - moisture
-
-sp = all.data %>%
-  filter(species %in% ("Ulmus thomasii"))
-
-points_sf <- sf::st_as_sf(sp, coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
-
-range(sp$high_temp_C, na.rm = TRUE)
-range(sp$macro_bio5_max_temp_warm_month_C, na.rm = TRUE)
-range(sp$low_temp_C, na.rm = TRUE)
-range(sp$macro_bi06_min_temp_cold_month_C, na.rm = TRUE)
-range(sp$moisture_mm, na.rm = TRUE)
-range(sp$macro_bio12_total_annual_precip_mm, na.rm = TRUE)
-
-# soil plot
-
-# Define bounding box
-lon_min <- -100.5
-lon_max <- -100
-lat_min <-  42.8
-lat_max <-  43
-
-# Subset soil.data
-soil.sub <- soil.data[
-  soil.data$decimalLongitude >= lon_min &
-    soil.data$decimalLongitude <= lon_max &
-    soil.data$decimalLatitude  >= lat_min &
-    soil.data$decimalLatitude  <= lat_max, ]
-
-soil.plot = ggplot(soil.data, aes(x = decimalLongitude, y = decimalLatitude, fill = ph_d0_100)) +
-  geom_tile() +
-  scale_fill_gradient(low = "black", high = "white")+
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) +
-  coord_fixed() + 
-  theme_classic(base_size = 15) +
-  labs(x = "Longitude", y = "Latitude") +
-  theme(legend.position = "none")
-soil.plot
 
 #### Category plots ####
 

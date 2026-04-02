@@ -40,23 +40,31 @@ sort(unique(gbif.3$species)) # 122 species
 # read in previously filtered occurrence data
 gbif = read.csv("./Formatted.Data/good.gbif.data.csv", row.names = 1)
 
+gbif.2 = gbif %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
 # read in soil data
 soil = read.csv("./Formatted.Data/gbif.data.soils.0.100cm.csv")
-# 67889 are NA: ph_d0_100
-# 66180 are NA: clay_d0_100
-# 66773 are NA: sand_d0_100
-# 67405 are NA: silt_d0_100
-# 66547 are NA: db_d0_100
-# 76944 are NA: ec_d0_100
-# 67417 are NA: texture_d0_100
+
+# filter out introduced species
+soil.2 = soil %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
+# 62183 are NA: ph_d0_100
+# 60521 are NA: clay_d0_100
+# 61087 are NA: sand_d0_100
+# 61690 are NA: silt_d0_100
+# 60873 are NA: db_d0_100
+# 71454 are NA: ec_d0_100
+# 61700 are NA: texture_d0_100
 
 # drop the rows in soil with NA in any column
-soil.final = soil %>%
+soil.final = soil.2 %>%
   drop_na()
-# total NA 82436
+# total NA 51714
 
 # looking at how many points for each species are missing
-counts = as.data.frame(table(gbif$species))
+counts = as.data.frame(table(gbif.2$species))
 colnames(counts)[1] = "species"
 colnames(counts)[2] = "gbif"
 counts$soil = table(soil.final$species)
@@ -67,28 +75,41 @@ counts$difference = counts$gbif - counts$soil
 soil.final = soil.final %>%
   rename(decimalLatitude = latitude, decimalLongitude = longitude)
 
-gbif.soil = inner_join(gbif, soil.final)
-# 1254429 occurrence points
-# 122 species
+gbif.soil = inner_join(gbif.2, soil.final)
+# 1208687 occurrence points
+# 119 species
 
 #### Merge and filter for missing elevation ####
 
 elev.final = read.csv("./Formatted.Data/elev.final.csv", row.names = 1)
 
 gbif.elev = inner_join(gbif.soil,elev.final)
-# 1254426, lose 3 individuals without elevation
+# 1208684, lose 3 individuals without elevation
 
 # write.csv(gbif.elev, file = "Formatted.Data/gbif.final.csv")
 
 #### Filter out final 45 data points without microclimate data ####
 
 final.data.01.05.26 = read.csv("./Formatted.Data/final.data.01.05.26.csv", row.names = 1)
-colSums(is.na(final.data.01.05.26))
 
-all.final.data = na.omit(final.data.01.05.26)
+# filter introduced species
+final.data.01.05.26.2 = final.data.01.05.26 %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
+colSums(is.na(final.data.01.05.26.2))
+
+all.final.data = na.omit(final.data.01.05.26.2)
 colSums(is.na(all.final.data))
 
 #write.csv(all.final.data, file = "./Formatted.Data/All.Final.Data.csv")
+
+#### Filter out 3 introducted species ####
+
+all.final.data = read.csv("./Formatted.Data/All.Final.Data.csv")
+all.final.data.2 = all.final.data %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
+write.csv(all.final.data.2, file = "./Formatted.Data/All.Final.Data.csv")
 
 #### Summary Stats ####
 
@@ -112,7 +133,12 @@ mean(merge.df$coordinateUncertaintyInMeters, na.rm = TRUE)
 
 # mean number of individuals per species
 table(all.final.data$species)
-mean(table(all.final.data$species)) # 10,281.81
-median(table(all.final.data$species)) # 4710
+mean(table(all.final.data$species)) # 10,156.73
+median(table(all.final.data$species)) # 4544
+
+### Removing introduced species from gbif, post hoc ####
+gbif.4 = gbif.3 %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
 
 

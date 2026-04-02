@@ -7,7 +7,7 @@
 # plot MRM every 100th interaction
 
 # 40 samples per species was chosen so that the global species would have 4,880 individuals,
-# a similar value to the median number of individuals per species in the data (n = 4710).
+# a similar value to the median number of individuals per species in the data (n = 4544).
 
 library(tidyverse)
 library(FD)
@@ -83,7 +83,7 @@ for(i in 1:999){
            plot = plot_obj,
            width = 5, height = 5)
     
-    write.csv(df_plot, file = paste("./Microclim.Global.Null/topo.global.dist_", i, ".csv"))
+    write.csv(df_plot, file = paste("./Microclim.Global.Null/micro.global.dist_", i, ".csv"))
   }
 }
 

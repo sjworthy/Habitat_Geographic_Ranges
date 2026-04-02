@@ -57,6 +57,10 @@ mean(obs$Intercept) # 0.08361417
 mean(obs$Slope) # 0.001727047
 mean(obs$R2) # 0.3914622
 
+mean(nulls$intercepts) # 0.0601699
+mean(nulls$slopes) #0.0009340788
+mean(nulls$R2) # 0.3839845
+
 #### Topography ####
 # read in 999 nulls
 
@@ -110,6 +114,10 @@ mean(obs$Intercept)
 mean(obs$Slope)
 mean(obs$R2)
 
+mean(nulls$intercepts) # 0.07776802
+mean(nulls$slopes) # -6.118209e-05
+mean(nulls$R2) # 0.003036681
+
 #### Soil ####
 # read in 999 nulls
 
@@ -162,6 +170,10 @@ colnames(obs)[10:18] = c("SES.intercept","SES.slope","SES.R2",
 mean(obs$Intercept) # 0.1948436
 mean(obs$Slope) # 0.0009679467
 mean(obs$R2) # 0.101624
+
+mean(nulls$intercepts) # 0.2306483
+mean(nulls$slopes) # 0.0004231967
+mean(nulls$R2) # 0.05483943
 
 #### Putting species into Microclimate Categories: one tailed ####
 
