@@ -18,7 +18,8 @@ R2.nulls.sds <- sd(nulls$R2)
 
 # read in the observed values
 
-obs = read.csv("./Results/microclim.MRM.results.csv", row.names = 1)
+obs = read.csv("./Results/microclim.MRM.results.csv", row.names = 1) %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 for(i in 1:nrow(obs)){
   obs.intercept = obs[i,2]
@@ -53,13 +54,13 @@ colnames(obs)[10:18] = c("SES.intercept","SES.slope","SES.R2",
 
 # write.csv(obs, file = "./Results/microclim.global.null.compare.results.csv")
 
-mean(obs$Intercept) # 0.08361417
-mean(obs$Slope) # 0.001727047
-mean(obs$R2) # 0.3914622
+mean(obs$Intercept) # 0.08386907
+mean(obs$Slope) # 0.001750449
+mean(obs$R2) # 0.3921366
 
-mean(nulls$intercepts) # 0.0601699
-mean(nulls$slopes) #0.0009340788
-mean(nulls$R2) # 0.3839845
+mean(nulls$intercepts) # 0.06071191
+mean(nulls$slopes) # 0.0009420475
+mean(nulls$R2) # 0.3821377
 
 #### Topography ####
 # read in 999 nulls
@@ -75,7 +76,8 @@ R2.nulls.sds <- sd(nulls$R2)
 
 # read in the observed values
 
-obs = read.csv("./Results/topo.MRM.results.csv", row.names = 1)
+obs = read.csv("./Results/topo.MRM.results.csv", row.names = 1) %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 for(i in 1:nrow(obs)){
   obs.intercept = obs[i,2]
@@ -108,15 +110,15 @@ colnames(obs)[10:18] = c("SES.intercept","SES.slope","SES.R2",
                          "Rank.intercept","Rank.slope","Rank.R2",
                          "P.val.intercept","P.val.slope","P.val.R2")
 
-# write.csv(obs, file = "./Results/topo.global.null.compare.results.csv")
+write.csv(obs, file = "./Results/topo.global.null.compare.results.csv")
 
-mean(obs$Intercept)
-mean(obs$Slope)
-mean(obs$R2)
+mean(obs$Intercept) # 0.07699623
+mean(obs$Slope) # 0.0002556053
+mean(obs$R2) # 0.03882695
 
-mean(nulls$intercepts) # 0.07776802
-mean(nulls$slopes) # -6.118209e-05
-mean(nulls$R2) # 0.003036681
+mean(nulls$intercepts) # 0.07825661
+mean(nulls$slopes) # -6.267296e-05
+mean(nulls$R2) # 0.003126151
 
 #### Soil ####
 # read in 999 nulls
@@ -132,7 +134,8 @@ R2.nulls.sds <- sd(nulls$R2)
 
 # read in the observed values
 
-obs = read.csv("./Results/soil.MRM.results.csv", row.names = 1)
+obs = read.csv("./Results/soil.MRM.results.csv", row.names = 1) %>% 
+  filter(!species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 for(i in 1:nrow(obs)){
   obs.intercept = obs[i,2]
@@ -165,11 +168,11 @@ colnames(obs)[10:18] = c("SES.intercept","SES.slope","SES.R2",
                          "Rank.intercept","Rank.slope","Rank.R2",
                          "P.val.intercept","P.val.slope","P.val.R2")
 
-# write.csv(obs, file = "./Results/soil.global.null.compare.results.csv")
+#write.csv(obs, file = "./Results/soil.global.null.compare.results.csv")
 
-mean(obs$Intercept) # 0.1948436
-mean(obs$Slope) # 0.0009679467
-mean(obs$R2) # 0.101624
+mean(obs$Intercept) # 0.1941249
+mean(obs$Slope) # 0.0009784194
+mean(obs$R2) # 0.1022176
 
 mean(nulls$intercepts) # 0.2306483
 mean(nulls$slopes) # 0.0004231967
@@ -186,24 +189,24 @@ shifting = obs %>%
 strong.shifting = shifting %>%
   filter(P.val.intercept < 0.05 & P.val.slope > 0.95 & P.val.R2 > 0.95)
 
-# Specialist, low intercept, low slope, 2 sp.
+# Specialist, low intercept, low slope, 1 sp.
 specialist = obs %>%
   filter(P.val.intercept < 0.05 & P.val.slope < 0.05)
 # Strong Specialist, low intercept, low slope, high R2, 2 sp.
 strong.specialist = specialist %>%
   filter(P.val.intercept < 0.05 & P.val.slope < 0.05 & P.val.R2 > 0.95)
 
-# Overdisperser, high intercept, low slope, 15 sp.
+# Overdisperser, high intercept, low slope, 14 sp.
 overdisperser = obs %>%
   filter(P.val.intercept > 0.95 & P.val.slope < 0.05)
-# Strong Overdisperser, high intercept, low slope, high R2, 1 sp.
+# Strong Overdisperser, high intercept, low slope, high R2, 0 sp.
 strong.overdisperser = overdisperser %>%
   filter(P.val.intercept > 0.95 & P.val.slope < 0.05 & P.val.R2 > 0.95)
 
 # Overdispersed shifters, high intercept, high slope, 68 sp.
 overdisperse.shifter = obs %>%
   filter(P.val.intercept > 0.95 & P.val.slope > 0.95)
-# Strong Overdispersed shifters, high intercept, high slope, high R2, 23 sp.
+# Strong Overdispersed shifters, high intercept, high slope, high R2, 24 sp.
 strong.overdisperse.shifter = overdisperse.shifter %>%
   filter(P.val.intercept > 0.95 & P.val.slope > 0.95 & P.val.R2 > 0.95)
 
@@ -211,13 +214,13 @@ strong.overdisperse.shifter = overdisperse.shifter %>%
 remain.sp = obs %>%
   filter(!species %in% c(shifting$species, specialist$species, overdisperser$species, 
                          overdisperse.shifter$species))
-# 18 species left
+# 17 species left
 
 # Uncategorized: either slope or intercept is significant, but not both
 No.Cat = remain.sp %>%
   filter(P.val.intercept < 0.05 | P.val.intercept > 0.95 |
            P.val.slope < 0.05 | P.val.slope > 0.95)
-# 18 species
+# 17 species
 
 # True generalists: non-significant, intercept, slope, R2, 0 sp. 
 true.generalists = remain.sp %>%
@@ -252,10 +255,10 @@ obs$significant = dplyr::case_when(
 
 obs = read.csv("./Results/topo.global.null.compare.results.csv", row.names = 1)
 
-# Shifter, low intercept, high slope, 60 sp.
+# Shifter, low intercept, high slope, 58 sp.
 shifting = obs %>%
   filter(P.val.intercept < 0.05 & P.val.slope > 0.95)
-# Strong Shifter, low intercept, high slope, high R2, 49 sp. 
+# Strong Shifter, low intercept, high slope, high R2, 47 sp. 
 strong.shifting = shifting %>%
   filter(P.val.intercept < 0.05 & P.val.slope > 0.95 & P.val.R2 > 0.95)
 
@@ -269,14 +272,14 @@ strong.specialist = specialist %>%
 # Overdisperser, high intercept, low slope, 3 sp.
 overdisperser = obs %>%
   filter(P.val.intercept > 0.95 & P.val.slope < 0.05)
-# Strong Overdisperser, high intercept, low slope, high R2, 1 sp.
+# Strong Overdisperser, high intercept, low slope, high R2, 0 sp.
 strong.overdisperser = overdisperser %>%
   filter(P.val.intercept > 0.95 & P.val.slope < 0.05 & P.val.R2 > 0.95)
 
-# Overdispersed shifters, high intercept, high slope, 35 sp.
+# Overdispersed shifters, high intercept, high slope, 34 sp.
 overdisperse.shifter = obs %>%
   filter(P.val.intercept > 0.95 & P.val.slope > 0.95)
-# Strong Overdispersed shifters, high intercept, high slope, high R2, 21 sp.
+# Strong Overdispersed shifters, high intercept, high slope, high R2, 20 sp.
 strong.overdisperse.shifter = overdisperse.shifter %>%
   filter(P.val.intercept > 0.95 & P.val.slope > 0.95 & P.val.R2 > 0.95)
 
@@ -325,14 +328,14 @@ obs$significant = dplyr::case_when(
 
 obs = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
 
-# Shifter, low intercept, high slope, 66 sp. 
+# Shifter, low intercept, high slope, 64 sp. 
 shifting = obs %>%
   filter(P.val.intercept < 0.05 & P.val.slope > 0.95)
-# Strong Shifter, low intercept, high slope, high R2, 47 sp.
+# Strong Shifter, low intercept, high slope, high R2, 46 sp.
 strong.shifting = shifting %>%
   filter(P.val.intercept < 0.05 & P.val.slope > 0.95 & P.val.R2 > 0.95)
 
-# Specialist, low intercept, low slope, 12 sp. 
+# Specialist, low intercept, low slope, 13 sp. 
 specialist = obs %>%
   filter(P.val.intercept < 0.05 & P.val.slope < 0.05)
 # Strong Specialist, low intercept, low slope, high R2, 0 sp.
@@ -346,10 +349,10 @@ overdisperser = obs %>%
 strong.overdisperser = overdisperser %>%
   filter(P.val.intercept > 0.95 & P.val.slope < 0.05 & P.val.R2 > 0.95)
 
-# Overdispersed shifters, high intercept, high slope, 10 sp.
+# Overdispersed shifters, high intercept, high slope, 9 sp.
 overdisperse.shifter = obs %>%
   filter(P.val.intercept > 0.95 & P.val.slope > 0.95)
-# Strong Overdispersed shifters, high intercept, high slope, high R2, 7 sp.
+# Strong Overdispersed shifters, high intercept, high slope, high R2, 6 sp.
 strong.overdisperse.shifter = overdisperse.shifter %>%
   filter(P.val.intercept > 0.95 & P.val.slope > 0.95 & P.val.R2 > 0.95)
 
@@ -357,9 +360,9 @@ strong.overdisperse.shifter = overdisperse.shifter %>%
 remain.sp = obs %>%
   filter(!species %in% c(shifting$species, specialist$species, overdisperser$species, 
                          overdisperse.shifter$species))
-# 22 species left
+# 21 species left
 
-# Uncategorized: either slope or intercept is significant, but not both, 20 sp.
+# Uncategorized: either slope or intercept is significant, but not both, 19 sp.
 No.Cat = remain.sp %>%
   filter(P.val.intercept < 0.05 | P.val.intercept > 0.95 |
            P.val.slope < 0.05 | P.val.slope > 0.95)
@@ -392,6 +395,6 @@ obs$significant = dplyr::case_when(
                      true.generalists$species) ~ "significant",
   TRUE ~ "non-significant")
 
-# write.csv(obs, "./Results/soil.global.null.compare.results.csv")
+#write.csv(obs, "./Results/soil.global.null.compare.results.csv")
 
 

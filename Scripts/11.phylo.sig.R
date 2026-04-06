@@ -12,8 +12,8 @@ library(U.Taxonstand)
 library(phytools)
 library(ape)
 library(caper)
+library(picante) # won't load if phytools previously loaded
 library(phangorn)
-library(picante)
 
 #### Building the Phylogeny ####
 # species list including species, genus, family, species.relative, and genus.relative
@@ -38,10 +38,15 @@ taxon.list.2 = taxon.list %>%
 # 122 species
 colnames(taxon.list.2)[1] = "Name"
 
+# remove introduced species
+
+taxon.list.3 = taxon.list.2 %>% 
+  filter(!Name %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
 # https://github.com/nameMatch/Database/tree/main/Plants_WFO
 load("./Raw.Data/Plants_WFO.rdata") # World Flora Online
 
-res <- nameMatch(spList=taxon.list.2, spSource=database, author = TRUE, max.distance= 1)
+res <- nameMatch(spList=taxon.list.3, spSource=database, author = TRUE, max.distance= 1)
 
 # Change Quercus margaretta to Quercus margarettae
 # Change Quercus sinuata var. sinuata to Quercus sinuata
@@ -60,9 +65,13 @@ sp.list.2 = sp.list.2 %>%
 sp.list.2[122,1] = "Quercus margarettae"
 sp.list.2[100,1] = "Quercus sinuata"
 sp.list.2[119,1] = "Fraxinus albicans"
-# 122 species
 
-colnames(sp.list.2) = c("species","genus")
+sp.list.3 = sp.list.2 %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
+# 119 species
+
+colnames(sp.list.3) = c("species","genus")
 
 # megatree for plants
 megatree <- read.tree("https://raw.githubusercontent.com/megatrees/plant_20221117/refs/heads/main/plant_megatree.tre")
@@ -71,7 +80,7 @@ megatree <- read.tree("https://raw.githubusercontent.com/megatrees/plant_2022111
 gen.list <- read.csv("./Formatted.Data/plant_genus_list.csv")
 
 # generate a phylogeny for the sample species list
-result <- phylo.maker(sp.list.2, megatree, gen.list, nodes.type = 1, scenario = 3)
+result <- phylo.maker(sp.list.3, megatree, gen.list, nodes.type = 1, scenario = 3)
 
 #write.tree(result$phylo, file = "./Results/phylo.tre")
 #write.csv(result$sp.list, file = "./Results/phylo_splist.csv")
@@ -104,6 +113,12 @@ soil <- soil %>%
 # read in the phylo
 phylo = read.tree("./Results/phylo.tre")
 
+# make sure species name's match
+
+test = as.data.frame(sort(phylo$tip.label))
+test[,2] = sort(microclim$species.2)
+match(test$`sort(phylo$tip.label)`,test$V2)
+
 # phylogenetic signal as category
 # determined by quantifying the parsimony Sankoff score calculated from the distribution of trait
 # categories on the phylogeny using the phangorn package. The significance of the score determined
@@ -125,9 +140,9 @@ for(i in 1:999){
 }
 
 microclim.obs.real = parsimony(phylo, microclim.obs2, method = "sankoff")
-# 48
+# 45
 microclim.p.value = (rank(c(microclim.obs.real,microclim.null))[1])/1000
-# 0.0645
+# 0.0535
 
 # topo
 cat.topo = as.data.frame(topo$Category)
@@ -145,7 +160,7 @@ for(i in 1:999){
 topo.obs.real = parsimony(phylo, topo.obs2, method = "sankoff")
 # 51
 topo.p.value = (rank(c(topo.obs.real,topo.null))[1])/1000
-# 0.1015
+# 0.2005
 
 # soil
 cat.soil = as.data.frame(soil$Category)
@@ -161,9 +176,9 @@ for(i in 1:999){
 }
 
 soil.obs.real = parsimony(phylo, soil.obs2, method = "sankoff")
-# 53
+# 52
 soil.p.value = (rank(c(soil.obs.real,soil.null))[1])/1000
-# 0.4635
+# 0.4885
 
 #### Testing for Phylogenetic Signal combo patterns ####
 # read in the data
@@ -171,7 +186,7 @@ dat = read.csv("./Results/occupancy.patterns.csv")
 
 # add new species column with _ between genus and species to match phylogeny
 dat = dat %>%
-  mutate(species.2 = str_replace(X, " ", "_"))
+  mutate(species.2 = str_replace(Species, " ", "_"))
 
 # Change Quercus margaretta to Quercus margarettae
 dat <- dat %>%
@@ -192,7 +207,7 @@ combo.letter = as.data.frame(dat$combo.letter)
 rownames(combo.letter) = dat$species.2
 colnames(combo.letter) = "combo.letter"
 
-clim.topo.letter = as.data.frame(dat$clim.topo.letter)
+clim.topo.letter = as.data.frame(dat$micro.topo.letter)
 rownames(clim.topo.letter) = dat$species.2
 colnames(clim.topo.letter) = "clim.topo.letter"
 
@@ -213,9 +228,9 @@ for(i in 1:999){
 }
 
 combo.obs.real = parsimony(phylo, combo.obs2, method = "sankoff")
-# 95
+# 93
 combo.p.value = (rank(c(combo.obs.real,combo.null))[1])/1000
-# 0.1765
+# 0.3235
 
 clim.topo.null = c(NA)
 for(i in 1:999){
@@ -226,9 +241,9 @@ for(i in 1:999){
 }
 
 clim.topo.obs.real = parsimony(phylo, clim.topo.obs2, method = "sankoff")
-# 81
+# 78
 clim.topo.p.value = (rank(c(clim.topo.obs.real,clim.topo.null))[1])/1000
-# 0.1625
+# 0.1495
 
 clim.soil.null = c(NA)
 for(i in 1:999){
@@ -239,9 +254,9 @@ for(i in 1:999){
 }
 
 clim.soil.obs.real = parsimony(phylo, clim.soil.obs2, method = "sankoff")
-# 77
+# 75
 clim.soil.p.value = (rank(c(clim.soil.obs.real,clim.soil.null))[1])/1000
-# 0.189
+# 0.226
 
 topo.soil.null = c(NA)
 for(i in 1:999){
@@ -252,6 +267,6 @@ for(i in 1:999){
 }
 
 topo.soil.obs.real = parsimony(phylo, topo.soil.obs2, method = "sankoff")
-# 78
+# 76
 topo.soil.p.value = (rank(c(topo.soil.obs.real,topo.soil.null))[1])/1000
-# 0.122
+# 0.135

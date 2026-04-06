@@ -151,17 +151,17 @@ range(soil.results$R2)
 
 ggplot(soil.results, aes(x = Intercept))+
   geom_density()+
-  geom_vline(xintercept = 0.2306483) + # global null value
+  geom_vline(xintercept = 0.2309786) + # global null value
   theme_classic()
 
 ggplot(soil.results, aes(x = Slope))+
   geom_density()+
-  geom_vline(xintercept = 0.0004231967) + # global null value
+  geom_vline(xintercept = 0.0004274535) + # global null value
   theme_classic()
 
 ggplot(soil.results, aes(x = R2))+ # global null value
   geom_density()+
-  geom_vline(xintercept = 0.05483943) +
+  geom_vline(xintercept = 0.0551019) +
   theme_classic()
 
 #### PCA of slopes, intercepts, R2 from MRM soil models ####

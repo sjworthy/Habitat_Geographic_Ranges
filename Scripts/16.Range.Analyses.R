@@ -4,7 +4,7 @@ library(tidyverse)
 library(rstatix)
 library(vegan)
 # library(devtools)
-# install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
+#install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
 library(pairwiseAdonis)
 library(ggpubr)
 library(ape)
@@ -46,7 +46,8 @@ colnames(merged_df)[5] = "EOO.alpha.issue"
 #### Visualizing correlation among range estimates ####
 
 # read in range data
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 
 cor(ranges[, c("EOO.norm", "EOO.alpha", "centroidX", "centroidY", "latRange",
@@ -57,12 +58,16 @@ cor(ranges[, c("EOO.norm", "EOO.alpha", "centroidX", "centroidY", "latRange",
 
 # test EOO.alpha, centroidX, and centroidY since least correlated
 
+cor.test(ranges$EOO.norm,ranges$EOO.alpha)
+# t = 31.219, df = 117, p-value < 2.2e-16
+
 ### Box plots of range and microclimate patterns ####
 
 # read in range data
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)%>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
-# read in soil data
+# read in data
 
 microclim = read.csv("./Results/microclim.global.null.compare.results.csv", row.names = 1)
 
@@ -87,10 +92,10 @@ ggplot(all.dat, aes(x = Category, y = centroidY)) +
 ### Box plots of range and topography patterns ####
 
 # read in range data
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
-# read in soil data
-
+# read in data
 topo = read.csv("./Results/topo.global.null.compare.results.csv", row.names = 1)
 
 # merge these together to get ranges and quadrants into the same df
@@ -114,10 +119,10 @@ ggplot(all.dat, aes(x = Category, y = centroidY)) +
 ### Box plots of range and soil patterns ####
 
 # read in range data
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 # read in soil data
-
 soil = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
 
 # merge these together to get ranges and quadrants into the same df
@@ -141,7 +146,9 @@ ggplot(all.dat, aes(x = Category, y = centroidY)) +
 #### Kruskal-Wallis for group differences microclim ####
 
 # read in range data
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
+
 
 # read in microclim data
 microclim = read.csv("./Results/microclim.global.null.compare.results.csv", row.names = 1)
@@ -153,13 +160,11 @@ all.dat$Category = as.factor(all.dat$Category)
 
 # using Krustal-Wallis 
 EOO.alpha.test = kruskal_test(EOO.alpha ~ Category, data = all.dat)
-EOO.alpha.test # significant, n = 122, df = 4, p = 0.0000127
+EOO.alpha.test # significant, n = 119, df = 4, p = 0.0000534
 EOO.alpha.posthoc = dunn_test(EOO.alpha ~ Category, data = all.dat)
 EOO.alpha.posthoc
-# generalists significantly larger overdispersed shifter, p adj = 0.000908
-# overdispersed shifter significantly smaller overdispersed, p adj = 0.0425
-# overdispersed shifter significantly smaller shifting, p adj = 0.0193
-# overdispersed shifter significantly smaller specialists, only for p value = 0.00841, p adj = 0.0589
+# generalists significantly larger overdispersed shifter, p adj = 0.000821
+# overdispersed shifter significantly smaller shifting, p adj = 0.0180
 
 EOO.alpha.posthoc.2 <- EOO.alpha.posthoc %>% add_xy_position(x = "Category")
 
@@ -188,14 +193,15 @@ EOO.plot
 ggsave("./Plots/microclim.EOO.png", width = 7, height = 5)
 
 centroidX.test = kruskal_test(centroidX ~ Category, data = all.dat)
-centroidX.test # not significant, p = 0.899
+centroidX.test # not significant, p = 0.966
 centroidY.test = kruskal_test(centroidY ~ Category, data = all.dat)
-centroidY.test # significant, p = 0.395
+centroidY.test # significant, p = 0.357
 
 #### Krustal-Wallis for group differences topography ####
 
 # read in range data
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 # read in microclim data
 topo = read.csv("./Results/topo.global.null.compare.results.csv", row.names = 1)
@@ -207,10 +213,10 @@ all.dat$Category = as.factor(all.dat$Category)
 
 # using Krustal-Wallis 
 EOO.alpha.test = kruskal_test(EOO.alpha ~ Category, data = all.dat)
-EOO.alpha.test # significant, df = 3, n = 122, p = 0.00496
+EOO.alpha.test # significant, df = 3, n = 119, p = 0.00384
 EOO.alpha.posthoc = dunn_test(EOO.alpha ~ Category, data = all.dat)
 EOO.alpha.posthoc
-# overdisper.shifter lower than shifter, p adj = 0.0111
+# overdisper.shifter lower than shifter, p adj = 0.00731
 
 EOO.alpha.posthoc.2 <- EOO.alpha.posthoc %>% add_xy_position(x = "Category")
 
@@ -239,14 +245,15 @@ EOO.plot
 ggsave("./Plots/topo.EOO.png", width = 7, height = 5)
 
 centroidX.test = kruskal_test(centroidX ~ Category, data = all.dat)
-centroidX.test # significant, p = 0.848
+centroidX.test # significant, p = 0.782
 centroidY.test = kruskal_test(centroidY ~ Category, data = all.dat)
-centroidY.test # not significant, p = 0.21
+centroidY.test # not significant, p = 0.226
 
 #### Krustal-Wallis for group differences soil ####
 
 # read in range data
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 # read in soil data
 soil = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
@@ -258,14 +265,10 @@ all.dat$Category = as.factor(all.dat$Category)
 
 # using Krustal-Wallis 
 EOO.alpha.test = kruskal_test(EOO.alpha ~ Category, data = all.dat)
-EOO.alpha.test # significant, p = 0.0196
+EOO.alpha.test # significant, n = 119, df = 4, p = 0.0167
 EOO.alpha.posthoc = dunn_test(EOO.alpha ~ Category, data = all.dat)
 EOO.alpha.posthoc
-# none significantly different after p-value adjustment
-# generalists higher than overdispersed shifter p = 0.00633
-# generalists higher than shifters p = 0.0407
-# overdispersed shifter less than overdisperser p = 0.0277
-# overdispersed shifter less than specialists p = 0.0107
+# overdispersed shifter less than specialists p = 0.0307
 
 EOO.alpha.posthoc.2 <- EOO.alpha.posthoc %>% add_xy_position(x = "Category")
 
@@ -294,24 +297,25 @@ EOO.plot
 ggsave("./Plots/soil.EOO.png", width = 7, height = 5)
 
 centroidX.test = kruskal_test(centroidX ~ Category, data = all.dat)
-centroidX.test # significant, p = 1.93e-10
+centroidX.test # significant, p = 0.00000000295
 centroidX.posthoc = dunn_test(centroidX ~ Category, data = all.dat)
 centroidX.posthoc
 
 centroidY.test = kruskal_test(centroidY ~ Category, data = all.dat)
-centroidY.test # not significant, p = 0.0117
+centroidY.test # significant, p = 0.021
 centroidY.posthoc = dunn_test(centroidY ~ Category, data = all.dat)
 centroidY.posthoc
 
 #### Testing for phylogenetic signal in range size ####
 
 # ranges
-ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)
+ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
+  filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 # read in the phylo
 phylo = read.tree("./Results/phylo.tre")
 
-ranges[93,1] = "Quercus margarettae"
+ranges[91,1] = "Quercus margarettae"
 ranges = ranges %>%
   mutate(species.2 = str_replace(Species, " ", "_"))
 
@@ -320,7 +324,7 @@ EOO.range = setNames(ranges$EOO.norm, ranges$species.2)
 set.seed(13) # set the seed so K is always the same
 
 K_EOO = phylosig(phylo, EOO.range, method = "K", test = TRUE, nsim = 10000)
-K_EOO # K = 0.00410193, p = 0.7507
+K_EOO # K = 0.00392558, p = 0.7546
 
 
 #### relationship between range size and slopes ####

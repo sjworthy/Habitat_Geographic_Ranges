@@ -1,0 +1,14 @@
+#!/bin/sh
+#SBATCH --nodes=1
+#SBATCH --mem=180000 # 180gb
+#SBATCH --time=168:00:00 # run time in hh:mm:ss
+#SBATCH --job-name=distance.range
+#SBATCH --error=/work/serussolab/samworthy/distance.range.%J.err
+#SBATCH --output=/work/serussolab/samworthy/distance.range.%J.out
+
+module purge
+module load anaconda
+
+conda activate myconda2
+
+Rscript 17.Random.Distance.Mapping.R

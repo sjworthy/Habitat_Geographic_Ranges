@@ -92,4 +92,4 @@ null_output = as.data.frame(intercepts)
 null_output$slopes = slopes
 null_output$R2 = R2
 
-write.csv(null_output, file = "./Soil.Global.Null/global.null.999.results.csv")
+write.csv(null_output, file = "./Soil.Global.Null/global.soil.null.999.results.csv")
