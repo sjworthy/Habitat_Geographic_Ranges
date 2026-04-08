@@ -1,4 +1,6 @@
-# Testing for phylogenetic signal
+# Testing for phylogenetic signal in occurrence patterns
+
+# Resources:
 # https://www.sciencedirect.com/science/article/pii/S2468265922001329
 # https://github.com/jinyizju/U.PhyloMaker?tab=readme-ov-file
 # https://github.com/megatrees
@@ -180,7 +182,7 @@ soil.obs.real = parsimony(phylo, soil.obs2, method = "sankoff")
 soil.p.value = (rank(c(soil.obs.real,soil.null))[1])/1000
 # 0.4885
 
-#### Testing for Phylogenetic Signal combo patterns ####
+#### Testing for Phylogenetic Signal with Combo Patterns ####
 # read in the data
 dat = read.csv("./Results/occupancy.patterns.csv")
 

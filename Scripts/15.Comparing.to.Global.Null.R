@@ -1,5 +1,5 @@
-# Script to test if microclim, topo, or soil values of intercept, slope, and R2
-# for each species significantly different from global null estimates of the values.
+# Script to test if microclimate, topo, or soil values of intercept, slope, and R2
+# for each species significantly differ from global null estimates of the values.
 
 library(tidyverse)
 

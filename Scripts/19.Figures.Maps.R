@@ -1,4 +1,4 @@
-#### Microclimate Specialist maps ####
+# Code to generate map figures
 
 library(maps)
 library(tigris)

@@ -1,4 +1,5 @@
-# code to evaluate relationships among occupancy patterns and range size
+# code to evaluate relationships among occupancy patterns and range size and test
+# for phylogenetic signal in range size
 
 library(tidyverse)
 library(rstatix)
@@ -9,9 +10,6 @@ library(pairwiseAdonis)
 library(ggpubr)
 library(ape)
 library(phytools)
-
-# ISSUES: EOO and CentoridX = equal variance, CentroidY unequal variance
-# shifters and specialists not normally distributed (can't use Welch's test)
 
 #### Combining all the ranges ####
 # combining all the range size estimates together and running analyses of range size
@@ -58,6 +56,7 @@ cor(ranges[, c("EOO.norm", "EOO.alpha", "centroidX", "centroidY", "latRange",
 
 # test EOO.alpha, centroidX, and centroidY since least correlated
 
+# correlation between EOO.norm (convex hull) and EOO alpha (alpha hull)
 cor.test(ranges$EOO.norm,ranges$EOO.alpha)
 # t = 31.219, df = 117, p-value < 2.2e-16
 
@@ -68,11 +67,9 @@ ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1)%>%
   filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
 
 # read in data
-
 microclim = read.csv("./Results/microclim.global.null.compare.results.csv", row.names = 1)
 
 # merge these together to get ranges and quadrants into the same df
-
 all.dat = inner_join(microclim, ranges, by = c("species" = "Species"))
 
 # Plotting
@@ -99,7 +96,6 @@ ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>%
 topo = read.csv("./Results/topo.global.null.compare.results.csv", row.names = 1)
 
 # merge these together to get ranges and quadrants into the same df
-
 all.dat = inner_join(topo, ranges, by = c("species" = "Species"))
 
 # Plotting
@@ -126,7 +122,6 @@ ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>%
 soil = read.csv("./Results/soil.global.null.compare.results.csv", row.names = 1)
 
 # merge these together to get ranges and quadrants into the same df
-
 all.dat = inner_join(soil, ranges, by = c("species" = "Species"))
 
 # Plotting
@@ -148,7 +143,6 @@ ggplot(all.dat, aes(x = Category, y = centroidY)) +
 # read in range data
 ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
   filter(!Species %in% c("Ailanthus altissima","Paulownia tomentosa","Triadica sebifera"))
-
 
 # read in microclim data
 microclim = read.csv("./Results/microclim.global.null.compare.results.csv", row.names = 1)
@@ -306,7 +300,7 @@ centroidY.test # significant, p = 0.021
 centroidY.posthoc = dunn_test(centroidY ~ Category, data = all.dat)
 centroidY.posthoc
 
-#### Testing for phylogenetic signal in range size ####
+#### Testing for Phylogenetic Signal in Range Size ####
 
 # ranges
 ranges = read.csv("./Formatted.Data/all.range.estimates.csv", row.names = 1) %>% 
@@ -325,7 +319,6 @@ set.seed(13) # set the seed so K is always the same
 
 K_EOO = phylosig(phylo, EOO.range, method = "K", test = TRUE, nsim = 10000)
 K_EOO # K = 0.00392558, p = 0.7546
-
 
 #### relationship between range size and slopes ####
 

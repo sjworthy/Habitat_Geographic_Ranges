@@ -5,6 +5,7 @@
 # Run MRM
 # plot distributions of intercept, slope, R2
 # plot MRM every 100th interaction
+# code run on HCC
 
 # 40 samples per species was chosen so that the global species would have 4,880 individuals,
 # a similar value to the median number of individuals per species in the data (n = 4544).
